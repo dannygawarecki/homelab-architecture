@@ -71,7 +71,7 @@ This isn't a homelab running a few Docker containers. It's a platform, and the e
 
 See [`/architecture`](./architecture/) for:
 - [Network and cluster diagrams](./architecture/diagrams/)
-- [Architecture Decision Records](./architecture/decisions/)
+- [Architecture Decision Records](./architecture/)
 
 ---
 
