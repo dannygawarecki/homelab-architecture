@@ -8,9 +8,9 @@ This cluster has been rebuilt from scratch three times. I lost data once. Each r
 
 ## The k0s → Talos Migration
 
-I started on bare-metal k0s with servers treated as pets. That worked until it didn't. The core problem: when something went wrong at the OS level, the answer was always "log in and fix it." That's fine until you're three layers deep into a workaround and you can't remember what the original state was supposed to look like.
+I started the early homelab on bare-metal k0s with the server treated as pets. That worked until it didn't. The core problem: when something went wrong at the OS level, the answer was always "log in and fix it." That's fine until you're three layers deep into a workaround and you can't remember what the original state was supposed to look like.
 
-I also fought hard to get GPU passthrough working into containers on k0s. That battle is over — I lost it completely. The combination of container runtime, kernel driver, and k0s networking never came together in a way that was stable.
+I also fought hard to get GPU passthrough working into containers on k0s. That battle is over — I lost it completely. The combination of container runtime, kernel driver, and k0s networking never came together in a way that was workable.
 
 Moving to Talos + Proxmox VMs changed the mental model entirely. Nodes are disposable. If something is wrong at the OS level, you don't fix it — you rebuild it. GPU passthrough on Talos worked on the first serious attempt.
 
