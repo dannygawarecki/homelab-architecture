@@ -1,4 +1,9 @@
-# Lessons Learned
+---
+title: Lessons Learned
+eyebrow: Operations
+summary: Three rebuilds from scratch. One data loss. Honest notes on what broke, what I underestimated, and what I'd do differently.
+permalink: /lessons-learned/
+---
 
 Real operational experience from running this platform. Not polished postmortems — honest notes on what broke, what I underestimated, and what I'd do differently.
 
@@ -16,6 +21,8 @@ Moving to Talos + Proxmox VMs changed the mental model entirely. Nodes are dispo
 
 **Lesson:** Treat your nodes as cattle from the start. The discipline of keeping everything declarative and reproducible pays back every time something breaks.
 
+*The decision this experience drove: [ADR 007 — Talos Linux as the Kubernetes OS](../architecture/decisions/007-talos-linux/).*
+
 ---
 
 ## Cilium + Istio CNI Coexistence
@@ -23,6 +30,8 @@ Moving to Talos + Proxmox VMs changed the mental model entirely. Nodes are dispo
 Running two CNI-adjacent components on the same node requires careful ordering and configuration. Cilium's eBPF kube-proxy replacement and Istio's traffic interception both operate at the network layer. Getting them to coexist without one clobbering the other's routing rules took iteration — specifically around Cilium's `kubeProxyReplacement` settings and Istio's `cni.chained` mode.
 
 **Lesson:** Read both projects' docs on CNI chaining before assuming they'll "just work." Test with a minimal workload before rolling out across the cluster.
+
+*Why ambient mode was worth this fight: [ADR 009 — Istio in ambient mode](../architecture/decisions/009-istio-ambient-mode/).*
 
 ---
 
@@ -39,6 +48,8 @@ The `bpg/proxmox` Terraform provider sometimes generates plan diffs for resource
 Early on, some secrets were managed ad-hoc — in Kubernetes Secrets created manually, in ArgoCD's credential store, or hardcoded in values files. Retrofitting everything through External Secrets Operator and Vault required hunting down every secret reference.
 
 **Lesson:** Establish the secrets management pattern (ESO + Vault) before deploying the first workload, not after. Retrofitting is painful.
+
+*The architecture that replaced the sprawl: [ADR 003 — Vault + External Secrets Operator](../architecture/decisions/003-vault-external-secrets/).*
 
 ---
 
@@ -65,6 +76,8 @@ Getting GPU passthrough working end-to-end (Proxmox PCIe passthrough → Talos L
 Each layer can fail silently in ways that look like the next layer's problem.
 
 **Lesson:** Test each layer independently before stacking them. Validate IOMMU groups before assuming passthrough will work. Check `talosctl dmesg` for kernel-level GPU detection before debugging at the Kubernetes layer.
+
+*What this stack unlocked: [ADR 011 — Local LLM inference](../architecture/decisions/011-local-llm-inference/), which now serves [Cortexa](../projects/cortexa/) and [Context Engine](../projects/context-engine/).*
 
 ---
 

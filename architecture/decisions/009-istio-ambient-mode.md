@@ -1,7 +1,11 @@
-# ADR 002: Use Istio in Ambient Mode (not Sidecar Mode)
+---
+title: "ADR 009: Use Istio in Ambient Mode (not Sidecar Mode)"
+eyebrow: Architecture Decision Record
+summary: Cluster-wide mTLS without per-pod sidecars — lower overhead, simpler rollout, a younger ecosystem.
+permalink: /architecture/decisions/009-istio-ambient-mode/
+---
 
-**Status:** Accepted  
-**Date:** 2026
+**Status:** Accepted &nbsp;·&nbsp; **Date:** Nov 2025 &nbsp;·&nbsp; [← All ADRs](../../)
 
 ---
 
@@ -27,7 +31,7 @@ Run **Istio in ambient mode** using ztunnel for cluster-wide mTLS and waypoint p
 
 ## Reasoning
 
-- **No sidecars means no per-pod overhead.** One ztunnel DaemonSet per node instead of N sidecars for N pods. On a 7-node cluster with ~50 pods, the savings are meaningful.
+- **No sidecars means no per-pod overhead.** One ztunnel DaemonSet per node instead of N sidecars for N pods. On a 6-node cluster with ~50 pods, the savings are meaningful.
 - **Simpler rollout.** Adding a namespace to the mesh is one label. No pod restarts, no injection webhooks to worry about.
 - **Same mTLS guarantees.** ztunnel enforces SPIFFE-based mTLS at L4 for all in-mesh traffic — whether or not a waypoint proxy is present.
 - **Real-world experience with new tech.** Ambient mode is production-ready but still operationally novel. Running it here means I understand the tradeoffs firsthand.
@@ -45,4 +49,13 @@ Run **Istio in ambient mode** using ztunnel for cluster-wide mTLS and waypoint p
 
 ## Outcome
 
-Ambient mode is running across the cluster. All inter-service traffic is mTLS-encrypted transparently. I've selectively deployed waypoint proxies for services where I want L7 observability. The operational experience is genuinely lighter than sidecar mode.
+Ambient mode is running across ~28 namespaces with mesh-wide `STRICT` mTLS enforced by a default PeerAuthentication. Outbound traffic policy is `REGISTRY_ONLY`, so external destinations require an explicit ServiceEntry. In practice I've ended up doing L7 authorization with per-namespace AuthorizationPolicies rather than waypoint proxies — no waypoints are currently deployed, which itself says something about how far L4 + AuthorizationPolicy gets you. The operational experience is genuinely lighter than sidecar mode.
+
+*The Cilium coexistence work this required is in [Lessons Learned](../../../lessons-learned/); the CNI's own decision record is [ADR 008](../008-cilium-cni/).*
+
+
+<div class="adr-nav">
+  <a href="../008-cilium-cni/">&larr; ADR 008 &middot; Cilium CNI</a>
+  <a class="adr-nav-all" href="../../">ADR 9 of 14</a>
+  <a href="../010-cloudnative-pg/">ADR 010 &middot; CloudNativePG &rarr;</a>
+</div>

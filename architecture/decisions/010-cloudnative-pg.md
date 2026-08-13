@@ -1,7 +1,11 @@
-# ADR 004: CloudNative PG for Managed Postgres
+---
+title: "ADR 010: CloudNative PG for Managed Postgres"
+eyebrow: Architecture Decision Record
+summary: An operator-managed Postgres with WAL archiving to MinIO, instead of one database container per application.
+permalink: /architecture/decisions/010-cloudnative-pg/
+---
 
-**Status:** Accepted  
-**Date:** 2026
+**Status:** Accepted &nbsp;·&nbsp; **Date:** Dec 2025 &nbsp;·&nbsp; [← All ADRs](../../)
 
 ---
 
@@ -49,3 +53,10 @@ Rather than provisioning a dedicated `Cluster` resource per application, run a *
 ## Outcome
 
 All stateful applications in the cluster use CNPG-managed Postgres clusters. WAL is continuously archived to MinIO. Scheduled base backups run nightly. Each database is independently restorable to any point in time without affecting others.
+
+
+<div class="adr-nav">
+  <a href="../009-istio-ambient-mode/">&larr; ADR 009 &middot; Istio ambient mode</a>
+  <a class="adr-nav-all" href="../../">ADR 10 of 14</a>
+  <a href="../011-local-llm-inference/">ADR 011 &middot; Local LLM inference &rarr;</a>
+</div>

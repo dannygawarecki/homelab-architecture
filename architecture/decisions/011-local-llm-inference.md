@@ -1,7 +1,11 @@
-# ADR 005: Local LLM Inference with Ollama on a Dedicated GPU Worker
+---
+title: "ADR 011: Local LLM Inference with Ollama on a Dedicated GPU Worker"
+eyebrow: Architecture Decision Record
+summary: GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network.
+permalink: /architecture/decisions/011-local-llm-inference/
+---
 
-**Status:** Accepted  
-**Date:** 2026
+**Status:** Accepted — runtime extended by [ADR 014](../014-vllm-inference/) &nbsp;·&nbsp; **Date:** Dec 2025 &nbsp;·&nbsp; [← All ADRs](../../)
 
 ---
 
@@ -45,4 +49,15 @@ Dedicate one Kubernetes worker node (`kube-worker-ai`) to GPU workloads. Use **O
 
 ## Outcome
 
-The GPU worker runs stably with Ollama serving models at `ollama-service.ollama.svc.cluster.local:11434`. Hermes, Policyclaw, and Open WebUI all consume it. The stack has survived Talos upgrades and node reboots without requiring manual intervention.
+The GPU worker runs stably with Ollama serving models at `ollama-service.ollama.svc.cluster.local:11434`. Open WebUI consumes it daily, and it powers [Cortexa](../../../projects/cortexa/)'s evaluation runs. The agent-runtime experiments that drove the original requirement (Hermes, Openclaw, Policyclaw) ran on it before being shelved for a future home inside [Cortexa](../../../projects/cortexa/) — see [ADR 013](../013-mcp-ai-operations/). The stack has survived Talos upgrades and node reboots without requiring manual intervention.
+
+*The four-layer debugging story behind getting here is in [Lessons Learned](../../../lessons-learned/). The hard-won VRAM sizing data this rig produced is written up on the [Cortexa](../../../projects/cortexa/) page.*
+
+> **Update (Aug 2026):** This ADR's core decision — a dedicated GPU worker running local inference, no prompt leaving the network — still holds. What's changed is the *runtime*: Ollama is no longer the sole engine. Generation is moving to **vLLM** for throughput and tensor parallelism, with Ollama retained for embeddings and experimentation. The reasoning and mid-flight status are in [ADR 014](../014-vllm-inference/).
+
+
+<div class="adr-nav">
+  <a href="../010-cloudnative-pg/">&larr; ADR 010 &middot; CloudNativePG</a>
+  <a class="adr-nav-all" href="../../">ADR 11 of 14</a>
+  <a href="../012-layered-backup-strategy/">ADR 012 &middot; Layered backup strategy &rarr;</a>
+</div>

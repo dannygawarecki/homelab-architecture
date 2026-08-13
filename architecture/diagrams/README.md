@@ -1,4 +1,9 @@
-# Architecture Diagrams
+---
+title: Architecture Diagrams
+eyebrow: Architecture
+summary: Physical layout, network trust zones, and the platform capability map.
+permalink: /architecture/diagrams/
+---
 
 Diagrams are created in [Excalidraw](https://excalidraw.com).
 
@@ -14,7 +19,7 @@ Three HP workstations form a Proxmox cluster, each running Talos VMs for the Kub
 
 ## Network Layout
 
-![Network Layout](../../images/network-layout.png)
+![Network Layout](../../images/network-layout-v2.png)
 
 The network is segmented into trust zones enforced at the firewall:
 
@@ -33,7 +38,7 @@ The network is segmented into trust zones enforced at the firewall:
 
 ## Platform View
 
-![Platform View](../../images/platform-view.png)
+![Platform View](../../images/platform-view-v2.png)
 
 The Talos Kubernetes platform is organised into seven capability areas:
 
@@ -45,4 +50,6 @@ The Talos Kubernetes platform is organised into seven capability areas:
 | **Observability** | Dozzle, Netdata, Ntfy, Uptime Kuma |
 | **Security & Compliance** | Authentik, Cert-Manager, Checkov, External-Secrets, Falco, Gitleaks, Kube-bench, Polaris, Vault |
 | **Local AI Platform** | Nvidia Device Plugin, Ollama, Open Web UI, 10+ MCP Servers, Openclaw Operator, Hermes Agent, Policyclaw (custom) |
+
+*Diagram update pending: Openclaw, Hermes, and Policyclaw have since been archived — the story of what they were and why is in [ADR 013](../decisions/013-mcp-ai-operations/).*
 | **User Apps** | Homepage, Karakeep, Paperless, Wallos |

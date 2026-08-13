@@ -1,0 +1,39 @@
+title: Danny Gawarecki — Platform Engineering
+tagline: A production-grade Kubernetes platform, built at home.
+description: >-
+  A homelab that grew into a platform: Talos Kubernetes, full GitOps, zero-trust
+  networking, and a local AI inference stack — plus the side projects running on top of it.
+author: Danny Gawarecki
+
+url: https://dannygawarecki.github.io
+baseurl: /homelab-architecture
+
+github_username: dannygawarecki
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  hard_wrap: false
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Social card for LinkedIn/OpenGraph previews (used by jekyll-seo-tag)
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: page
+      image: /assets/img/social-card.png
+
+exclude:
+  - README.md
+  - DEVELOPMENT.md
+  - Gemfile
+  - Gemfile.lock
+  - docker-compose.yml
+  - .dev
+  - vendor
+  - .gitignore

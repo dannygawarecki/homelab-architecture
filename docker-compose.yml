@@ -1,0 +1,43 @@
+# Local preview for the GitHub Pages site. Requires only Docker — no Ruby on the host.
+#
+#   docker compose up          preview at http://localhost:4000 with live reload
+#   docker compose run --rm build    one-shot build; fails loudly on error
+#
+services:
+  site:
+    build:
+      context: .
+      dockerfile: .dev/Dockerfile
+    ports:
+      - "4000:4000"
+      - "35729:35729"   # livereload
+    volumes:
+      - .:/srv
+      - jekyll-cache:/srv/.jekyll-cache
+    # Keeps the container's bundle from being shadowed by the host mount
+    environment:
+      - JEKYLL_ENV=development
+
+  # One-shot build used to verify the site compiles before pushing.
+  build:
+    build:
+      context: .
+      dockerfile: .dev/Dockerfile
+    volumes:
+      - .:/srv
+    command: bundle exec jekyll build --trace --baseurl ""
+
+  # Build, then check every internal link and image actually resolves.
+  # Jekyll will happily build a site full of dead links; this is what catches them.
+  # External URLs are not checked — they fail for reasons that have nothing to do
+  # with this repo (rate limits, offline hosts) and would train you to ignore red.
+  check:
+    build:
+      context: .
+      dockerfile: .dev/Dockerfile
+    volumes:
+      - .:/srv
+    command: sh -c "bundle exec jekyll build --trace --baseurl '' && bundle exec htmlproofer ./_site --disable-external --allow-hash-href --no-enforce-https"
+
+volumes:
+  jekyll-cache:

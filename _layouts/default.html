@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% seo %}
+  <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬢</text></svg>">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{{ '/' | relative_url }}">
+      <span class="brand-mark">⬢</span>
+      <span class="brand-text">Danny Gawarecki</span>
+    </a>
+    <nav class="site-nav">
+      <a href="{{ '/architecture/' | relative_url }}">Architecture</a>
+      <a href="{{ '/infrastructure/' | relative_url }}">Infrastructure</a>
+      <a href="{{ '/projects/' | relative_url }}">Projects</a>
+      <a href="{{ '/lessons-learned/' | relative_url }}">Lessons</a>
+      <a href="{{ '/copilot-experiments/' | relative_url }}">AI Engineering</a>
+      <a class="nav-ext" href="https://github.com/{{ site.github_username }}">GitHub&nbsp;↗</a>
+      <a class="nav-ext" href="https://www.linkedin.com/in/danny-gawarecki/">LinkedIn&nbsp;↗</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  {{ content }}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="about">
+      <span class="about-avatar" aria-hidden="true">DG</span>
+      <div class="about-body">
+        <p class="about-name">Danny Gawarecki</p>
+        <p class="about-bio">I build and operate infrastructure — and I self-host because you don't really understand a system until you've built it, broken it, and fixed it yourself. This site is my homelab: a production-grade Kubernetes platform, and the projects running on it.</p>
+        <p class="about-links">
+          <a href="https://www.linkedin.com/in/danny-gawarecki/">LinkedIn&nbsp;↗</a> ·
+          <a href="https://github.com/{{ site.github_username }}">GitHub&nbsp;↗</a> ·
+          <a href="https://github.com/{{ site.github_username }}/homelab-architecture">Site source</a>
+        </p>
+      </div>
+    </div>
+    <p class="muted">Diagrams made in Excalidraw. Site built with Jekyll.</p>
+  </div>
+</footer>
+
+</body>
+</html>

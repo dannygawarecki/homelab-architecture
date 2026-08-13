@@ -1,7 +1,11 @@
-# ADR 003: GitOps with ArgoCD (App of Apps Pattern)
+---
+title: "ADR 001: GitOps with ArgoCD (App of Apps Pattern)"
+eyebrow: Architecture Decision Record
+summary: One root Application bootstraps the entire cluster. Git is the only way in.
+permalink: /architecture/decisions/001-gitops-argocd/
+---
 
-**Status:** Accepted  
-**Date:** 2025
+**Status:** Accepted &nbsp;·&nbsp; **Date:** July 2025 &nbsp;·&nbsp; [← All ADRs](../../)
 
 ---
 
@@ -44,3 +48,10 @@ Use **ArgoCD** with the **App of Apps** pattern. A single root `Application` poi
 ## Outcome
 
 Every workload in the cluster is managed through ArgoCD. The cluster can be (and has been) fully rebuilt from the home-lab-argocd repo. The root application bootstraps everything else in dependency order.
+
+
+<div class="adr-nav">
+  <span></span>
+  <a class="adr-nav-all" href="../../">ADR 1 of 14</a>
+  <a href="../002-self-hosted-gitea-ci/">ADR 002 &middot; Self-hosted Gitea + CI &rarr;</a>
+</div>

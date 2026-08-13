@@ -1,0 +1,210 @@
+---
+layout: default
+title: Platform Engineering Portfolio
+description: A production-grade Kubernetes platform built at home — Talos, full GitOps, zero-trust networking, local GPU inference — and the side projects running on top of it.
+---
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Platform Engineering · Home Lab</p>
+    <h1>I built a production-grade platform at home, then wrote down everything I learned.</h1>
+    <p class="lede">
+      A 6-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust
+      networking, and local GPU inference — plus the applications running on top of it.
+      Three rebuilds from scratch. One data loss. All of it documented, including the parts
+      that didn't work.
+    </p>
+    <div class="actions">
+      <a class="btn btn-primary" href="{{ '/projects/' | relative_url }}">See the projects</a>
+      <a class="btn" href="{{ '/architecture/' | relative_url }}">Read the architecture</a>
+      <a class="btn" href="{{ '/lessons-learned/' | relative_url }}">What broke</a>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><span class="num">6</span><span class="lbl">Talos K8s nodes</span></div>
+    <div class="stat"><span class="num">3</span><span class="lbl">Proxmox hosts</span></div>
+    <div class="stat"><span class="num">72</span><span class="lbl">ArgoCD applications</span></div>
+    <div class="stat"><span class="num">37</span><span class="lbl">Monitored endpoints</span></div>
+    <div class="stat"><span class="num">8</span><span class="lbl">Network trust zones</span></div>
+    <div class="stat"><span class="num">100%</span><span class="lbl">GitOps delivered</span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="wrap">
+    <h2>Start here</h2>
+    <p class="section-sub">
+      Two things that are built and running — and one arc still being written. If you have
+      five minutes, start with any of them.
+    </p>
+
+    <p class="eyebrow" style="margin-top: 2rem;">Built and running</p>
+    <div class="cards">
+      <a class="card" href="{{ '/architecture/' | relative_url }}">
+        <span class="card-tag">Platform · 14 ADRs · 72 apps</span>
+        <h3>The homelab platform</h3>
+        <p>A production-grade Kubernetes platform on Talos and Proxmox — full GitOps,
+        zero-trust networking, local GPU inference. It grew from a single Home Assistant box
+        into 72 ArgoCD applications, documented across fourteen decision records that show the
+        tradeoffs I accepted rather than solved.</p>
+      </a>
+      <a class="card" href="{{ '/projects/big-ads/' | relative_url }}">
+        <span class="card-tag">Product · Shipped, in daily use</span>
+        <h3>big-ads</h3>
+        <p>A grocery flyer viewer for a user with severe visual impairment. Accessibility
+        constraints drove every engineering decision — no build step, no database, graceful
+        degradation across three scraping fallbacks.</p>
+      </a>
+    </div>
+
+    <p class="eyebrow" style="margin-top: 2.5rem;">The arc, still in motion</p>
+    <div class="cards">
+      <a class="card" href="{{ '/projects/' | relative_url }}">
+        <span class="card-tag">AI systems · Converging on Cortexa</span>
+        <h3>Cortexa &amp; the AI arc</h3>
+        <p>Three efforts — a knowledge engine, a governance gateway, and a collaboration
+        runtime — turned out to be one question: what does it take to build an AI collaborator
+        you can actually trust? Cortexa is the synthesis the others are folding into, and it
+        ships with a blind-judged evaluation harness honest enough to tell me, on the first
+        run, that it wasn't working yet.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="border-top: 1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>The platform</h2>
+    <p class="section-sub">
+      This didn't start as a platform. It started in 2024 with Home Assistant, some ESP32s,
+      and wanting to learn a little Linux — and got serious in July 2025.
+    </p>
+
+    <a href="{{ '/architecture/diagrams/' | relative_url }}" class="hero-figure">
+      <img src="{{ '/images/platform-view-v2.png' | relative_url }}?v={{ site.time | date: '%s' }}"
+           alt="Platform capability map showing seven areas: GitOps delivery, networking and segmentation, data persistence, observability, security and compliance, local AI platform, and user applications.">
+      <span class="figcap">The platform's seven capability areas — see all diagrams →</span>
+    </a>
+
+    <div class="cards">
+      <div class="card">
+        <span class="card-tag">Compute</span>
+        <h3>Talos on Proxmox</h3>
+        <p>3-node Proxmox cluster with ZFS. 6-node Talos Kubernetes cluster — immutable,
+        API-driven, no SSH. One worker dedicated to GPU inference.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">Networking</span>
+        <h3>Zero-trust by default</h3>
+        <p>Cilium eBPF networking with per-namespace egress policy. Istio ambient mode for
+        mTLS without sidecars. VLAN segmentation across eight trust zones.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">Delivery</span>
+        <h3>Git is the only way in</h3>
+        <p>App-of-Apps ArgoCD bootstraps everything. Vault is the single source of truth for
+        secrets, synced at runtime by External Secrets. No <code>kubectl apply</code>.</p>
+      </div>
+      <div class="card">
+        <span class="card-tag">AI Platform</span>
+        <h3>Inference that stays home</h3>
+        <p>GPU passthrough from Proxmox through Talos into Kubernetes, serving local models
+        on the GPU worker. No prompt leaves the network, and there's no per-token bill.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="border-top: 1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>How it grew</h2>
+    <p class="section-sub">
+      Eighteen months of tinkering, then a year of building. It didn't arrive as a platform —
+      it accreted, one problem at a time, through a couple of rebuilds and one fight I lost
+      outright.
+    </p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-date">2024 – mid 2025 · the prelude</div>
+        <div class="tl-title">Home Assistant, ESP32s, Docker on the NAS</div>
+        <p>It started small and stayed small for a while: Home Assistant and a handful of
+        ESP32s on an existing Unifi and Synology foundation, then containers running straight
+        on the NAS. The goal was to learn a little Linux. Eighteen months of tinkering that
+        looks unremarkable on a timeline — and taught me enough to want something better.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Jul 2025 · it gets serious</div>
+        <div class="tl-title">Bare-metal k0s, and GitOps from day one</div>
+        <p>Containers moved off the NAS onto a dedicated server, run as a pet. ArgoCD and
+        self-hosted Gitea made Git the only way to change what was deployed. This is where
+        the homelab stopped being a hobby project and started being infrastructure.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Aug 2025</div>
+        <div class="tl-title">The platform layer</div>
+        <p>SSO through Authentik, secrets through Vault and External Secrets, automated
+        certificates. It stopped being "some containers" and started being a platform.</p>
+      </div>
+      <div class="tl-item tl-loss">
+        <div class="tl-date">Sep 2025 · a loss</div>
+        <div class="tl-title">The GPU passthrough fight — lost</div>
+        <p>A dedicated AI workstation joined the lab, but GPU passthrough into k0s containers
+        never came together. I lost that one outright — and it forced the next two steps.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Nov 2025 · the big migration</div>
+        <div class="tl-title">Nodes became cattle</div>
+        <p>Kubernetes moved onto disposable Proxmox VMs running immutable Talos Linux. GPU
+        passthrough worked on the first serious attempt, and the mental model flipped from
+        "repair the server" to "rebuild the node."</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Nov 2025</div>
+        <div class="tl-title">Zero-trust networking</div>
+        <p>Cilium eBPF with per-namespace egress policy, and Istio ambient mTLS across the
+        mesh. A new service reaching the internet became a deliberate change to Git, not a
+        default.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Dec 2025 – today</div>
+        <div class="tl-title">Local AI, first-class</div>
+        <p>Ollama on the GPU worker, then eleven MCP servers giving AI tooling scoped access
+        to the platform, then vLLM for throughput. The lab now helps operate itself.</p>
+      </div>
+    </div>
+    <p class="section-sub" style="margin-top: 2rem;">
+      The reasoning behind each step is in the
+      <a href="{{ '/architecture/decisions/' | relative_url }}">decision records</a>; what
+      broke getting there is in <a href="{{ '/lessons-learned/' | relative_url }}">lessons learned</a>.
+    </p>
+  </div>
+</section>
+
+<section class="section" style="border-top: 1px solid var(--line-soft);">
+  <div class="wrap">
+    <h2>Why the failures are on the site</h2>
+    <p class="section-sub">
+      A homelab writeup that only lists what worked tells you nothing about the engineer.
+      These pages are the ones I'd actually want read.
+    </p>
+    <div class="cards">
+      <a class="card" href="{{ '/lessons-learned/' | relative_url }}">
+        <span class="card-tag">Operations</span>
+        <h3>Lessons learned</h3>
+        <p>The GPU passthrough fight I lost completely on k0s. The MTU misconfiguration that
+        looked like application bugs for weeks. Retrofitting secrets management after the
+        fact — and why that ordering was the mistake.</p>
+      </a>
+      <a class="card" href="{{ '/copilot-experiments/' | relative_url }}">
+        <span class="card-tag">Practice</span>
+        <h3>AI-assisted engineering</h3>
+        <p>Where AI tools genuinely accelerated this work, where they cost me days, and the
+        most dangerous failure mode: being confidently assured a destructive action was
+        safe.</p>
+      </a>
+    </div>
+  </div>
+</section>

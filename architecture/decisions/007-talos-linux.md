@@ -1,7 +1,11 @@
-# ADR 001: Use Talos Linux as the Kubernetes OS
+---
+title: "ADR 007: Use Talos Linux as the Kubernetes OS"
+eyebrow: Architecture Decision Record
+summary: An immutable, API-driven, SSH-less OS — chosen to make nodes disposable and eliminate configuration drift.
+permalink: /architecture/decisions/007-talos-linux/
+---
 
-**Status:** Accepted  
-**Date:** 2026
+**Status:** Accepted &nbsp;·&nbsp; **Date:** Nov 2025 &nbsp;·&nbsp; [← All ADRs](../../)
 
 ---
 
@@ -45,3 +49,12 @@ Use **Talos Linux** for all Kubernetes nodes (control plane and workers).
 ## Outcome
 
 The cluster has been running stably. Upgrades are done by regenerating machine configs and applying them via `talosctl` — no manual steps on the nodes. I wish I would have made this decision in the beginning!
+
+*The k0s experience that drove this decision is written up in [Lessons Learned](../../../lessons-learned/).*
+
+
+<div class="adr-nav">
+  <a href="../006-proxmox-vms/">&larr; ADR 006 &middot; Kubernetes on Proxmox VMs</a>
+  <a class="adr-nav-all" href="../../">ADR 7 of 14</a>
+  <a href="../008-cilium-cni/">ADR 008 &middot; Cilium CNI &rarr;</a>
+</div>
