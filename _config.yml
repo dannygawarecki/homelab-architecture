@@ -5,8 +5,8 @@ description: >-
   networking, and a local AI inference stack — plus the side projects running on top of it.
 author: Danny Gawarecki
 
-url: https://dannygawarecki.github.io
-baseurl: /homelab-architecture
+url: https://lab.gawarecki.us
+baseurl: ""
 
 github_username: dannygawarecki
 
