@@ -1,6 +1,6 @@
 # Home Lab Platform Engineering
 
-### 📖 **[Read this as a site → dannygawarecki.github.io/homelab-architecture](https://dannygawarecki.github.io/homelab-architecture/)**
+### 📖 **[Read this as a site → lab.gawarecki.us](https://lab.gawarecki.us/)**
 
 *A 6-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust networking, and local GPU inference — plus the applications running on top of it.*
 
@@ -79,16 +79,16 @@ This isn't a homelab running a few Docker containers. It's a platform, and the e
 
 ## Projects Running on the Platform
 
-The platform exists to run things. One is a shipped product; the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://dannygawarecki.github.io/homelab-architecture/projects/).
+The platform exists to run things. One is a shipped product; the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://lab.gawarecki.us/projects/).
 
 | Project | What it is | Status |
 |---|---|---|
-| **[big-ads](https://dannygawarecki.github.io/homelab-architecture/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule; a 347-line dependency-free UI. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
-| **[Context Engine](https://dannygawarecki.github.io/homelab-architecture/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen, folding into Cortexa |
-| **[Policyclaw](https://dannygawarecki.github.io/homelab-architecture/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | First-gen, design input to Cortexa |
-| **[Cortexa](https://dannygawarecki.github.io/homelab-architecture/projects/cortexa/)** | The synthesis: an AI collaboration engine that puts collaborative behavior in code rather than a system prompt — with a blind-judged evaluation harness built to falsify that claim. | MVP, in development |
+| **[big-ads](https://lab.gawarecki.us/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule; a 347-line dependency-free UI. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
+| **[Context Engine](https://lab.gawarecki.us/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen, folding into Cortexa |
+| **[Policyclaw](https://lab.gawarecki.us/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | First-gen, design input to Cortexa |
+| **[Cortexa](https://lab.gawarecki.us/projects/cortexa/)** | The synthesis: an AI collaboration engine that puts collaborative behavior in code rather than a system prompt — with a blind-judged evaluation harness built to falsify that claim. | MVP, in development |
 
-big-ads is delivered to the cluster through the GitOps pipeline described below; the AI projects consume the platform's Postgres, Ollama, and MCP layer. Cortexa is the successor the other two are converging into — see the [through-line](https://dannygawarecki.github.io/homelab-architecture/projects/).
+big-ads is delivered to the cluster through the GitOps pipeline described below; the AI projects consume the platform's Postgres, Ollama, and MCP layer. Cortexa is the successor the other two are converging into — see the [through-line](https://lab.gawarecki.us/projects/).
 
 ---
 
