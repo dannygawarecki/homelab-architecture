@@ -26,7 +26,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
   <div class="stats">
     <div class="stat"><span class="num">6</span><span class="lbl">Talos K8s nodes</span></div>
     <div class="stat"><span class="num">3</span><span class="lbl">Proxmox hosts</span></div>
-    <div class="stat"><span class="num">72</span><span class="lbl">ArgoCD applications</span></div>
+    <div class="stat"><span class="num">76</span><span class="lbl">ArgoCD applications</span></div>
     <div class="stat"><span class="num">37</span><span class="lbl">Monitored endpoints</span></div>
     <div class="stat"><span class="num">8</span><span class="lbl">Network trust zones</span></div>
     <div class="stat"><span class="num">100%</span><span class="lbl">GitOps delivered</span></div>
@@ -44,11 +44,11 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <p class="eyebrow" style="margin-top: 2rem;">Built and running</p>
     <div class="cards">
       <a class="card" href="{{ '/architecture/' | relative_url }}">
-        <span class="card-tag">Platform · 14 ADRs · 72 apps</span>
+        <span class="card-tag">Platform · 16 ADRs · 76 apps</span>
         <h3>The homelab platform</h3>
         <p>A production-grade Kubernetes platform on Talos and Proxmox — full GitOps,
         zero-trust networking, local GPU inference. It grew from a single Home Assistant box
-        into 72 ArgoCD applications, documented across fourteen decision records that show the
+        into 76 ArgoCD applications, documented across sixteen decision records that show the
         tradeoffs I accepted rather than solved.</p>
       </a>
       <a class="card" href="{{ '/projects/big-ads/' | relative_url }}">
@@ -84,7 +84,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     </p>
 
     <a href="{{ '/architecture/diagrams/' | relative_url }}" class="hero-figure">
-      <img src="{{ '/images/platform-view-v2.png' | relative_url }}?v={{ site.time | date: '%s' }}"
+      <img src="{{ '/images/platform-view-v3.png' | relative_url }}?v={{ site.time | date: '%s' }}"
            alt="Platform capability map showing seven areas: GitOps delivery, networking and segmentation, data persistence, observability, security and compliance, local AI platform, and user applications.">
       <span class="figcap">The platform's seven capability areas — see all diagrams →</span>
     </a>
@@ -169,10 +169,18 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
         default.</p>
       </div>
       <div class="tl-item">
-        <div class="tl-date">Dec 2025 – today</div>
+        <div class="tl-date">Dec 2025 – mid 2026</div>
         <div class="tl-title">Local AI, first-class</div>
-        <p>Ollama on the GPU worker, then eleven MCP servers giving AI tooling scoped access
+        <p>Ollama on the GPU worker, then a dozen MCP servers giving AI tooling scoped access
         to the platform, then vLLM for throughput. The lab now helps operate itself.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Aug 2026 · day two</div>
+        <div class="tl-title">Seeing it, and reaching it</div>
+        <p>The build slowed down and the operating started. Hubble and Kiali to see what the
+        network and mesh are actually doing, a Tailscale subnet router for private remote
+        access, and a deliberate decision <em>not</em> to run a metrics stack. Less new
+        capability, more understanding what's already there.</p>
       </div>
     </div>
     <p class="section-sub" style="margin-top: 2rem;">

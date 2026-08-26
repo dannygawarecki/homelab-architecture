@@ -75,11 +75,21 @@ The records are ordered as the platform came together — foundational choices f
   <a class="card" href="013-mcp-ai-operations/">
     <span class="card-tag">ADR 013 · Mar 2026</span>
     <h3>MCP servers as the AI-ops interface</h3>
-    <p>Eleven scoped, in-cluster MCP servers give AI tooling live platform access without credentials ever leaving the cluster.</p>
+    <p>Twelve scoped, in-cluster MCP servers give AI tooling live platform access without credentials ever leaving the cluster.</p>
   </a>
   <a class="card" href="014-vllm-inference/">
     <span class="card-tag">ADR 014 · Aug 2026</span>
     <h3>vLLM for served generation</h3>
     <p>A throughput-first runtime — a quantized 30B tensor-parallel across both GPUs — alongside Ollama, which moved to embeddings. Documented mid-migration.</p>
+  </a>
+  <a class="card" href="015-tailscale-remote-access/">
+    <span class="card-tag">ADR 015 · Aug 2026</span>
+    <h3>A Tailscale subnet router</h3>
+    <p>A deliberate exception to "Git is the only way in" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't.</p>
+  </a>
+  <a class="card" href="016-observability-approach/">
+    <span class="card-tag">ADR 016 · Aug 2026</span>
+    <h3>Targeted observability, no single pane</h3>
+    <p>I ran a full APM stack, retired it, and replaced it with narrow tools per layer — accepting that nothing correlates, and saying why that's the right call here.</p>
   </a>
 </div>

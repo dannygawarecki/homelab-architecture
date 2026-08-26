@@ -343,3 +343,34 @@ pre code { background: none; border: 0; padding: 0; font-size: inherit; }
   .header-inner { min-height: auto; padding-top: .6rem; padding-bottom: .6rem; }
   .site-nav { gap: .85rem; font-size: .85rem; }
 }
+
+/* ---------- callout / signup ---------- */
+.callout {
+  margin: 3rem 0 1rem;
+  padding: 1.6rem 1.6rem 1.4rem;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+}
+.callout h3 { margin: 0 0 .75rem; font-size: 1.12rem; letter-spacing: -0.01em; }
+.callout p { color: var(--text-dim); font-size: .95rem; }
+.callout p:last-of-type { margin-bottom: 0; }
+
+.signup { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
+.signup input[type="email"] {
+  flex: 1 1 16rem; min-width: 0;
+  padding: .7rem .85rem;
+  font: inherit; font-size: .95rem;
+  color: var(--text); background: var(--bg-raise);
+  border: 1px solid var(--line); border-radius: 8px;
+}
+.signup input[type="email"]::placeholder { color: var(--text-mute); }
+.signup input[type="email"]:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.signup button { flex: 0 0 auto; cursor: pointer; font: inherit; }
+.signup-note {
+  margin-top: .7rem; font-size: .82rem; color: var(--text-mute);
+}

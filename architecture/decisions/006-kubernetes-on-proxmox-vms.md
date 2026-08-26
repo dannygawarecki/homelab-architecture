@@ -44,6 +44,6 @@ Nodes are rebuilt routinely without drama. The full stack — Proxmox → Talos 
 
 <div class="adr-nav">
   <a href="../005-synology-iscsi-storage/">&larr; ADR 005 &middot; Synology iSCSI storage</a>
-  <a class="adr-nav-all" href="../../">ADR 6 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 6 of 16</a>
   <a href="../007-talos-linux/">ADR 007 &middot; Talos Linux &rarr;</a>
 </div>

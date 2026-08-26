@@ -69,7 +69,7 @@ Treat Copilot output like a PR from a capable junior engineer who hasn't worked 
 
 ## Pattern: Make It Build the Verifier
 
-The upgrade on "verify, don't trust": when a change is too large to eyeball, have the assistant write the check *as well as* the change. Restructuring fourteen ADR files was fine; what made it safe was a script asserting that every filename, title, and permalink agreed, and that no link label pointed somewhere else. Same instinct as the link checker that runs before every push, and the same instinct behind Cortexa's evaluation harness.
+The upgrade on "verify, don't trust": when a change is too large to eyeball, have the assistant write the check *as well as* the change. Restructuring the ADR files was fine; what made it safe was a script asserting that every filename, title, and permalink agreed, and that no link label pointed somewhere else. Same instinct as the link checker that runs before every push, and the same instinct behind Cortexa's evaluation harness.
 
 There's a pattern across everything on this site: the AI-assisted work I trust most is the work where I also built the thing that would catch it being wrong. That generalises well beyond AI, but AI makes it urgent — a tool that produces plausible output at high speed needs a check that runs at the same speed.
 

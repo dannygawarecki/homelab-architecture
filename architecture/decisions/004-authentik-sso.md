@@ -22,7 +22,7 @@ Options:
 
 ## Decision
 
-**Authentik is the identity provider for everything.** Eleven OAuth2/OIDC provider-application pairs are generated in Terraform from a single `for_each` map — adding SSO to a new app is one map entry. Authorization is two groups: application **admins** and application **users**, bound per-application.
+**Authentik is the identity provider for everything.** Ten OAuth2/OIDC provider-application pairs are generated in Terraform from a single `for_each` map — adding SSO to a new app is one map entry. Authorization is two groups: application **admins** and application **users**, bound per-application.
 
 The deliberate part is scope: not just user apps (Paperless, Outline, Home Assistant, and the rest) but the **infrastructure itself** — Vault, ArgoCD, Gitea, and even Proxmox authenticate against Authentik via OIDC.
 
@@ -41,11 +41,11 @@ The deliberate part is scope: not just user apps (Paperless, Outline, Home Assis
 
 ## Outcome
 
-Every web surface on the platform sits behind the same login. Onboarding the second user was a group membership, not eleven account creations. The `for_each` pattern has held: new applications get SSO in roughly ten lines of diff.
+Every web surface on the platform sits behind the same login. Onboarding the second user was a group membership, not ten account creations. The `for_each` pattern has held: new applications get SSO in roughly ten lines of diff.
 
 
 <div class="adr-nav">
   <a href="../003-vault-external-secrets/">&larr; ADR 003 &middot; Vault + External Secrets</a>
-  <a class="adr-nav-all" href="../../">ADR 4 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 4 of 16</a>
   <a href="../005-synology-iscsi-storage/">ADR 005 &middot; Synology iSCSI storage &rarr;</a>
 </div>

@@ -55,6 +55,6 @@ The cluster has been running stably. Upgrades are done by regenerating machine c
 
 <div class="adr-nav">
   <a href="../006-proxmox-vms/">&larr; ADR 006 &middot; Kubernetes on Proxmox VMs</a>
-  <a class="adr-nav-all" href="../../">ADR 7 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 7 of 16</a>
   <a href="../008-cilium-cni/">ADR 008 &middot; Cilium CNI &rarr;</a>
 </div>

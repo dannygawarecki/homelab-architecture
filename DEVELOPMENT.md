@@ -25,14 +25,12 @@ The image uses the real `github-pages` gem rather than standalone Jekyll, so a l
 matches what GitHub actually runs. Standalone Jekyll is a newer major version and would
 hide version differences until they showed up in production.
 
-## Two things that will confuse you later
+## Things that will confuse you later
 
-**`--baseurl ''` is set on every local command.** In production the site lives at
-`/homelab-architecture`; locally it's served from the root. Without the override, every
-stylesheet and image 404s locally.
-
-A side effect: the SEO canonical URLs in local output are missing the `/homelab-architecture`
-segment. That's expected and only affects local builds — which is one reason the link
+**The site publishes to the custom domain `lab.gawarecki.us`**, so `baseurl` is `""` and the
+local `--baseurl ''` override now matches production exactly. The `CNAME` file at the repo
+root is what tells GitHub Pages about the domain — don't delete it. Local canonical URLs
+still differ from production (they point at `localhost`), which is one reason the link
 checker runs with `--disable-external`.
 
 **After changing the `Gemfile`, run `docker compose build` with no service name.** All three
@@ -49,9 +47,9 @@ actually being served at the CSS path before blaming the browser.
 
 **Updating a diagram? Rename the file.** Browsers cache images by URL, and the markdown
 pages can't carry cache-busting query strings (they'd break GitHub's rendering of the same
-files). So the convention is content-versioned filenames: `network-layout-v2.png`,
-`-v3`, and so on — update the handful of references and every cache, everywhere, misses
-cleanly. Same-name overwrites are what cause "my new diagram isn't showing."
+files). So the convention is content-versioned filenames: `network-layout-v3.png`
+becomes `-v4`, and so on — update the handful of references and every cache, everywhere,
+misses cleanly. Delete the superseded file once nothing references it. Same-name overwrites are what cause "my new diagram isn't showing."
 
 **Link checking is deliberately internal-only.** External URLs fail for reasons that have
 nothing to do with this repo — rate limits, hosts that block CI, sites that are briefly
@@ -82,7 +80,7 @@ down. A check that goes red for reasons you can't fix is a check you learn to ig
 
 - `_layouts/default.html` — header, nav, footer. Edit the nav here.
 - `_layouts/page.html` — the prose wrapper. Renders `title` / `eyebrow` / `summary`.
-- `assets/css/style.css` — all styling. Colors are CSS custom properties at the top and
+- `assets/css/site.css` — all styling. Colors are CSS custom properties at the top and
   the whole sheet supports light and dark via `prefers-color-scheme`.
 - The root `README.md` is excluded from the site (see `exclude:` in `_config.yml`). It's
   the GitHub-native entry point and points at the site.

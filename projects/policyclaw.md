@@ -17,7 +17,7 @@ It isn't running today. It was never a product; it was infrastructure, and a pro
 
 ## The discovered need
 
-The MCP layer gave AI tooling structured, credential-contained access to eleven platform systems. That's agency — and agency is exactly what you want to be nervous about. A read-only query against the Kubernetes API is harmless. A write against Vault, or a delete against Talos, is not. Authentication scoping and network policy contain *who* can reach a server; they say nothing about *which specific action* is about to run, or whether a human should see it first.
+The MCP layer gave AI tooling structured, credential-contained access to a dozen platform systems. That's agency — and agency is exactly what you want to be nervous about. A read-only query against the Kubernetes API is harmless. A write against Vault, or a delete against Talos, is not. Authentication scoping and network policy contain *who* can reach a server; they say nothing about *which specific action* is about to run, or whether a human should see it first.
 
 Nothing in the stack put a person in the loop at the moment of a dangerous call. Policyclaw was built to be that thing.
 
@@ -28,7 +28,7 @@ Nothing in the stack put a person in the loop at the moment of a dangerous call.
 A gateway, written in Go, that sat between the AI client and the MCP servers. Every tool call was routed through it, classified, and either passed or held:
 
 - **An OPA sidecar** (Open Policy Agent) evaluated each call against Rego policy. Keeping policy in OPA rather than in application code meant the rules were declarative, inspectable, and changeable without a rebuild.
-- **Per-backend risk tiers.** Each of the eleven MCP backends carried a tier. Read-only surfaces (Kubernetes queries, MinIO reads) were `allow` — they flowed straight through. Mutating or high-blast-radius surfaces (Vault, CloudNativePG, Synology, Talos, ArgoCD) were `require_confirmation`.
+- **Per-backend risk tiers.** Each MCP backend carried a tier. Read-only surfaces (Kubernetes queries, MinIO reads) were `allow` — they flowed straight through. Mutating or high-blast-radius surfaces (Vault, CloudNativePG, Synology, Talos, ArgoCD) were `require_confirmation`.
 - **A human confirmation gate.** A `require_confirmation` call didn't execute. It paused, surfaced exactly what was about to happen, and waited for an explicit human yes. Confirmations were persisted to a volume, so the decision survived restarts rather than evaporating mid-session.
 
 The design principle: **the model proposes; code disposes.** An agent could *ask* to do anything, and the dangerous asks were rendered as a decision a person had to actively make — not something buried in a stream of autonomous actions.

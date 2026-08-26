@@ -1,7 +1,7 @@
 ---
 title: "ADR 013: MCP Servers as the AI-Operations Interface"
 eyebrow: Architecture Decision Record
-summary: Eleven in-cluster MCP servers give AI tooling structured, scoped access to platform APIs — instead of pasted terminal output or raw credentials.
+summary: Twelve in-cluster MCP servers give AI tooling structured, scoped access to platform APIs — instead of pasted terminal output or raw credentials.
 permalink: /architecture/decisions/013-mcp-ai-operations/
 ---
 
@@ -19,7 +19,7 @@ AI assistants became genuinely useful for operating this platform once they coul
 
 ## Decision
 
-**Eleven MCP servers run in the cluster** — Kubernetes, ArgoCD, Gitea, Vault, MinIO, CloudNativePG, Talos, Authentik, Synology, Unifi, and Paperless — each a small Deployment in a dedicated namespace. Design rules:
+**Twelve MCP servers run in the cluster** — Kubernetes, ArgoCD, Gitea, Vault, MinIO, CloudNativePG, Talos, Authentik, Synology, Unifi, Paperless, and Karakeep — each a small Deployment in a dedicated namespace. Design rules:
 
 - **Credentials never leave the cluster.** Each server authenticates to its target with a dedicated credential delivered by ESO from Vault ([ADR 003](../003-vault-external-secrets/)). The AI client talks to the MCP endpoint; it never holds a platform secret.
 - **Least privilege per target, where the target allows it.** The Kubernetes server runs under a ClusterRole limited to `get`/`list`/`watch` — read-only by construction. The ArgoCD server uses a dedicated service account whose RBAC permits viewing and syncing applications, nothing else.
@@ -35,8 +35,8 @@ AI assistants became genuinely useful for operating this platform once they coul
 ## Tradeoffs
 
 - **Not everything is read-only.** Some servers expose mutating operations, and per-*tool* authorization within a server is coarse. The current containment is authentication scoping plus network policy — honest gap: a malicious or confused client with mesh access to a write-capable server can do write-capable things.
-- **I built the governance layer, then learned it was the wrong shape.** [Policyclaw](../../../projects/policyclaw/) — a custom Go MCP gateway with an OPA sidecar — routed all eleven servers through per-backend risk tiers: read-only calls passed, mutating calls required explicit human confirmation. It worked. But a gateway you have to route through is opt-in governance — it protects you only as long as nothing talks to an MCP server directly. That judgment belongs *inside* the collaborator as an invariant, not beside it as a proxy, which is exactly what [Cortexa](../../../projects/cortexa/)'s code-owned approval handshake does. So the MCP servers stay — they're the live agency layer — while Policyclaw's confirmation-gate idea (and the agent-runtime experiments, Openclaw and Hermes) graduate into Cortexa rather than run as standalone boxes. For now the containment on the raw MCP layer is authentication scoping plus network policy, and I'm honest above about that gap.
-- **Eleven more deployments** to patch, monitor, and occasionally debug.
+- **I built the governance layer, then learned it was the wrong shape.** [Policyclaw](../../../projects/policyclaw/) — a custom Go MCP gateway with an OPA sidecar — routed every server through per-backend risk tiers: read-only calls passed, mutating calls required explicit human confirmation. It worked. But a gateway you have to route through is opt-in governance — it protects you only as long as nothing talks to an MCP server directly. That judgment belongs *inside* the collaborator as an invariant, not beside it as a proxy, which is exactly what [Cortexa](../../../projects/cortexa/)'s code-owned approval handshake does. So the MCP servers stay — they're the live agency layer — while Policyclaw's confirmation-gate idea (and the agent-runtime experiments, Openclaw and Hermes) graduate into Cortexa rather than run as standalone boxes. For now the containment on the raw MCP layer is authentication scoping plus network policy, and I'm honest above about that gap.
+- **A dozen more deployments** to patch, monitor, and occasionally debug.
 
 ## Outcome
 
@@ -45,6 +45,6 @@ Troubleshooting sessions now start with the assistant querying the actual system
 
 <div class="adr-nav">
   <a href="../012-layered-backup-strategy/">&larr; ADR 012 &middot; Layered backup strategy</a>
-  <a class="adr-nav-all" href="../../">ADR 13 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 13 of 16</a>
   <a href="../014-vllm-inference/">ADR 014 &middot; vLLM for served generation &rarr;</a>
 </div>

@@ -35,7 +35,7 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 
 ### Networking
 
-![Network Layout](./images/network-layout-v2.png)
+![Network Layout](./images/network-layout-v3.png)
 
 - **VLAN segmentation** across management, workload, and IoT traffic
 - **Cilium** as the Kubernetes CNI featuring eBPF-based networking, network policies, and egress control
@@ -45,7 +45,7 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 ### Platform Capabilities
 This diagram covers the high-level capabilities of my homelab platform. See [`/infrastructure`](./infrastructure/) for deeper technical detail.
 
-![Platform View](./images/platform-view-v2.png)
+![Platform View](./images/platform-view-v3.png)
 
 ---
 

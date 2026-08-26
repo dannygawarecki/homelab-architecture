@@ -33,3 +33,5 @@ The records are ordered as the platform came together — foundational choices f
 | [012](./decisions/012-layered-backup-strategy/) | A layered backup strategy | 2025–2026 |
 | [013](./decisions/013-mcp-ai-operations/) | MCP servers as the AI-operations interface | Mar 2026 |
 | [014](./decisions/014-vllm-inference/) | vLLM for served generation, alongside Ollama | Aug 2026 |
+| [015](./decisions/015-tailscale-remote-access/) | A Tailscale subnet router for private remote access | Aug 2026 |
+| [016](./decisions/016-observability-approach/) | Targeted observability tools, not a single pane of glass | Aug 2026 |
