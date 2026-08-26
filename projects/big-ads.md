@@ -14,7 +14,7 @@ permalink: /projects/big-ads/
   <a class="btn btn-primary" href="https://big-ads.gawarecki.us/">Open big-ads &nearr;</a>
 </p>
 
-The name means making store ads *physically big*. It has nothing to do with advertising technology.
+The name means making store ads *physically big*. It has nothing to do with advertising technology. It later gained a sibling, [big-recipes](../big-recipes/), built for the same person against the same constraints.
 
 big-ads exists because grocery store websites are effectively unusable for someone with severe visual impairment. Weekly flyers are rendered into `<canvas>` elements inside nested cross-origin iframes, gated behind store-locator forms and cookie modals, with controls too small to hit and layouts that collapse under screen magnification. Every one of those is a deliberate product decision by the retailer, and collectively they lock out the people most likely to be price-sensitive about groceries.
 
