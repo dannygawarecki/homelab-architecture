@@ -46,6 +46,6 @@ The gap I'll name plainly: a full, coordinated restore drill — fresh cluster, 
 
 <div class="adr-nav">
   <a href="../011-local-llm-inference/">&larr; ADR 011 &middot; Local LLM inference</a>
-  <a class="adr-nav-all" href="../../">ADR 12 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 12 of 16</a>
   <a href="../013-mcp-ai-operations/">ADR 013 &middot; MCP for AI operations &rarr;</a>
 </div>

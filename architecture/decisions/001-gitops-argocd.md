@@ -49,9 +49,11 @@ Use **ArgoCD** with the **App of Apps** pattern. A single root `Application` poi
 
 Every workload in the cluster is managed through ArgoCD. The cluster can be (and has been) fully rebuilt from the home-lab-argocd repo. The root application bootstraps everything else in dependency order.
 
+*The full path a change takes — code repo, CI, registry, manifest patch, reconcile — is drawn in the [GitOps delivery flow diagram](../../diagrams/#gitops-delivery-flow).*
+
 
 <div class="adr-nav">
   <span></span>
-  <a class="adr-nav-all" href="../../">ADR 1 of 14</a>
+  <a class="adr-nav-all" href="../../">ADR 1 of 16</a>
   <a href="../002-self-hosted-gitea-ci/">ADR 002 &middot; Self-hosted Gitea + CI &rarr;</a>
 </div>

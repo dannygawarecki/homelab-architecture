@@ -37,10 +37,13 @@ Run **vLLM** as the **served-generation** runtime, and keep **Ollama** for every
 - **Less model flexibility — which is *why* Ollama stays.** vLLM is effectively one model per server, with a heavy startup (torch.compile, a ~20 GB first-run download, ~90 s init). Swapping models is nothing like Ollama's one-liner. The coexistence isn't hedging; it's using each tool where it's strong.
 - **The two can't share the GPUs.** Both want both cards, and time-slicing was rejected, so GPU generation is vLLM *or* GPU-Ollama — never both at once. Embeddings had to move to CPU to free the cards for vLLM.
 - **More knobs, and sharp ones.** `--gpu-memory-utilization=0.93` (0.90 OOMed during CUDA-graph capture on 12 GB cards), `NCCL_P2P_DISABLE=1` (no NVLink on consumer 3060s), and a 1 GiB `/dev/shm` because the 64 MB default breaks NCCL all-reduce. Ollama needed none of this.
+- **Tuning advice is hardware-specific, and mine disagreed with the internet.** I enabled n-gram speculative decoding — a widely recommended vLLM throughput win — and measured it making generation **3.6× slower** on this rig, so I reverted it. Speculative decoding trades extra compute for fewer sequential steps; on two mid-range consumer cards already saturated by tensor parallelism, that trade is backwards. A reminder that "known good" settings are known good *on someone else's hardware*.
 - **Weights on hostPath, not the SAN.** Talos `/var/mnt` is read-only and the Ollama UserVolume was too small, so model weights live on a `hostPath` at `/var/lib/vllm-models` (~96 GiB ephemeral on the node). A node rebuild re-downloads ~20 GB — a deliberate, documented departure from the platform's usual PVC-on-Synology pattern ([ADR 005](../005-synology-iscsi-storage/)).
 - **No egress policy yet.** The `vllm` namespace has no Cilium lane ([ADR 008](../008-cilium-cni/)). It needs outbound access to pull weights from HuggingFace on first run, but "no policy" means unrestricted egress — the right fix is a Lane-B FQDN allowlist for the HF endpoints, and it isn't in place.
 
 ## Outcome
+
+*The layered stack this runs on is drawn in the [GPU inference stack diagram](../../diagrams/#gpu-inference-stack).*
 
 vLLM is live and serving `qwen3-coder-30b` across both cards. But this is honestly recorded as **a migration in progress (Aug 2026), not a finished cutover.** The generation consumers — Open WebUI, paperless-ai, karakeep — still point at Ollama endpoints and haven't been repointed to vLLM's OpenAI API, so some currently have no generation backend during the transition. The external gateway is wired for Cortexa; the internal repointing (and the egress lane) is the open work.
 
@@ -49,6 +52,6 @@ I'm documenting it mid-flight on purpose. The tidy version — "migrated to vLLM
 
 <div class="adr-nav">
   <a href="../013-mcp-ai-operations/">&larr; ADR 013 &middot; MCP for AI operations</a>
-  <a class="adr-nav-all" href="../../">ADR 14 of 14</a>
-  <span></span>
+  <a class="adr-nav-all" href="../../">ADR 14 of 16</a>
+  <a href="../015-tailscale-remote-access/">ADR 015 &middot; Tailscale remote access &rarr;</a>
 </div>

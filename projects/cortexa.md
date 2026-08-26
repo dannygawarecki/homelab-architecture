@@ -139,7 +139,7 @@ A 4× speedup from a context-window change is the kind of thing you only learn b
 Cortexa didn't start the AI work on this platform — it's where the AI work *converged*. Three earlier efforts each solved one piece of "a collaborator you can trust," as a standalone thing, before I understood they were one problem:
 
 - **Knowledge — [Context Engine](../context-engine/).** Local-first retrieval, so an assistant answers from current, real documents instead of a model's stale recollection. That becomes Cortexa's knowledge layer.
-- **Agency — [the platform's MCP layer](../../architecture/decisions/013-mcp-ai-operations/).** Eleven scoped, credential-contained servers giving an assistant structured access to the real systems. Those are Cortexa's hands — and they stay live as infrastructure regardless of what Cortexa does.
+- **Agency — [the platform's MCP layer](../../architecture/decisions/013-mcp-ai-operations/).** A dozen scoped, credential-contained servers giving an assistant structured access to the real systems. Those are Cortexa's hands — and they stay live as infrastructure regardless of what Cortexa does.
 - **Governance — [Policyclaw](../policyclaw/).** A gateway that made every mutating action pass a human confirmation gate. Here's the part that convinced me these were one project: Cortexa's code-owned memory handshake is *the same idea* — approval enforced by code, not by a model's goodwill — arrived at independently, one layer up.
 
 Cortexa is the frame that holds all three: a mind that knows, can act, and is governed, wrapped in a collaboration loop that's measured rather than asserted. That's the "and more" — the loop, the judgment, and the falsifiable instrument are Cortexa's own; the three facets are what it inherits.

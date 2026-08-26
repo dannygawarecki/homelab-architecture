@@ -94,7 +94,7 @@ An out-of-memory incident in production is what drove the per-store timeouts and
 
 ## Deployment — the homelab doing its job
 
-This is where the platform pays off. big-ads is fully GitOps-delivered with no manual steps:
+This is where the platform pays off. big-ads is fully GitOps-delivered with no manual steps — the whole path is drawn in the [GitOps delivery flow diagram](../../architecture/diagrams/#gitops-delivery-flow):
 
 1. Push to **Gitea**, self-hosted in the cluster.
 2. **Gitea Actions** bumps the patch version, commits it back, builds the image, and pushes to the private in-cluster registry with retry and backoff.
