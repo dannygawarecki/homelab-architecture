@@ -33,7 +33,7 @@ Run **narrow tools scoped to specific layers**, and accept that there is no unif
 
 **Kiali is the interesting one, because it is deliberately not doing what Kiali usually does.** Its Prometheus integration is *disabled*. It's deployed to validate Istio configuration — across roughly seventy AuthorizationPolicies, catching the misconfigurations that are otherwise invisible until traffic mysteriously fails. It runs view-only, behind an authorization policy that admits only the ingress gateway, with read-only enforced at the Kubernetes RBAC layer rather than trusted to the UI.
 
-Two facts about [ambient mode](../009-istio-ambient-mode/) make that the right call rather than a compromise: ztunnel emits only L4 counters, and the mesh currently runs exactly one waypoint proxy. There is very little L7 telemetry to graph. Standing up Prometheus to feed Kiali traffic graphs would mean operating a metrics stack to visualize data the mesh isn't producing.
+One fact about [ambient mode](../009-istio-ambient-mode/) makes that the right call rather than a compromise: with no waypoint proxies deployed, ztunnel emits only L4 counters — bytes and connection counts, no request rates or response codes. There is essentially no L7 telemetry to graph. Standing up Prometheus to feed Kiali traffic graphs would mean operating a metrics stack to visualize byte-level edges that Hubble already draws at finer granularity.
 
 ## Reasoning
 
