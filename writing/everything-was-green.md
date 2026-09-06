@@ -1,7 +1,7 @@
 ---
 title: Everything Was Green
 eyebrow: Writing
-summary: A weekend that started with a self-signed certificate on a UPS and ended 164 commits later with seven applications that had never had a login. Almost nothing in between was broken. That was the problem.
+summary: A weekend that started with an expired certificate on a UPS and ended 164 commits later with seven applications that had never had a login. Almost nothing in between was broken. That was the problem.
 permalink: /writing/everything-was-green/
 ---
 
@@ -33,7 +33,7 @@ So this isn't an argument for discipline. It's an argument about a specific fail
 
 ## It started with a certificate
 
-Thursday evening, 17:05. A cert-manager Certificate for the UPS management card, because the thing was serving a self-signed cert and my browser complained every time I opened it.
+Thursday evening, 17:05. A cert-manager Certificate for the UPS management card, because the thing was serving an expired cert and my browser complained every time I opened it.
 
 The cluster's DNS-01 solver can already issue for any name in the domain. The gap was never *issuing* — it was **delivery** to things that aren't in Kubernetes. Three of them: a Tripp Lite UPS, a Synology NAS, and the UniFi console. Each needs a job that logs into a proprietary web API and uploads a PEM.
 
