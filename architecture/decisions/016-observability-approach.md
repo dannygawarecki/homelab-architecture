@@ -61,6 +61,6 @@ The honest summary: **this is the right architecture for a single operator runni
 
 <div class="adr-nav">
   <a href="../015-tailscale-remote-access/">&larr; ADR 015 &middot; Tailscale remote access</a>
-  <a class="adr-nav-all" href="../../">ADR 16 of 16</a>
-  <span></span>
+  <a class="adr-nav-all" href="../../">ADR 16 of 17</a>
+  <a href="../017-outpost-reverse-proxy-auth/">ADR 017 &middot; A reverse-proxy outpost &rarr;</a>
 </div>

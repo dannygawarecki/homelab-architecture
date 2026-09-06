@@ -54,6 +54,6 @@ Every workload in the cluster is managed through ArgoCD. The cluster can be (and
 
 <div class="adr-nav">
   <span></span>
-  <a class="adr-nav-all" href="../../">ADR 1 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 1 of 17</a>
   <a href="../002-self-hosted-gitea-ci/">ADR 002 &middot; Self-hosted Gitea + CI &rarr;</a>
 </div>

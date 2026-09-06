@@ -92,4 +92,9 @@ The records are ordered as the platform came together — foundational choices f
     <h3>Targeted observability, no single pane</h3>
     <p>I ran a full APM stack, retired it, and replaced it with narrow tools per layer — accepting that nothing correlates, and saying why that's the right call here.</p>
   </a>
+  <a class="card" href="017-outpost-reverse-proxy-auth/">
+    <span class="card-tag">ADR 017 · Sep 2026</span>
+    <h3>A reverse-proxy outpost for apps that can't do OIDC</h3>
+    <p>Seven web surfaces had no usable login. Putting them behind Authentik's embedded outpost makes an L4 network policy the real security boundary — not a nicety.</p>
+  </a>
 </div>

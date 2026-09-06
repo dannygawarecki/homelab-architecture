@@ -57,6 +57,6 @@ All stateful applications in the cluster use CNPG-managed Postgres clusters. WAL
 
 <div class="adr-nav">
   <a href="../009-istio-ambient-mode/">&larr; ADR 009 &middot; Istio ambient mode</a>
-  <a class="adr-nav-all" href="../../">ADR 10 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 10 of 17</a>
   <a href="../011-local-llm-inference/">ADR 011 &middot; Local LLM inference &rarr;</a>
 </div>

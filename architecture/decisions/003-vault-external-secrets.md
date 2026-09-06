@@ -48,6 +48,6 @@ Every secret a workload consumes arrives through the same pipeline: Vault → ES
 
 <div class="adr-nav">
   <a href="../002-self-hosted-gitea-ci/">&larr; ADR 002 &middot; Self-hosted Gitea + CI</a>
-  <a class="adr-nav-all" href="../../">ADR 3 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 3 of 17</a>
   <a href="../004-authentik-sso/">ADR 004 &middot; Authentik SSO &rarr;</a>
 </div>

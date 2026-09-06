@@ -52,6 +52,6 @@ I'm documenting it mid-flight on purpose. The tidy version — "migrated to vLLM
 
 <div class="adr-nav">
   <a href="../013-mcp-ai-operations/">&larr; ADR 013 &middot; MCP for AI operations</a>
-  <a class="adr-nav-all" href="../../">ADR 14 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 14 of 17</a>
   <a href="../015-tailscale-remote-access/">ADR 015 &middot; Tailscale remote access &rarr;</a>
 </div>
