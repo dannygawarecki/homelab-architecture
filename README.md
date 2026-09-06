@@ -107,6 +107,12 @@ See [`/lessons-learned`](./lessons-learned/) for honest write-ups on what broke,
 
 ---
 
+## Writing
+
+See [`/writing`](./writing/) for longer pieces that are an argument rather than a decision record — starting with [Everything Was Green](./writing/everything-was-green.md), on why moving fast leaves you with things that work and report healthy, rather than things that are visibly broken.
+
+---
+
 ## Copilot & AI-Assisted Engineering
 
 See [`/copilot-experiments`](./copilot-experiments/) for notes on using GitHub Copilot to accelerate infrastructure work — including where it helped, where it hallucinated, and how I learned to drive it effectively.
