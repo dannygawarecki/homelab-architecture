@@ -41,7 +41,7 @@ That's the entire scope as I understood it on Thursday.
 
 ## Automation creates the debt it was meant to remove
 
-To log into three appliances you need three service accounts. So a project whose purpose was to retire three certificates that expire every 90 days **created three long-lived credentials that expire never.**
+To log into three appliances you need three service accounts. So a project whose purpose was to retire three certificates that expire every 90 days **created three long-lived credentials that never expire.**
 
 That's not a good trade, and it's the exact shape of the debt that had accumulated everywhere else in this lab.
 
@@ -55,7 +55,7 @@ Nothing in that chain was a detour. Each step was forced by the one above it. I 
 
 ## What the reorganization found
 
-Moving a credential means finding everything that consumes it. Doing that forty-odd times over two days is, it turns out, an audit — just an unusually thorough one, conducted for unrelated reasons.
+Moving a credential means finding everything that consumes it. Doing that forty-odd times over two days is, it turns out, an audit — just an unusually thorough one.
 
 **An MCP server was running on a Vault root token.** `policies ["root"]`, `ttl 0`, no expiry, delivered into a namespace Secret through an ExternalSecret. One value that could read and write every secret in the store, rewrite policies, revoke any token, and seal the vault. It had been sitting there the whole time, working perfectly.
 
@@ -65,18 +65,18 @@ Moving a credential means finding everything that consumes it. Doing that forty-
 
 **Two CI tools shared one token.** polaris and checkov authenticating as the same identity, which means neither could be rotated without silently breaking the other.
 
-**Vault had never had an audit device.** Not misconfigured — never enabled. Every request to the secret store since the day it was installed, unlogged.
+**And the rotation machinery could not have worked.** One commit that weekend reads “grant metadata write, without which no rotation can ever succeed.” KV v2 needs metadata write to update a secret; the policy only granted create. Every credential I'd written so far had been a create, so it had never come up.
 
-**And the rotation machinery could not have worked.** One commit that weekend reads *"grant metadata write, without which no rotation can ever succeed."* Built, deployed, scheduled, and structurally incapable of doing the thing it was scheduled to do: KV v2 needs metadata write to *update* a secret, and the policy only granted create. Every credential I'd written so far had been a create, so it had never come up.
+**Vault had never had an audit device.** Not misconfigured — never enabled. Every request to the secret store since the day it was installed, unlogged.
 
 Then Sunday added its own:
 
-- **An identity-provider outpost, healthy, with zero providers.** Reporting version-matched for a year, gating nothing, handing browsers a URL on a closed port. It reports healthy *because* it reaches Authentik over localhost — its health check is structurally incapable of noticing that the URL it gives browsers doesn't answer.
-- **My dashboard authenticating as the Terraform superuser.** Right Vault key, sixty well-formed characters, no log line anywhere. The tiles just showed zero. The only thing on the platform that named the cause was Authentik's own event log, filtered to `action=model_deleted`.
-- **An update-available alert that can never fire.** The version check needs `version.goauthentik.io`; the egress policy — correctly — denies the IdP any route to the internet. Two systems each doing exactly what they were told, combining into a monitor that cannot alert.
-- **A network policy with nothing to enforce against.** hubble-ui's `AuthorizationPolicy` looks identical to the six that work. `kube-system` isn't in the ambient mesh, so there's no mTLS principal to match on. It restricts nothing.
-- **A liveness probe that had been passing wrong for a year.** It hit `/` and got a 200 — but `/` is a 302 into an authenticated page, and the kubelet's prober follows redirects. Under the old auth middleware that returned null and the chain ended 200. Change the middleware and the same path throws, the probe goes 500, and the pod crashloops. The probe didn't break. It had never worked.
-- **And my own documentation.** [ADR 004](../../architecture/decisions/004-authentik-sso/) said, in my words, *"Every web surface on the platform sits behind the same login."* Seven didn't. netdata was serving `/api/v1/allmetrics` for eight hosts to anyone who could resolve the name. Stirling PDF had `SECURITY_ENABLELOGIN` set to `false`, serving the whole toolkit — and whatever documents passed through it — to anyone at all.
+- **An identity-provider outpost, healthy, with zero providers.** Reporting version-matched for a year, gating nothing, handing browsers a URL on a closed port. It was healthy because it could reach Authentik over localhost; its health check was structurally incapable of noticing that the URL it gave browsers didn't answer.
+- **My dashboard authenticating as the Terraform superuser.** Right Vault key, sixty well-formed characters, no log line anywhere. The tiles just showed zero. Authentik's event log was the only thing that named the cause: action=model_deleted.
+- **An update-available alert that could never fire.** The version check needed version.goauthentik.io; the egress policy correctly denied the IdP any route to the internet. Two systems each doing exactly what they were told had combined into a monitor that could not alert.
+- **A network policy with nothing to enforce against.** hubble-ui's AuthorizationPolicy looked identical to the six that worked. kube-system wasn't in the ambient mesh, so there was no mTLS principal to match on. It restricted nothing.
+- **A liveness probe that had been passing wrong for a year.** It hit / and got a 200, but / was a 302 into an authenticated page, and the kubelet followed redirects. Under the old auth middleware that returned null and the chain ended 200. Change the middleware and the same path threw, the probe went 500, and the pod crashlooped. The probe didn't break. It had never worked.
+- **And my own documentation was wrong.** [ADR 004](../../architecture/decisions/004-authentik-sso/) said, in my words, “Every web surface on the platform sits behind the same login.” Seven didn't. netdata was serving /api/v1/allmetrics for eight hosts to anyone who could resolve the name. Stirling PDF had SECURITY_ENABLELOGIN set to false, serving the whole toolkit — and whatever documents passed through it — to anyone at all.
 
 Not one of those was reporting a problem. Several were actively reporting success.
 
@@ -94,19 +94,19 @@ I had the evidence in hand and drew the wrong conclusion, because the search spa
 
 > **"Absent from every Actions secret" was really "absent from every ORG Actions secret", and the gap was invisible because a negative result looks identical whether the enumeration was complete or not.**
 
-That's the sharpest version of this entire essay, and I only have it because I got it wrong first. An empty result set isn't evidence of absence until you've proved the search covered the space — and mine looked exactly like one that had.
+An empty result set isn't evidence of absence until you've proved the search covered the space — and mine looked exactly like one that had.
 
 There was a second instance of the same bug in the same sweep, which I'd rather admit than bury: my scan for credentials in cluster Secrets missed registry credentials entirely, because that value sits inside a *second* base64 layer in the `auth` field of a `dockerconfigjson`. A clean scan. The wrong scan.
 
 ## The lesson, learned twice, thirty hours apart
 
-Here's what convinced me this is a real pattern and not just a bad weekend. The same idea got invented twice, independently, in two unrelated domains.
+The same idea got invented twice, independently, in two unrelated domains.
 
 **Saturday morning — certificates.** The rotation jobs checked that their password file was non-empty, then exited. But renewals are ~60 days apart, so a revoked password or a narrowed role stays invisible until the one day rotation is due: the exact failure the job exists to prevent. The fix was to perform a **real login every night**, on the already-in-sync path, when nothing depends on the result. Prove the credential while it's still cheap to find out it's dead.
 
 **Sunday afternoon — authorization policies.** Every app put behind the outpost got verified twice: request it from inside the outpost's own pod (expect 200), and request the same service from a pod in an unrelated namespace (**expect the connection to be reset**). The first test proves the app is up, which it was before I touched anything. The second is the only thing that distinguishes a working policy from hubble-ui's — both have a policy file, both look identical from outside, one resets the connection and one cheerfully returns 200.
 
-Same idea. Two domains. Thirty hours apart, and I didn't notice until I sat down to write this.
+Same idea. Two domains. Thirty hours apart.
 
 **Prove the mechanism with a control, not the happy path.** A green check tells you something responded. A control tells you the thing you built is the *reason*. And the control has to fail at least once, deliberately, or you don't know it's wired to anything at all.
 
@@ -114,7 +114,7 @@ Nearly every item in the inventory above would have been caught in about thirty 
 
 ## And then, on Sunday afternoon, "fix grocy's login"
 
-Fifty-two hours into a weekend that began with a UPS certificate, the last thread started. It's worth tracing, because it shows the same property at a smaller scale: not one of these steps was chosen.
+Fifty-two hours into a weekend that began with a UPS certificate, the last thread started. It's worth tracing because it shows the same property at a smaller scale: not one of these steps was chosen.
 
 <div class="timeline" markdown="0">
   <div class="tl-item">
@@ -166,13 +166,13 @@ Fast and loose is correct while the only person a silent failure can hurt is you
 
 Somewhere in there the lab acquired *consumers*, and the cost of a green check that means nothing went up by an order of magnitude.
 
-I didn't miss a best practice. I missed a threshold.
+**I didn't miss a best practice. I missed a threshold.**
 
-So I'm not going to stop going fast — that trades away the thing that built this for a discipline I'd abandon by December anyway. What changes is narrower, and I think it's the only part of this that generalizes:
+I'm not going to stop going fast. What changes is narrower:
 
 **Anything I stand up that is supposed to say no, I make say no once, on purpose, before I walk away from it.**
 
-Everything else can stay loose. That one check is what makes the green mean anything.
+Everything else can stay loose. That one check is what makes the green mean something.
 
 ---
 
