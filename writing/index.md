@@ -11,6 +11,6 @@ The [ADRs](../architecture/decisions/) record what I chose and what it cost. [Le
   <a class="card" href="everything-was-green/">
     <span class="card-tag">Sep 2026</span>
     <h3>Everything Was Green</h3>
-    <p>Going fast doesn't leave broken things behind — it leaves things that work and report healthy. Seven green checks that were lying, and the one habit that would have caught all of them.</p>
+    <p>A weekend that started with a self-signed certificate on a UPS and ended 164 commits later with seven applications that had never had a login. Almost nothing in between was broken — including the audit I got wrong.</p>
   </a>
 </div>
