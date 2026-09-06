@@ -56,6 +56,6 @@ Ambient mode is running across ~28 namespaces with mesh-wide `STRICT` mTLS enfor
 
 <div class="adr-nav">
   <a href="../008-cilium-cni/">&larr; ADR 008 &middot; Cilium CNI</a>
-  <a class="adr-nav-all" href="../../">ADR 9 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 9 of 17</a>
   <a href="../010-cloudnative-pg/">ADR 010 &middot; CloudNativePG &rarr;</a>
 </div>

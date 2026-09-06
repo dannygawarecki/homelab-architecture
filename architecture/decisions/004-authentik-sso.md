@@ -22,7 +22,7 @@ Options:
 
 ## Decision
 
-**Authentik is the identity provider for everything.** Ten OAuth2/OIDC provider-application pairs are generated in Terraform from a single `for_each` map — adding SSO to a new app is one map entry. Authorization is two groups: application **admins** and application **users**, bound per-application.
+**Authentik is the identity provider for everything.** OAuth2/OIDC provider-application pairs are generated in Terraform from a single `for_each` map — adding SSO to a new app is one map entry. (Ten at the time of writing, nine today: grocy moved to a proxy provider in [ADR 017](../017-outpost-reverse-proxy-auth/), for reasons worth reading.) Authorization is two groups: application **admins** and application **users**, bound per-application.
 
 The deliberate part is scope: not just user apps (Paperless, Outline, Home Assistant, and the rest) but the **infrastructure itself** — Vault, ArgoCD, Gitea, and even Proxmox authenticate against Authentik via OIDC.
 
@@ -41,11 +41,13 @@ The deliberate part is scope: not just user apps (Paperless, Outline, Home Assis
 
 ## Outcome
 
-Every web surface on the platform sits behind the same login. Onboarding the second user was a group membership, not ten account creations. The `for_each` pattern has held: new applications get SSO in roughly ten lines of diff.
+Onboarding the second user was a group membership, not ten account creations. The `for_each` pattern has held: new applications get SSO in roughly ten lines of diff.
+
+> **Correction, Sep 2026.** This section originally opened with *"Every web surface on the platform sits behind the same login."* That was not true when it was written and had not been for some time. Seven surfaces — kiali, hubble-ui, netdata, dozzle, homepage, Stirling PDF, and grocy — had no working login, and grocy's OIDC application pointed at a callback route it has never had. All seven are now behind the outpost; see [ADR 017](../017-outpost-reverse-proxy-auth/) for the decision and [Everything Was Green](../../../writing/everything-was-green/) for how a claim like that survives a year unchallenged.
 
 
 <div class="adr-nav">
   <a href="../003-vault-external-secrets/">&larr; ADR 003 &middot; Vault + External Secrets</a>
-  <a class="adr-nav-all" href="../../">ADR 4 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 4 of 17</a>
   <a href="../005-synology-iscsi-storage/">ADR 005 &middot; Synology iSCSI storage &rarr;</a>
 </div>

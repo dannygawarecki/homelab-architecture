@@ -35,3 +35,4 @@ The records are ordered as the platform came together — foundational choices f
 | [014](./decisions/014-vllm-inference/) | vLLM for served generation, alongside Ollama | Aug 2026 |
 | [015](./decisions/015-tailscale-remote-access/) | A Tailscale subnet router for private remote access | Aug 2026 |
 | [016](./decisions/016-observability-approach/) | Targeted observability tools, not a single pane of glass | Aug 2026 |
+| [017](./decisions/017-outpost-reverse-proxy-auth/) | A reverse-proxy outpost for the apps that can't do OIDC | Sep 2026 |

@@ -58,6 +58,6 @@ The GPU worker runs stably with Ollama serving models at `ollama-service.ollama.
 
 <div class="adr-nav">
   <a href="../010-cloudnative-pg/">&larr; ADR 010 &middot; CloudNativePG</a>
-  <a class="adr-nav-all" href="../../">ADR 11 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 11 of 17</a>
   <a href="../012-layered-backup-strategy/">ADR 012 &middot; Layered backup strategy &rarr;</a>
 </div>

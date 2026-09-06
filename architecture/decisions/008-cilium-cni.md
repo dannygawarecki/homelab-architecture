@@ -45,6 +45,6 @@ Egress denial is the default posture for application namespaces. Policy lives in
 
 <div class="adr-nav">
   <a href="../007-talos-linux/">&larr; ADR 007 &middot; Talos Linux</a>
-  <a class="adr-nav-all" href="../../">ADR 8 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 8 of 17</a>
   <a href="../009-istio-ambient-mode/">ADR 009 &middot; Istio ambient mode &rarr;</a>
 </div>

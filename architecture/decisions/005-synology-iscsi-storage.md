@@ -43,6 +43,6 @@ Every stateful workload on the platform runs on the same storage class with the 
 
 <div class="adr-nav">
   <a href="../004-authentik-sso/">&larr; ADR 004 &middot; Authentik SSO</a>
-  <a class="adr-nav-all" href="../../">ADR 5 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 5 of 17</a>
   <a href="../006-proxmox-vms/">ADR 006 &middot; Kubernetes on Proxmox VMs &rarr;</a>
 </div>

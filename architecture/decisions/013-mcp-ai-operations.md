@@ -45,6 +45,6 @@ Troubleshooting sessions now start with the assistant querying the actual system
 
 <div class="adr-nav">
   <a href="../012-layered-backup-strategy/">&larr; ADR 012 &middot; Layered backup strategy</a>
-  <a class="adr-nav-all" href="../../">ADR 13 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 13 of 17</a>
   <a href="../014-vllm-inference/">ADR 014 &middot; vLLM for served generation &rarr;</a>
 </div>

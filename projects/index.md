@@ -7,7 +7,7 @@ permalink: /projects/
 
 The homelab is the substrate. What runs on it falls into two groups.
 
-**[big-ads](big-ads/)** stands on its own: a shipped product, in weekly use by the one person it was built for, with no AI in it at all — and that was the right call.
+**[big-ads](big-ads/)** and **[big-recipes](big-recipes/)** stand on their own: two accessibility tools built for the same person, with no AI in either — and that was the right call both times.
 
 The rest are chapters of one story. I kept building AI tools to scratch specific itches — a way to give an assistant *current* knowledge, a way to give it *safe* access to my systems, a way to make it a genuine *collaborator* — before I understood they were three faces of a single problem: **what does it take to build an AI collaborator you can actually trust?** Cortexa is where that question finally has a name, and it's the successor the earlier attempts are folding into.
 
@@ -16,6 +16,11 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
     <span class="card-tag">Accessibility · Shipped</span>
     <h3>big-ads</h3>
     <p>A grocery flyer viewer for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule, served through a 347-line dependency-free UI. Full GitOps delivery into the cluster.</p>
+  </a>
+  <a class="card" href="big-recipes/">
+    <span class="card-tag">Accessibility · Deployed</span>
+    <h3>big-recipes</h3>
+    <p>The sibling: accessible recipe search, reading, listening, and printing for the same user. A three-tier extractor and extract-before-display, so every result on screen is a real recipe.</p>
   </a>
   <a class="card" href="context-engine/">
     <span class="card-tag">Knowledge · First-generation</span>
@@ -47,4 +52,4 @@ Four efforts, one question. Each solved a piece of "a collaborator you can trust
 
 Two honesty notes, because the point of this site is that I don't skip them. **None of this is integrated yet** — Cortexa today consumes only Postgres and Ollama; the convergence is design intent and roadmap, not shipped software. And "successor" doesn't mean the predecessors were wasted: each was a working first-generation build whose real output was the lesson. Building them separately is *how I learned* they belonged together.
 
-And then there's **big-ads** — no AI, no research question, just a thing someone needed that now works every week. It's here to keep the rest honest: I converge on hard problems *and* I finish and ship.
+And then there are **big-ads** and **big-recipes** — no AI, no research question, just things someone needed that now work. They're here to keep the rest honest: I converge on hard problems *and* I finish and ship.

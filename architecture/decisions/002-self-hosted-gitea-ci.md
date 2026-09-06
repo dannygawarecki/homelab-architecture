@@ -41,6 +41,6 @@ Nine CI-driven releases of big-ads shipped through this pipeline with no manual 
 
 <div class="adr-nav">
   <a href="../001-gitops-argocd/">&larr; ADR 001 &middot; GitOps with ArgoCD</a>
-  <a class="adr-nav-all" href="../../">ADR 2 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 2 of 17</a>
   <a href="../003-vault-external-secrets/">ADR 003 &middot; Vault + External Secrets &rarr;</a>
 </div>

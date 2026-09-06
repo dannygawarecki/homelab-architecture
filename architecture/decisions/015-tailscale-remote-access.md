@@ -58,6 +58,6 @@ Remote administration now happens over the tailnet, and the public surface staye
 
 <div class="adr-nav">
   <a href="../014-vllm-inference/">&larr; ADR 014 &middot; vLLM for served generation</a>
-  <a class="adr-nav-all" href="../../">ADR 15 of 16</a>
+  <a class="adr-nav-all" href="../../">ADR 15 of 17</a>
   <a href="../016-observability-approach/">ADR 016 &middot; Targeted observability &rarr;</a>
 </div>
