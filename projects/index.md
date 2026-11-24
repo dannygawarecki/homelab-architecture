@@ -7,7 +7,7 @@ permalink: /projects/
 
 The homelab is the substrate. What runs on it falls into three groups.
 
-**[big-ads](big-ads/)** and **[big-recipes](big-recipes/)** stand on their own: two accessibility tools built for the same person, with no AI in either — and that was the right call both times.
+**[big-ads](big-ads/)**, **[big-recipes](big-recipes/)** and **[big-weather](big-weather/)** are a family: three accessibility tools for the same person, sharing one house style and one set of keys, with no AI in any of them. That was the right call all three times.
 
 **[kubeslo-operator](kubeslo-operator/)** is the newest, and the earliest: a Kubernetes operator, written by hand in Go, that judges every change against its SLO. The groundwork is running; the operator is next.
 
@@ -15,8 +15,8 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
 
 <div class="proj-group" markdown="0">
   <div class="proj-group-head">
-    <p class="eyebrow">Stand-alone tools</p>
-    <span class="proj-group-meta">2 projects · no AI in either</span>
+    <p class="eyebrow">The big- family</p>
+    <span class="proj-group-meta">3 tools · one reader · one house style</span>
   </div>
   <div class="cards">
     <a class="card proj-card" href="big-ads/">
@@ -36,6 +36,15 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
         <span><b>0</b>databases</span><span><b>0</b>internet egress</span><span><b>1,075 / 1,083</b>pages identical after stripping</span>
       </div>
       <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>Public requests still come through the tunnel into the lab, and it hasn't earned "in weekly use" yet.</div>
+    </a>
+    <a class="card proj-card" href="big-weather/">
+      <div class="proj-top"><span class="card-tag">Accessibility</span><span class="status status-live">Deployed · new</span></div>
+      <h3>big-weather</h3>
+      <p>Eight weather sources compared for him and said plainly: "Rain likely", "Sources differ", a named disagreement when it matters. Built like big-ads, as static files on R2, and public without ever publishing where home is.</p>
+      <div class="proj-facts">
+        <span><b>8</b>sources compared</span><span><b>0</b>servers listening</span><span><b>~4 mi</b>most precise it publishes</span>
+      </div>
+      <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>Two weeks old, and the measured weather is still mostly radar estimates.</div>
     </a>
   </div>
 </div>
@@ -120,4 +129,4 @@ Four efforts, one question. Each solved a piece of "a collaborator you can trust
 
 Two honesty notes, because the point of this site is that I don't skip them. **The convergence is code now, but not services**: Cortexa adapted Context Engine's retrieval core and ported Policyclaw's policy rules rather than calling either one, and it reads the cluster through the MCP layer only, read-only. And "successor" doesn't mean the predecessors were wasted: each was a working first-generation build whose real output was the lesson. Building them separately is *how I learned* they belonged together.
 
-And then there are **big-ads** and **big-recipes** — no AI, no research question, just things someone needed that now work. They're here to keep the rest honest: I converge on hard problems *and* I finish and ship.
+And then there are **big-ads**, **big-recipes** and **big-weather** — no AI, no research question, just things someone needed that now work. They're here to keep the rest honest: I converge on hard problems *and* I finish and ship.

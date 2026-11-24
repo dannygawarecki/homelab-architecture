@@ -80,7 +80,7 @@ areas:
       - { name: Cortexa, url: /projects/cortexa/ }
       - { name: big-ads, url: /projects/big-ads/ }
       - { name: big-recipes, url: /projects/big-recipes/ }
-      - { name: big-weather }
+      - { name: big-weather, url: /projects/big-weather/ }
       - { name: Paperless }
       - { name: Karakeep }
       - { name: Outline }
