@@ -3,10 +3,13 @@ title: "ADR 015: A Tailscale Subnet Router for Private Remote Access"
 eyebrow: Architecture Decision Record
 summary: A deliberate exception to "Git is the only way in" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't.
 permalink: /architecture/decisions/015-tailscale-remote-access/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Aug 2026 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "A Tailscale subnet router"
+card_blurb: "A deliberate exception to \"Git is the only way in\" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't."
+layout: adr
+status: Accepted
+date_label: Aug 2026
+subsystem: Networking · Remote access
+tldr: 'Remote administration runs through a Tailscale subnet router in a Proxmox LXC, outside Kubernetes and declared in Terraform — a deliberate exception to ADR 001''s "Git is the only way in" so the recovery path doesn''t depend on the cluster.'
 ---
 
 ## Context
@@ -15,10 +18,10 @@ Until now the platform had exactly one way in from outside the house: a **Cloudf
 
 It is the wrong tool for *me* getting to the platform. Administering the lab remotely means reaching the Proxmox UIs, Vault, the Talos API, the Synology, the UniFi controller — none of which should ever be public, WAF or not. The options:
 
-- **Expose more through the Cloudflare Tunnel** with Access policies in front. I tried this one first. Beyond never quite getting it to behave, it puts admin interfaces on the public internet behind an authorization layer, and every one of them becomes a thing I have to reason about being probed.
-- **Port-forward a VPN (WireGuard/OpenVPN) on the router.** The traditional answer. It needs an open inbound port, dynamic-DNS handling, and per-device key distribution I'd maintain by hand.
-- **Run Tailscale's Kubernetes operator** so the tailnet is just another workload. Consistent with how everything else runs — and, on reflection, exactly the wrong dependency (see below).
-- **A Tailscale subnet router outside the cluster**, advertising the LAN into a private tailnet.
+- <span class="opt">Rejected</span> **Expose more through the Cloudflare Tunnel** with Access policies in front. I tried this one first. Beyond never quite getting it to behave, it puts admin interfaces on the public internet behind an authorization layer, and every one of them becomes a thing I have to reason about being probed.
+- <span class="opt">Rejected</span> **Port-forward a VPN (WireGuard/OpenVPN) on the router.** The traditional answer. It needs an open inbound port, dynamic-DNS handling, and per-device key distribution I'd maintain by hand.
+- <span class="opt">Rejected</span> **Run Tailscale's Kubernetes operator** so the tailnet is just another workload. Consistent with how everything else runs — and, on reflection, exactly the wrong dependency (see below).
+- <span class="opt opt-chosen">Chosen</span> **A Tailscale subnet router outside the cluster**, advertising the LAN into a private tailnet.
 
 I really liked the thought of Tailscale and have read many articles on it by home-labbers just like me. It has a generous free tier that more than meets my needs — and it just worked, on the first try. I'd already spent an afternoon trying to get the same private access out of Cloudflare and never got it to do exactly what I wanted. Tailscale did, right out of the box.
 
@@ -54,10 +57,3 @@ It is still infrastructure-as-code; it just answers to Terraform instead of Argo
 *Both ingress paths — the public Cloudflare tunnel and the private tailnet — are drawn in the [network layout diagram](../../diagrams/#network-layout).*
 
 Remote administration now happens over the tailnet, and the public surface stayed exactly three hostnames. The recovery property is the one I care about most: because the router is an LXC that boots before anything else, "the cluster is broken and I'm not home" is now a solvable problem rather than a wait-until-I'm-back problem.
-
-
-<div class="adr-nav">
-  <a href="../014-vllm-inference/">&larr; ADR 014 &middot; vLLM for served generation</a>
-  <a class="adr-nav-all" href="../../">ADR 15 of 17</a>
-  <a href="../016-observability-approach/">ADR 016 &middot; Targeted observability &rarr;</a>
-</div>

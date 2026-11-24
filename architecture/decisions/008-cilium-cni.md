@@ -3,10 +3,13 @@ title: "ADR 008: Cilium as the CNI, with kube-proxy Replaced"
 eyebrow: Architecture Decision Record
 summary: eBPF networking with kube-proxy fully replaced, and an egress "lanes" model that makes internet access an explicit, reviewable choice.
 permalink: /architecture/decisions/008-cilium-cni/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Nov 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Cilium as the CNI"
+card_blurb: "eBPF networking, no kube-proxy at all, and an egress-lanes model where internet access is an explicit Git change."
+layout: adr
+status: Accepted
+date_label: Nov 2025
+subsystem: Networking · CNI
+tldr: Cilium is the sole CNI, replacing kube-proxy and organizing egress into lanes so a new workload gets internet access by a Git change, not by default — at the cost of two networking dataplanes on every node alongside Istio ambient.
 ---
 
 ## Context
@@ -15,9 +18,9 @@ Talos ships with Flannel by default, and it works — so this was a decision to 
 
 Options:
 
-- **Flannel** — what Talos ships by default. Simple, boring, and essentially policy-free. Fine for connectivity, nothing for the egress control I was after.
-- **Calico** — a mature policy engine and a real contender.
-- **Cilium** — eBPF-native, full kube-proxy replacement, FQDN-aware egress policy, Hubble for flow-level observability, and the smoothest coexistence story with Istio ambient.
+- <span class="opt">Rejected</span> **Flannel** — what Talos ships by default. Simple, boring, and essentially policy-free. Fine for connectivity, nothing for the egress control I was after.
+- <span class="opt">Rejected</span> **Calico** — a mature policy engine and a real contender.
+- <span class="opt opt-chosen">Chosen</span> **Cilium** — eBPF-native, full kube-proxy replacement, FQDN-aware egress policy, Hubble for flow-level observability, and the smoothest coexistence story with Istio ambient.
 
 ## Decision
 
@@ -41,10 +44,3 @@ Bootstrap ordering matters: Cilium is installed once, immediately after Talos bo
 ## Outcome
 
 Egress denial is the default posture for application namespaces. Policy lives in Git next to the workloads it governs, and Hubble provides the evidence when a policy is wrong. Cilium has survived Talos upgrades and the Istio ambient rollout intact.
-
-
-<div class="adr-nav">
-  <a href="../007-talos-linux/">&larr; ADR 007 &middot; Talos Linux</a>
-  <a class="adr-nav-all" href="../../">ADR 8 of 17</a>
-  <a href="../009-istio-ambient-mode/">ADR 009 &middot; Istio ambient mode &rarr;</a>
-</div>

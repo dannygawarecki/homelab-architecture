@@ -79,17 +79,18 @@ This isn't a homelab running a few Docker containers. It's a platform, and the e
 
 ## Projects Running on the Platform
 
-The platform exists to run things. Two are shipped accessibility tools; the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://lab.gawarecki.us/projects/).
+The platform exists to run things. Two are shipped accessibility tools, one is a reliability operator just getting started, and the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://lab.gawarecki.us/projects/).
 
 | Project | What it is | Status |
 |---|---|---|
-| **[big-ads](https://lab.gawarecki.us/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule; a 347-line dependency-free UI. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
-| **[big-recipes](https://lab.gawarecki.us/projects/big-recipes/)** | The sibling to big-ads: accessible recipe search, reading, listening, and printing for the same user. Three-tier extraction, so every result on screen is a real recipe. | Deployed, two-day build |
-| **[Context Engine](https://lab.gawarecki.us/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen, folding into Cortexa |
-| **[Policyclaw](https://lab.gawarecki.us/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | First-gen, design input to Cortexa |
-| **[Cortexa](https://lab.gawarecki.us/projects/cortexa/)** | The synthesis: an AI collaboration engine that puts collaborative behavior in code rather than a system prompt — with a blind-judged evaluation harness built to falsify that claim. | MVP, in development |
+| **[big-ads](https://lab.gawarecki.us/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule in the cluster and published as a static site to Cloudflare R2, so nothing public reaches the lab. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
+| **[big-recipes](https://lab.gawarecki.us/projects/big-recipes/)** | The sibling to big-ads: a Chrome/Edge extension that turns the recipe he already found into large type, read-aloud, cook mode, and print. It started as a search engine; the search was the part that had to go. | Deployed |
+| **[kubeslo-operator](https://lab.gawarecki.us/projects/kubeslo-operator/)** | A Kubernetes operator, written by hand in Go, that records every rollout as a `ChangeRecord` and judges it against the workload's SLO. The metrics, SLOs, and a purpose-built test service are running; the controller is next. | Early, groundwork done |
+| **[Context Engine](https://lab.gawarecki.us/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen; retrieval core now in Cortexa |
+| **[Policyclaw](https://lab.gawarecki.us/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | Archived; its policy rules ported into Cortexa |
+| **[Cortexa](https://lab.gawarecki.us/projects/cortexa/)** | The synthesis: an AI collaborator running in the cluster behind Open WebUI, where code decides what the model sees and the model writes the answer. Measured against the same model alone — and corrected, retraction included, when the instrument was wrong. | Deployed, single user |
 
-big-ads is delivered to the cluster through the GitOps pipeline described below; the AI projects consume the platform's Postgres, Ollama, and MCP layer. Cortexa is the successor the other two are converging into — see the [through-line](https://lab.gawarecki.us/projects/).
+big-ads is delivered to the cluster through the GitOps pipeline described below; Cortexa runs in the cluster on the platform's vLLM, Postgres, and MCP layer, and is the successor the other two folded into — see the [through-line](https://lab.gawarecki.us/projects/).
 
 ---
 

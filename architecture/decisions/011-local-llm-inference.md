@@ -3,20 +3,24 @@ title: "ADR 011: Local LLM Inference with Ollama on a Dedicated GPU Worker"
 eyebrow: Architecture Decision Record
 summary: GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network.
 permalink: /architecture/decisions/011-local-llm-inference/
----
-
-**Status:** Accepted — runtime extended by [ADR 014](../014-vllm-inference/) &nbsp;·&nbsp; **Date:** Dec 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Local LLM inference on a dedicated GPU worker"
+card_blurb: "GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network."
+layout: adr
+status: Accepted
+status_note: "runtime extended by [ADR 014](../014-vllm-inference/)"
+date_label: Dec 2025
+subsystem: AI · Inference
+tldr: One dedicated GPU worker serves LLMs in-cluster through Ollama so prompts never leave the network, at the cost of a hardware purchase, a four-layer GPU passthrough stack, and a single point of failure for AI workloads.
 ---
 
 ## Context
 
 I wanted LLM capabilities available in the homelab — both for personal use (chat, document Q&A) and as a foundation for in-cluster AI agents. Options:
 
-- **Cloud APIs (OpenAI, Anthropic, Google)** — low friction, always up to date, no hardware investment. But every prompt leaves the network, costs accumulate, and rate limits constrain agentic workloads.
-- **Consumer AI devices (e.g. AI PCs, Apple Silicon)** — capable, but not Kubernetes-native and not easily integrated into cluster workloads.
-- **GPU passthrough into a VM** — possible, but keeps the inference stack outside the cluster and requires separate orchestration.
-- **Dedicated GPU Kubernetes worker with Ollama** — inference runs inside the cluster, accessible to all workloads as a standard service endpoint, no data leaves the network.
+- <span class="opt">Rejected</span> **Cloud APIs (OpenAI, Anthropic, Google)** — low friction, always up to date, no hardware investment. But every prompt leaves the network, costs accumulate, and rate limits constrain agentic workloads.
+- <span class="opt">Rejected</span> **Consumer AI devices (e.g. AI PCs, Apple Silicon)** — capable, but not Kubernetes-native and not easily integrated into cluster workloads.
+- <span class="opt">Rejected</span> **GPU passthrough into a VM** — possible, but keeps the inference stack outside the cluster and requires separate orchestration.
+- <span class="opt opt-chosen">Chosen</span> **Dedicated GPU Kubernetes worker with Ollama** — inference runs inside the cluster, accessible to all workloads as a standard service endpoint, no data leaves the network.
 
 The workloads I had in mind — MCP servers, in-cluster agents (Hermes), policy enforcement (Policyclaw) — all benefit from low-latency access to an LLM that doesn't require an API key rotation strategy or a credit card.
 
@@ -54,10 +58,5 @@ The GPU worker runs stably with Ollama serving models at `ollama-service.ollama.
 *The four-layer debugging story behind getting here is in [Lessons Learned](../../../lessons-learned/); the layers themselves are drawn in the [GPU inference stack diagram](../../diagrams/#gpu-inference-stack). The hard-won VRAM sizing data this rig produced is written up on the [Cortexa](../../../projects/cortexa/) page.*
 
 > **Update (Aug 2026):** This ADR's core decision — a dedicated GPU worker running local inference, no prompt leaving the network — still holds. What's changed is the *runtime*: Ollama is no longer the sole engine. Generation is moving to **vLLM** for throughput and tensor parallelism, with Ollama retained for embeddings and experimentation. The reasoning and mid-flight status are in [ADR 014](../014-vllm-inference/).
-
-
-<div class="adr-nav">
-  <a href="../010-cloudnative-pg/">&larr; ADR 010 &middot; CloudNativePG</a>
-  <a class="adr-nav-all" href="../../">ADR 11 of 17</a>
-  <a href="../012-layered-backup-strategy/">ADR 012 &middot; Layered backup strategy &rarr;</a>
-</div>
+>
+> **Update (Oct 2026):** The move is done. Generation runs on vLLM, Open WebUI reaches it through Cortexa, and Ollama now serves only embeddings, on CPU.

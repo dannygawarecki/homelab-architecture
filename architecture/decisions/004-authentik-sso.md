@@ -3,10 +3,18 @@ title: "ADR 004: Authentik as the Identity Provider"
 eyebrow: Architecture Decision Record
 summary: One login for everything — including the infrastructure itself — with every provider and application declared in Terraform.
 permalink: /architecture/decisions/004-authentik-sso/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Aug 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Authentik as the identity provider"
+card_blurb: "One login for everything — including Vault, ArgoCD, and Proxmox — declared entirely in Terraform."
+layout: adr
+status: Accepted
+date_label: Aug 2025
+subsystem: Identity · SSO
+tldr: Authentik is the identity provider for everything, infrastructure included, with every provider and application declared in Terraform — at the cost of a platform-wide single point of failure for human logins.
+outcome_stats:
+  - num: "9"
+    label: OIDC Applications Today
+  - num: "2"
+    label: Access Groups
 ---
 
 ## Context
@@ -15,10 +23,10 @@ A platform running a dozen web UIs accumulates a dozen credential stores unless 
 
 Options:
 
-- **Keycloak** — the enterprise standard; heavyweight, and its administration model is famously sprawling for a two-user deployment.
-- **Authelia** — lean and well-liked, but at the time more portal/proxy-oriented; I wanted a full OIDC provider with a first-class Terraform provider.
-- **Dex** — an identity *broker*, not a user store; solves federation, not the directory.
-- **Authentik** — full IdP with flows, OIDC/SAML/proxy providers, and a maintained Terraform provider.
+- <span class="opt">Rejected</span> **Keycloak** — the enterprise standard; heavyweight, and its administration model is famously sprawling for a two-user deployment.
+- <span class="opt">Rejected</span> **Authelia** — lean and well-liked, but at the time more portal/proxy-oriented; I wanted a full OIDC provider with a first-class Terraform provider.
+- <span class="opt">Rejected</span> **Dex** — an identity *broker*, not a user store; solves federation, not the directory.
+- <span class="opt opt-chosen">Chosen</span> **Authentik** — full IdP with flows, OIDC/SAML/proxy providers, and a maintained Terraform provider.
 
 ## Decision
 
@@ -44,10 +52,3 @@ The deliberate part is scope: not just user apps (Paperless, Outline, Home Assis
 Onboarding the second user was a group membership, not ten account creations. The `for_each` pattern has held: new applications get SSO in roughly ten lines of diff.
 
 > **Correction, Sep 2026.** This section originally opened with *"Every web surface on the platform sits behind the same login."* That was not true when it was written and had not been for some time. Seven surfaces — kiali, hubble-ui, netdata, dozzle, homepage, Stirling PDF, and grocy — had no working login, and grocy's OIDC application pointed at a callback route it has never had. All seven are now behind the outpost; see [ADR 017](../017-outpost-reverse-proxy-auth/) for the decision and [Everything Was Green](../../../writing/everything-was-green/) for how a claim like that survives a year unchallenged.
-
-
-<div class="adr-nav">
-  <a href="../003-vault-external-secrets/">&larr; ADR 003 &middot; Vault + External Secrets</a>
-  <a class="adr-nav-all" href="../../">ADR 4 of 17</a>
-  <a href="../005-synology-iscsi-storage/">ADR 005 &middot; Synology iSCSI storage &rarr;</a>
-</div>

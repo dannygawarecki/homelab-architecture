@@ -3,21 +3,24 @@ title: "ADR 005: Synology iSCSI via CSI as Primary Storage"
 eyebrow: Architecture Decision Record
 summary: Centralized NAS storage over a dedicated network, chosen over distributed storage I would have operated badly — with the single point of failure named and accepted.
 permalink: /architecture/decisions/005-synology-iscsi-storage/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Oct 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Synology iSCSI as primary storage"
+card_blurb: "Centralized NAS block storage over distributed storage I'd operate badly — the single point of failure named and accepted."
+layout: adr
+status: Accepted
+date_label: Oct 2025
+subsystem: Storage
+tldr: The Synology CSI driver provides one iSCSI-backed StorageClass with reclaimPolicy Retain over a dedicated storage VLAN for nearly every stateful workload — making the NAS a named, accepted single point of failure mitigated by backups.
 ---
 
 ## Context
 
 Persistent storage is the most consequential choice in any cluster — it's the one layer where a bad decision costs data, and this platform has [lost data once](../../../lessons-learned/). The options:
 
-- **Local-path provisioning** — what the cluster actually used at first (the configs are still in the GitOps repo's archive). Fast and simple, but a volume is welded to a node, which makes "nodes are disposable" a lie.
-- **Longhorn** — Kubernetes-native replicated storage. Attractive, but replication across three consumer mini-PCs over the general network adds failure modes I'd be debugging instead of using.
-- **Rook-Ceph** — the serious answer at scale, and vast operational overkill for this hardware.
-- **NFS from the NAS** — simple, but weaker semantics for databases than block storage.
-- **iSCSI from the Synology via its CSI driver** — block volumes from hardware I already own, trust, and monitor, with RAID and snapshots built in.
+- <span class="opt">Rejected</span> **Local-path provisioning** — what the cluster actually used at first (the configs are still in the GitOps repo's archive). Fast and simple, but a volume is welded to a node, which makes "nodes are disposable" a lie.
+- <span class="opt">Rejected</span> **Longhorn** — Kubernetes-native replicated storage. Attractive, but replication across three consumer mini-PCs over the general network adds failure modes I'd be debugging instead of using.
+- <span class="opt">Rejected</span> **Rook-Ceph** — the serious answer at scale, and vast operational overkill for this hardware.
+- <span class="opt">Rejected</span> **NFS from the NAS** — simple, but weaker semantics for databases than block storage.
+- <span class="opt opt-chosen">Chosen</span> **iSCSI from the Synology via its CSI driver** — block volumes from hardware I already own, trust, and monitor, with RAID and snapshots built in.
 
 ## Decision
 
@@ -39,10 +42,3 @@ The **Synology CSI driver** provides one StorageClass — iSCSI-backed, `ext4`, 
 ## Outcome
 
 Every stateful workload on the platform runs on the same storage class with the same guarantees. Volume expansion has been used in anger. Node rebuilds — the whole point of the disposability story — don't move data, because data was never on the nodes.
-
-
-<div class="adr-nav">
-  <a href="../004-authentik-sso/">&larr; ADR 004 &middot; Authentik SSO</a>
-  <a class="adr-nav-all" href="../../">ADR 5 of 17</a>
-  <a href="../006-proxmox-vms/">ADR 006 &middot; Kubernetes on Proxmox VMs &rarr;</a>
-</div>

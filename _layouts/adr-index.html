@@ -1,0 +1,62 @@
+---
+layout: default
+---
+{%- comment -%}
+  ADR index. Cards are built from each record's front matter (card_title,
+  card_blurb, date_label, status, subsystem) and grouped by _data/adr_eras.yml,
+  so a new ADR needs no edit here.
+{%- endcomment -%}
+{%- assign adrs = site.pages | where_exp: "p", "p.path contains 'architecture/decisions/0'" | sort: "path" -%}
+{%- assign first = adrs | first -%}
+{%- assign latest = adrs | last -%}
+{%- assign accepted = 0 -%}
+{%- for a in adrs -%}{%- assign s = a.status | default: "Accepted" -%}{%- if s == "Accepted" -%}{%- assign accepted = accepted | plus: 1 -%}{%- endif -%}{%- endfor -%}
+{%- assign superseded = adrs.size | minus: accepted -%}
+<article class="wrap prose">
+  <header class="page-head">
+    {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+  </header>
+
+  <p class="chip-row">
+    <span class="chip"><b>{{ adrs.size }}</b> records</span>
+    <span class="chip chip-good"><b>{{ accepted }}</b> accepted</span>
+    {% if superseded > 0 %}<span class="chip chip-warn"><b>{{ superseded }}</b> superseded</span>{% endif %}
+    <span class="chip">{{ first.date_label }} – {{ latest.date_label }}</span>
+  </p>
+
+  {{ content }}
+
+  {%- for era in site.data.adr_eras -%}
+    {%- assign members = "" | split: "" -%}
+    {%- for a in adrs -%}
+      {%- assign n = a.path | split: '/' | last | slice: 0, 3 | plus: 0 -%}
+      {%- if n >= era.from and n <= era.to -%}{%- assign members = members | push: a -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if members.size > 0 -%}
+    {%- assign lo = members | first -%}{%- assign hi = members | last -%}
+    <section class="adr-era">
+      <div class="adr-era-head">
+        <p class="eyebrow">{{ era.name }}</p>
+        <span class="adr-era-meta">{{ lo.path | split: '/' | last | slice: 0, 3 }}–{{ hi.path | split: '/' | last | slice: 0, 3 }} · {{ members.size }} records</span>
+      </div>
+      <p class="adr-era-blurb">{{ era.blurb }}</p>
+      <div class="cards">
+        {%- for a in members -%}
+        {%- assign st = a.status | default: "Accepted" -%}
+        <a class="card adr-card{% if st == 'Superseded' %} adr-card-superseded{% endif %}" href="{{ a.url | relative_url }}">
+          <span class="card-tag">{{ a.title | slice: 0, 7 }} · {{ a.date_label }}</span>
+          <h3>{{ a.card_title | default: a.title }}</h3>
+          <p>{{ a.card_blurb | default: a.summary }}</p>
+          <span class="adr-card-foot">
+            <span>{{ a.subsystem }}</span>
+            <span class="status {% if st == 'Superseded' %}status-wip{% else %}status-live{% endif %}">{{ st }}</span>
+          </span>
+        </a>
+        {%- endfor -%}
+      </div>
+    </section>
+    {%- endif -%}
+  {%- endfor -%}
+</article>

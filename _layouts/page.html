@@ -1,7 +1,7 @@
 ---
 layout: default
 ---
-<article class="wrap prose">
+<article class="wrap prose{% if page.class %} {{ page.class }}{% endif %}">
   {% if page.title %}
   <header class="page-head">
     {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
