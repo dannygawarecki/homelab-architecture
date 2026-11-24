@@ -55,6 +55,21 @@ I've settled into a rhythm. I've learned what AI tools are good at and how to us
 
 ---
 
+## The Exception: Where AI Teaches and I Write
+
+Almost everything above is AI writing and me checking. [kubeslo-operator](../projects/kubeslo-operator/) runs the other way on purpose. **I write the Go by hand. The AI reviews it, explains it, and quizzes me on it, but it doesn't author it.** The goal is to understand a Kubernetes reconcile loop well enough to write one from a blank file, and there's no way to get that by reading someone else's.
+
+The commit history shows the difference better than I can describe it. Every human commit in [big-weather](../projects/big-weather/) and [Cortexa](../projects/cortexa/) since September carries an AI co-author line. **None of the 19 in `flaky`**, kubeslo's test service, do. The messages read like it, too: "Table-driven tests", "More tests, I wasn't done yet", "oops".
+
+It's slower, and that's the point:
+
+- **flaky took about twelve days for roughly 930 lines of Go.** big-weather, written the usual way, reached about 3,500 lines of Python in three.
+- **What I got for the extra time is the design.** The constraints on the kubeslo page didn't come from a suggestion. A revert reuses an old ReplicaSet. A config change keeps the same version label. An error query that returns *nothing* isn't the same as one that returns zero. They came from watching my own code misbehave in the cluster and understanding why. That last one was a fix I made myself: initialising flaky's request counters so the query has something to return.
+
+The rule of thumb I've landed on: **when the code is the product, let AI write it and verify hard. When understanding is the product, write it yourself and let AI be the reviewer who never gets tired of "why?"** Picking which one a project is, before starting, is most of the decision.
+
+---
+
 ## Pattern: Context-First Prompting
 
 The most effective pattern I found: give Copilot the current state of the file *and* the goal before asking for changes. "Here's what the file looks like. Here's what I want it to do. What should change?" produces much better results than "refactor this."
