@@ -4,8 +4,8 @@ eyebrow: Platform
 summary: The diagrams that describe the platform, and the decision records that explain why it looks the way it does.
 permalink: /architecture/
 layout: architecture
-diagram_count: 5
-diagram_thumb: /images/platform-view-v3.png
+diagram_count: 4
+diagram_thumb: /images/physical-architecture-v2.png
 ---
 
 <p class="gh-only">Two parts: the <a href="./diagrams/">diagrams</a> (physical layout, network trust zones, platform capability map, delivery and inference flows) and the <a href="./decisions/">architecture decision records</a> below.</p>

@@ -83,11 +83,10 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
       and wanting to learn a little Linux — and got serious in July 2025.
     </p>
 
-    <a href="{{ '/architecture/diagrams/' | relative_url }}" class="hero-figure">
-      <img src="{{ '/images/platform-view-v3.png' | relative_url }}?v={{ site.time | date: '%s' }}"
-           alt="Platform capability map showing seven areas: GitOps delivery, networking and segmentation, data persistence, observability, security and compliance, local AI platform, and user applications.">
-      <span class="figcap">The platform's seven capability areas — see all diagrams →</span>
-    </a>
+    {% include platform-map.html %}
+    <p class="figcap" style="margin-top: -1.5rem; margin-bottom: 2.5rem;">
+      <a href="{{ '/architecture/diagrams/' | relative_url }}">See how it's laid out, networked, and delivered →</a>
+    </p>
 
     <div class="cards">
       <div class="card">

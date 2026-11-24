@@ -1,0 +1,11 @@
+{%- assign c = include.item -%}
+{%- if c.adr -%}
+{%- assign c_idx = c.adr | minus: 1 -%}
+{%- assign c_page = include.adrs[c_idx] -%}
+{%- assign c_num = c.adr | prepend: "00" | slice: -3, 3 -%}
+<li><a class="pchip pchip-adr" href="{{ c_page.url | relative_url }}" title="{{ c_page.title | escape }}{% if c.note %} · {{ c.note | escape }}{% endif %}">{{ c.name }}<span class="pchip-ref">{{ c_num }}</span></a></li>
+{%- elsif c.url -%}
+<li><a class="pchip pchip-link" href="{{ c.url | relative_url }}"{% if c.note %} title="{{ c.note | escape }}"{% endif %}>{{ c.name }}<span class="pchip-arrow" aria-hidden="true">&rarr;</span></a></li>
+{%- else -%}
+<li><span class="pchip"{% if c.note %} title="{{ c.note | escape }}" tabindex="0"{% endif %}>{{ c.name }}</span></li>
+{%- endif -%}

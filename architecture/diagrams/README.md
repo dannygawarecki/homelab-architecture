@@ -50,25 +50,27 @@ The two unrouted VLANs never touch the firewall at all. Instead, the machines th
 
 ---
 
-## Platform View
+## Platform Capability Map
 
-[![Platform View](../../images/platform-view-v3.png)](../../images/platform-view-v3.png)
+What runs on the platform, in seven areas. This one isn't a drawing because it isn't a picture of relationships; it's an inventory. Every highlighted component links to the decision record that explains why it's there, and the numbers say which one. Plain components are in use without a record of their own.
 
-The Talos Kubernetes platform is organised into seven capability areas:
+<!-- platform-map -->
+
+<div class="gh-only" markdown="1">
 
 | Area | Components |
 |---|---|
-| **GitOps Development** | Argo CD, Gitea, Gitea Runner, Renovate, Velero |
-| **Networking & Segmentation** | Cilium, Istio Ambient, MetalLB |
-| **Data Persistence** | CloudNativePG, MinIO, Synology CSI |
-| **Observability** | Prometheus, Grafana, Alertmanager, Pyrra, Dozzle, Ntfy, Uptime Kuma, Hubble, Kiali, metrics-server, Goldilocks |
-| **Security & Compliance** | Authentik, Cert-Manager, Checkov, External-Secrets, Falco, Gitleaks, Kube-bench, Kyverno, Polaris, Tetragon, Trivy, Vault |
-| **Local AI Platform** | Nvidia Device Plugin, 11 MCP Servers, Ollama, vLLM, Open Web UI |
-| **User Apps** | Homepage, Karakeep, Outline, Paperless, Wallos, big-ads, big-recipes, big-weather, Cortexa |
+| **GitOps & delivery** | Argo CD, Gitea, Gitea Runner, Renovate, Velero |
+| **Networking & segmentation** | Cilium, Istio Ambient, MetalLB, Cloudflare Tunnel |
+| **Data persistence** | CloudNativePG, Synology CSI, MinIO |
+| **Observability** | Prometheus, Alertmanager, Pyrra, Grafana, six exporters, Uptime Kuma, Hubble, Kiali, Dozzle, Ntfy, metrics-server, Goldilocks |
+| **Security & compliance** | Authentik (and its outpost), Vault, External Secrets, Kyverno, Tetragon, cert-manager, Falco, Trivy, Gitleaks, Checkov, kube-bench, Polaris |
+| **Local AI platform** | vLLM, Ollama, NVIDIA device plugin, 11 MCP servers, Open WebUI |
+| **User apps** | Cortexa, big-ads, big-recipes, big-weather, Paperless, Karakeep, Outline, Homepage, Wallos |
 
-One thing this map deliberately does *not* show: the **Tailscale subnet router**, absent because it runs in an LXC beside the cluster rather than on it — that separation is the whole point of [ADR 015](../decisions/015-tailscale-remote-access/).
+</div>
 
-*The image predates October 2026. It doesn't yet show the metrics stack ([ADR 019](../decisions/019-metrics-and-slos/)), Kyverno and Tetragon ([ADR 020](../decisions/020-signed-images-runtime-enforcement/)), or [Cortexa](../../projects/cortexa/), which now runs in the cluster. It still shows Netdata, which was retired in November, and counts twelve MCP servers, one more than now run. The table above is current.*
+The bottom row matters as much as the grid. **Tailscale, the backup server, transit-vault and the offsite copy run beside the cluster on purpose**: each is something you need when the cluster is the thing that's broken. Tailscale gets you in ([ADR 015](../decisions/015-tailscale-remote-access/)), PBS and Backblaze get the data back ([ADR 012](../decisions/012-layered-backup-strategy/), [ADR 018](../decisions/018-offsite-backup/)), and transit-vault unseals the cluster's Vault, which can't unseal itself.
 
 ---
 

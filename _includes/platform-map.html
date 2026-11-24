@@ -1,0 +1,39 @@
+{%- comment -%}
+  Platform capability map, from _data/platform.yml.
+  A chip with an ADR behind it links there and shows the record's number;
+  one with a url links to that page; anything else is plain.
+  Kept free of blank lines and indentation so it survives inside markdown.
+{%- endcomment -%}
+{%- assign pm_adrs = site.pages | where_exp: "p", "p.path contains 'architecture/decisions/0'" | sort: "path" -%}
+<figure class="pmap" aria-label="Platform capability map">
+<div class="pmap-frame">
+<div class="pmap-grid">
+{%- for area in site.data.platform.areas %}
+<section class="pmap-area">
+<h3 class="pmap-name">{{ area.name }}<span class="pmap-count">{{ area.items.size }}</span></h3>
+<p class="pmap-blurb">{{ area.blurb }}</p>
+<ul class="pmap-chips">
+{%- for item in area.items -%}{%- include platform-chip.html item=item adrs=pm_adrs -%}{%- endfor -%}
+</ul>
+</section>
+{%- endfor %}
+</div>
+<div class="pmap-base">
+<span class="pmap-base-label">Talos Kubernetes · runs on</span>
+<ul class="pmap-chips">
+{%- for item in site.data.platform.runs_on -%}{%- include platform-chip.html item=item adrs=pm_adrs -%}{%- endfor -%}
+</ul>
+</div>
+</div>
+<div class="pmap-beside">
+<span class="pmap-base-label">Beside the cluster, on purpose</span>
+<ul class="pmap-chips">
+{%- for item in site.data.platform.beside -%}{%- include platform-chip.html item=item adrs=pm_adrs -%}{%- endfor -%}
+</ul>
+</div>
+<figcaption class="pmap-legend">
+<span class="pchip pchip-adr pchip-demo">Component<span class="pchip-ref">ADR</span></span> a decision record explains the choice
+<span class="pmap-legend-sep">·</span>
+<span class="pchip pchip-demo">Component</span> in use, no record of its own
+</figcaption>
+</figure>

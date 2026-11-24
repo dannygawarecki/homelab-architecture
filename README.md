@@ -43,9 +43,19 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 - **MetalLB** for bare-metal load balancing
 
 ### Platform Capabilities
-This diagram covers the high-level capabilities of my homelab platform. See [`/infrastructure`](./infrastructure/) for deeper technical detail.
+The high-level capabilities of the platform. The [site](https://lab.gawarecki.us/architecture/diagrams/#platform-capability-map) links each one to the decision record behind it; see [`/infrastructure`](./infrastructure/) for deeper technical detail.
 
-![Platform View](./images/platform-view-v3.png)
+| Area | Components |
+|---|---|
+| **GitOps & delivery** | Argo CD, Gitea, Gitea Runner, Renovate, Velero |
+| **Networking & segmentation** | Cilium, Istio Ambient, MetalLB, Cloudflare Tunnel |
+| **Data persistence** | CloudNativePG, Synology CSI, MinIO |
+| **Observability** | Prometheus, Alertmanager, Pyrra, Grafana, six exporters, Uptime Kuma, Hubble, Kiali, Dozzle, Ntfy, metrics-server, Goldilocks |
+| **Security & compliance** | Authentik (and its outpost), Vault, External Secrets, Kyverno, Tetragon, cert-manager, Falco, Trivy, Gitleaks, Checkov, kube-bench, Polaris |
+| **Local AI platform** | vLLM, Ollama, NVIDIA device plugin, 11 MCP servers, Open WebUI |
+| **User apps** | Cortexa, big-ads, big-recipes, big-weather, Paperless, Karakeep, Outline, Homepage, Wallos |
+
+Beside the cluster, on purpose: Tailscale, Proxmox Backup Server, transit-vault, and an offsite copy on Backblaze B2.
 
 ---
 

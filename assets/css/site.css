@@ -748,3 +748,58 @@ pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 .signup-note {
   margin-top: .7rem; font-size: .82rem; color: var(--text-mute);
 }
+
+/* ---------- platform capability map (_includes/platform-map.html) ---------- */
+.pmap { margin: 2rem 0 2.5rem; }
+.pmap-frame {
+  border: 1px dashed var(--line); border-radius: calc(var(--radius) + 4px);
+  padding: .85rem .85rem .9rem;
+}
+.pmap-grid { columns: 3 16rem; column-gap: .75rem; }
+.pmap-area {
+  display: inline-block; width: 100%; break-inside: avoid;
+  margin: 0 0 .75rem; padding: .85rem .95rem .95rem;
+  background: var(--bg-soft); border: 1px solid var(--line-soft); border-radius: var(--radius);
+}
+.pmap .pmap-name {
+  display: flex; justify-content: space-between; align-items: baseline; gap: .5rem;
+  margin: 0; font-size: .95rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em;
+}
+.pmap-count { font-family: var(--mono); font-size: .7rem; font-weight: 500; color: var(--text-mute); }
+.pmap .pmap-blurb { margin: .15rem 0 .7rem; font-size: .8rem; color: var(--text-dim); }
+.pmap-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem; }
+.pmap .pmap-chips li { margin: 0; }
+
+.pchip {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .26rem .6rem; border-radius: 999px;
+  font-size: .8rem; line-height: 1.25; white-space: nowrap;
+  color: var(--text-dim); background: var(--bg); border: 1px solid var(--line);
+}
+.pchip-adr, .pchip-link {
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg));
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.pchip-ref, .pchip-arrow { font-family: var(--mono); font-size: .66rem; color: var(--accent); letter-spacing: .02em; }
+.pmap a.pchip { transition: border-color .15s ease, color .15s ease; }
+.pmap a.pchip:hover, .pmap a.pchip:focus-visible { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.pmap span.pchip[title] { cursor: help; }
+
+.pmap-base, .pmap-beside { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem .85rem; }
+.pmap-base { margin-top: .1rem; padding: .8rem .15rem 0; border-top: 1px dashed var(--line); }
+.pmap-beside { margin-top: .8rem; padding: 0 1rem; }
+.pmap-base-label {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--text-mute);
+}
+.pmap-legend {
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .45rem;
+  margin-top: 1.1rem; font-size: .78rem; color: var(--text-mute);
+}
+.pmap-legend-sep { margin: 0 .35rem; }
+.pchip-demo { pointer-events: none; font-size: .72rem; padding: .15rem .5rem; }
+@media (max-width: 640px) {
+  .pmap-frame { padding: .6rem; }
+  .pmap-beside { padding: 0 .25rem; }
+}
