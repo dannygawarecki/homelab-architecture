@@ -9,7 +9,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <p class="eyebrow">Platform Engineering · Home Lab</p>
     <h1>I built a production-grade platform at home, then wrote down everything I learned.</h1>
     <p class="lede">
-      A 6-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust
+      A 7-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust
       networking, and local GPU inference — plus the applications running on top of it.
       Three rebuilds from scratch. One data loss. All of it documented, including the parts
       that didn't work.
@@ -24,10 +24,10 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
 
 <div class="wrap">
   <div class="stats">
-    <div class="stat"><span class="num">6</span><span class="lbl">Talos K8s nodes</span></div>
-    <div class="stat"><span class="num">3</span><span class="lbl">Proxmox hosts</span></div>
-    <div class="stat"><span class="num">88</span><span class="lbl">ArgoCD applications</span></div>
-    <div class="stat"><span class="num">54</span><span class="lbl">Monitored endpoints</span></div>
+    <div class="stat"><span class="num">7</span><span class="lbl">Talos K8s nodes</span></div>
+    <div class="stat"><span class="num">4</span><span class="lbl">Proxmox hosts</span></div>
+    <div class="stat"><span class="num">99</span><span class="lbl">ArgoCD applications</span></div>
+    <div class="stat"><span class="num">56</span><span class="lbl">Monitored endpoints</span></div>
     <div class="stat"><span class="num">8</span><span class="lbl">Network trust zones</span></div>
     <div class="stat"><span class="num">100%</span><span class="lbl">GitOps delivered</span></div>
   </div>
@@ -44,11 +44,11 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <p class="eyebrow" style="margin-top: 2rem;">Built and running</p>
     <div class="cards">
       <a class="card" href="{{ '/architecture/' | relative_url }}">
-        <span class="card-tag">Platform · 20 ADRs · 88 apps</span>
+        <span class="card-tag">Platform · 20 ADRs · 99 apps</span>
         <h3>The homelab platform</h3>
         <p>A production-grade Kubernetes platform on Talos and Proxmox — full GitOps,
         zero-trust networking, local GPU inference. It grew from a single Home Assistant box
-        into 88 ArgoCD applications, documented across twenty decision records that show the
+        into 99 ArgoCD applications, documented across twenty decision records that show the
         tradeoffs I accepted rather than solved.</p>
       </a>
       <a class="card" href="{{ '/projects/big-ads/' | relative_url }}">
@@ -93,7 +93,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
       <div class="card">
         <span class="card-tag">Compute</span>
         <h3>Talos on Proxmox</h3>
-        <p>3-node Proxmox cluster with ZFS. 6-node Talos Kubernetes cluster — immutable,
+        <p>4-node Proxmox cluster with ZFS. 7-node Talos Kubernetes cluster — immutable,
         API-driven, no SSH. One worker dedicated to GPU inference.</p>
       </div>
       <div class="card">

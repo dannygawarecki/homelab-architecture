@@ -112,7 +112,7 @@ Four efforts, one question. Each solved a piece of "a collaborator you can trust
 <div class="axioms" markdown="1">
 
 - **Knowledge — [Context Engine](context-engine/).** An assistant is only as good as what it can actually see. Local-first retrieval answers from *current* documents instead of a model's stale recollection. Its retrieval core is now Cortexa's knowledge layer.
-- **Agency — [the platform's MCP layer](../architecture/decisions/013-mcp-ai-operations/).** A dozen scoped, credential-contained servers give an assistant structured access to the real systems. These are Cortexa's hands — and unlike the other two, they stay live as platform infrastructure regardless.
+- **Agency — [the platform's MCP layer](../architecture/decisions/013-mcp-ai-operations/).** Eleven scoped, credential-contained servers give an assistant structured access to the real systems. These are Cortexa's hands — and unlike the other two, they stay live as platform infrastructure regardless.
 - **Governance — [Policyclaw](policyclaw/).** Agency without a leash is a liability. Policyclaw made every mutating action pass a human confirmation gate. The tell that convinced me these were one project: Cortexa kept arriving at *the same idea* — approval enforced by code, not model goodwill — and its tool policy is now a direct port of Policyclaw's rules.
 - **The mind — [Cortexa](cortexa/).** The frame that holds all three: something that knows, can act, and is governed — and whose value is *measured* rather than asserted.
 

@@ -14,7 +14,9 @@ Diagrams are created in [Excalidraw](https://excalidraw.com).
 
 [![Physical Architecture](../../images/physical-architecture.png)](../../images/physical-architecture.png)
 
-Three HP workstations form a Proxmox cluster, each running Talos VMs for the Kubernetes control plane and workers. The HP Z440 hosts the GPU worker (`kube-worker-ai`) with dual RTX 3060s for local LLM inference. The HP EliteDesk 800 also runs the Proxmox Backup Server (PBS) and Home Assistant VMs. All cluster nodes connect to a Synology DS1817+ for iSCSI primary storage, which also receives Proxmox VM backups.
+Four small workstations form a Proxmox cluster. The three HP machines each run a Talos control-plane VM and a worker. The HP Z440 hosts the GPU worker (`kube-worker-ai`) with dual RTX 3060s for local LLM inference. The HP ProDesk 600 also runs the Proxmox Backup Server (PBS) VM, and the HP EliteDesk 800 runs Home Assistant. All cluster nodes connect to a Synology DS1817+ for iSCSI primary storage, which also receives Proxmox VM backups.
+
+*The image predates the fourth host.* pve-4, a Dell OptiPlex 5060, joined in November 2026 with 32GB and no second SSD. It runs one deliberately smaller worker (`kube-worker-2`) and no control plane, so quorum placement is unchanged.
 
 ---
 
@@ -50,14 +52,14 @@ The Talos Kubernetes platform is organised into seven capability areas:
 | **GitOps Development** | Argo CD, Gitea, Gitea Runner, Renovate, Velero |
 | **Networking & Segmentation** | Cilium, Istio Ambient, MetalLB |
 | **Data Persistence** | CloudNativePG, MinIO, Synology CSI |
-| **Observability** | Prometheus, Grafana, Alertmanager, Pyrra, Dozzle, Netdata, Ntfy, Uptime Kuma, Hubble, Kiali, metrics-server, Goldilocks |
+| **Observability** | Prometheus, Grafana, Alertmanager, Pyrra, Dozzle, Ntfy, Uptime Kuma, Hubble, Kiali, metrics-server, Goldilocks |
 | **Security & Compliance** | Authentik, Cert-Manager, Checkov, External-Secrets, Falco, Gitleaks, Kube-bench, Kyverno, Polaris, Tetragon, Trivy, Vault |
-| **Local AI Platform** | Nvidia Device Plugin, 12 MCP Servers, Ollama, vLLM, Open Web UI |
-| **User Apps** | Homepage, Karakeep, Outline, Paperless, Wallos, big-ads, big-recipes, Cortexa |
+| **Local AI Platform** | Nvidia Device Plugin, 11 MCP Servers, Ollama, vLLM, Open Web UI |
+| **User Apps** | Homepage, Karakeep, Outline, Paperless, Wallos, big-ads, big-recipes, big-weather, Cortexa |
 
 One thing this map deliberately does *not* show: the **Tailscale subnet router**, absent because it runs in an LXC beside the cluster rather than on it — that separation is the whole point of [ADR 015](../decisions/015-tailscale-remote-access/).
 
-*The image predates October 2026: it doesn't yet show the metrics stack ([ADR 019](../decisions/019-metrics-and-slos/)), Kyverno and Tetragon ([ADR 020](../decisions/020-signed-images-runtime-enforcement/)), or [Cortexa](../../projects/cortexa/), which now runs in the cluster. The table above is current.*
+*The image predates October 2026. It doesn't yet show the metrics stack ([ADR 019](../decisions/019-metrics-and-slos/)), Kyverno and Tetragon ([ADR 020](../decisions/020-signed-images-runtime-enforcement/)), or [Cortexa](../../projects/cortexa/), which now runs in the cluster. It still shows Netdata, which was retired in November, and counts twelve MCP servers, one more than now run. The table above is current.*
 
 ---
 

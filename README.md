@@ -2,7 +2,7 @@
 
 ### 📖 **[Read this as a site → lab.gawarecki.us](https://lab.gawarecki.us/)**
 
-*A 6-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust networking, and local GPU inference — plus the applications running on top of it.*
+*A 7-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust networking, and local GPU inference — plus the applications running on top of it.*
 
 <sub>Working on the site itself? See [DEVELOPMENT.md](./DEVELOPMENT.md) — preview and link-check it with Docker, no Ruby required.</sub>
 
@@ -29,8 +29,8 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 ## The Stack
 
 ### Compute
-- **3-node Proxmox cluster** (pve-1, pve-2, pve-3) with ZFS storage
-- **6-node Talos Kubernetes cluster** with 3 control plane nodes, 3 workers (1 dedicated to AI)
+- **4-node Proxmox cluster** (pve-1 through pve-4) with ZFS storage
+- **7-node Talos Kubernetes cluster** with 3 control plane nodes, 4 workers (1 dedicated to AI)
 - **GPU passthrough** on the AI worker (NVIDIA) for local LLM inference
 
 ### Networking

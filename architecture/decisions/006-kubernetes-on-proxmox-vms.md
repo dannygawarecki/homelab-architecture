@@ -43,3 +43,5 @@ Run a **3-node Proxmox cluster** (ZFS on each host) and provision **every Kubern
 ## Outcome
 
 Nodes are rebuilt routinely without drama. The full stack — Proxmox → Talos VM → NVIDIA device plugin → Ollama — has survived host reboots and upgrades. This decision is the foundation [ADR 007 (Talos)](../007-talos-linux/) stands on: immutable node OS only pays off when creating and destroying nodes is trivial.
+
+> **Update (Nov 2026):** A fourth host, **pve-4** (a Dell OptiPlex 5060), joined the cluster. It has 32GB against the others' 64GB and no second SSD, so it carries one deliberately *smaller* worker, `kube-worker-2`, and no control plane. The asymmetry runs the safe way: the scheduler places by memory requests, so the smallest node takes the least and hurts least to lose. Control-plane placement, one per HP host, is unchanged.
