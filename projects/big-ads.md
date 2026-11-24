@@ -1,7 +1,7 @@
 ---
 title: big-ads
 eyebrow: Side Project · Accessibility
-summary: A grocery flyer viewer built for one person with severe visual impairment — where every interesting engineering decision was forced by an accessibility constraint.
+description: A grocery flyer viewer built for one person with severe visual impairment — where every interesting engineering decision was forced by an accessibility constraint.
 permalink: /projects/big-ads/
 ---
 
@@ -14,7 +14,7 @@ permalink: /projects/big-ads/
   <a class="btn btn-primary" href="https://big-ads.gawarecki.us/">Open big-ads &nearr;</a>
 </p>
 
-The name means making store ads *physically big*. It has nothing to do with advertising technology. It later gained a sibling, [big-recipes](../big-recipes/), built for the same person against the same constraints.
+The name means making store ads *physically big*. It has nothing to do with advertising technology. It was the first of three tools for the same person. [big-recipes](../big-recipes/) and [big-weather](../big-weather/) followed, built against the same constraints, and since November 2026 all three share one house style.
 
 big-ads exists because grocery store websites are effectively unusable for someone with severe visual impairment. Weekly flyers are rendered into `<canvas>` elements inside nested cross-origin iframes, gated behind store-locator forms and cookie modals, with controls too small to hit and layouts that collapse under screen magnification. Every one of those is a deliberate product decision by the retailer, and collectively they lock out the people most likely to be price-sensitive about groceries.
 
@@ -22,7 +22,12 @@ So the system scrapes four regional chains on a schedule, normalizes their flyer
 
 The success criteria in the spec end with the real one:
 
-> Never interact directly with grocery store websites.
+> 1. A user can open big-ads.
+> 2. Select a store.
+> 3. Open a flyer.
+> 4. Read flyer pages at high magnification.
+> 5. Navigate pages using obvious controls.
+> 6. Never interact directly with grocery store websites.
 >
 > If all six are true, the project has achieved its purpose.
 
@@ -34,7 +39,9 @@ The spec's **non-goals** section is the part I'd point at. No accounts. No searc
 
 > The system prioritizes reliability and simplicity over features and aesthetics.
 
-The interface is four giant stacked store buttons, then a fit-to-width flyer page with HOME / PREVIOUS / NEXT. That's the entire product surface.
+The interface is four giant stacked store buttons, then a fit-to-width flyer page with HOME / PREVIOUS / NEXT. That was the entire product surface at launch, and it's still the spine. Added since: ZOOM (1×/2×/3× with drag-to-pan), a DARK SCREEN high-contrast toggle, RELOAD, a page-progress bar, a "MAY BE OUT OF DATE" tag when a flyer is stale, and a NEXT STORE offer at the end of each flyer. Every page has its own URL, so a reload or a bookmark returns to the same page.
+
+The look was redesigned in October 2026 from Google Stitch mockups, then held to these rules by hand. In November it became the template for the other two tools: one shared stylesheet, the same file in all three repositories, with a self-hosted low-vision font (Atkinson Hyperlegible Next), the same yellow key badges, and the same keys (**T** for the light or dark screen, **Esc** to back out).
 
 The requirements are measurable rather than aspirational:
 
@@ -44,17 +51,17 @@ The requirements are measurable rather than aspirational:
 
 Every interactive control has a single-letter hotkey — and the letter is **printed visibly on the button**. Hidden keyboard shortcuts are useless to a user who can't be expected to memorize them.
 
-The frontend is **347 lines of vanilla HTML, CSS, and JavaScript with no dependencies and no build step.** That's not minimalism for its own sake. A build pipeline is a thing that can break between me and someone who depends on this working every week.
+The frontend is **about 1,800 lines of vanilla HTML, CSS, and JavaScript with no dependencies and no build step.** It launched at 347; the growth is the features above and the shared house style, not a framework. That's not minimalism for its own sake. A build pipeline is a thing that can break between me and someone who depends on this working every week.
 
 ---
 
-## The hard part: four stores, four incompatible defenses
+## The hard part: four stores, each hostile in its own way
 
-Each retailer publishes flyers in a way that resists automation differently, so each needed its own approach behind a shared `fetch_latest() -> FlyerPackage` interface.
+Each retailer publishes flyers in a way that resists automation differently, so each needed its own approach behind a shared `fetch_latest() -> FlyerPackage` interface. The adapters have changed more than the interface has: two of the four stores have moved platforms since launch.
 
-### Flipp (Aldi, IGA) — a three-tier fallback chain
+### Flipp (formerly ALDI and IGA) — a three-tier fallback chain, and then the stores left
 
-The hardest piece, and the one I'm happiest with. The flyer renders to a canvas inside a nested cross-origin iframe. The capture script dismisses the cookie banner, finds the postal-code frame, types a ZIP, matches a store button by `aria-label`, and locates the publication frame. Then it degrades gracefully:
+The hardest piece, and the one I was happiest with. The flyer renders to a canvas inside a nested cross-origin iframe. The capture script dismisses the cookie banner, finds the postal-code frame, types a ZIP, matches a store button by `aria-label`, and locates the publication frame. Then it degrades gracefully:
 
 1. **Sniff the API response for a `pdf_url`** and download the true source PDF — complete, perfect pages.
 2. If unavailable, **passively record the CDN tile requests** the viewer makes, re-fetch every tile, and **stitch them back into full pages** — missing tiles filled white rather than failing the whole capture.
@@ -62,7 +69,9 @@ The hardest piece, and the one I'm happiest with. The flyer renders to a canvas 
 
 Captures are validated before publishing, and top UI chrome is auto-trimmed by pixel scanning.
 
-The fallback chain matters because tier 1 breaks silently whenever the vendor changes their API — and when it does, the system degrades to slightly worse images instead of going dark on the person using it.
+The fallback chain mattered because tier 1 breaks silently whenever the vendor changes their API — and when it does, the system degrades to slightly worse images instead of going dark on the person using it.
+
+What it couldn't survive was the retailers leaving the vendor. **ALDI moved off Flipp in August 2026** to an Instacart storefront; its new adapter uses a browser only to discover a CDN prefix, then downloads the pages over plain HTTP. **IGA left in September** and now publishes a print-ad PDF at a predictable address, which is downloaded directly, with no browser at all. It has one quirk of its own: early on ad day, the new PDF often isn't up yet, so the adapter falls back to last week's and the viewer marks it MAY BE OUT OF DATE rather than presenting it as current. No store in the config uses Flipp today; the adapter is kept, unused, in case one comes back. The adapter interface is what made that a two-adapter change instead of a rewrite: `fetch_latest() -> FlyerPackage` didn't care where the pages came from.
 
 ### Kroger — resolving a human address to an internal ID
 
@@ -70,7 +79,7 @@ There is no public API mapping an address to a store. So it downloads Kroger's *
 
 ### Save-A-Lot — recovering server state from the HTML
 
-Flyer data is embedded in a server-rendered React context blob, so it's parsed back out of the page, with a sitemap-plus-API fallback to turn a slug URL into a numeric store ID.
+Flyer data is embedded in a server-rendered Remix context blob (`window.__remixContext`), so it's parsed back out of the page, with a sitemap-plus-API fallback to turn a slug URL into a numeric store ID.
 
 ---
 
@@ -86,42 +95,54 @@ Scraping four hostile sites on a schedule fails constantly. The engineering is m
 
 **No database.** Storage is a flat filesystem tree of page images plus a metadata file. Given a small, fully-derived dataset that can be rebuilt by re-running the pipeline, a database would have been a stateful service to back up and operate for no benefit.
 
-The processing pipeline rasterizes PDFs at 300 DPI, autocrops white margins by luminance threshold, downscales with LANCZOS, and encodes progressive JPEG at quality 92 — tuned so pages render sharp under heavy magnification while still hitting the 2-second budget on DSL.
+The processing pipeline writes **two versions of every page**. A full-resolution one, up to 3,200px wide at JPEG quality 92, is only loaded when zooming. A 1,600px one at quality 85 is what the default fit-to-width view loads, which is how it stays inside the 2-second budget on DSL. PDFs are rendered at up to 300 DPI but never past the source image's own resolution, because a flyer that's really one scanned image would otherwise be blown up fourfold only to be shrunk again. Margins are autocropped by luminance, and pages are processed one at a time so peak memory stays at a single page.
 
 An out-of-memory incident in production is what drove the per-store timeouts and made DPI, width, and quality environment-tunable. That fix is in the commit history, which reads like software someone actually uses: *"Fix for OOM," "Hopefully final fixes for Kroger," "Fixes based on feedback."*
 
 ---
 
-## Deployment — the homelab doing its job
+## Deployment — the lab builds it, the edge serves it
 
-This is where the platform pays off. big-ads is fully GitOps-delivered with no manual steps — the whole path is drawn in the [GitOps delivery flow diagram](../../architecture/diagrams/#gitops-delivery-flow):
+The application is fully GitOps-delivered with no manual steps — the whole path is drawn in the [GitOps delivery flow diagram](../../architecture/diagrams/#gitops-delivery-flow):
 
-1. Push to **Gitea**, self-hosted in the cluster.
-2. **Gitea Actions** bumps the patch version, commits it back, builds the image, and pushes to the private in-cluster registry with retry and backoff.
+1. Push to **Gitea**, self-hosted in the cluster. Pull requests are built and scanned before they can merge.
+2. **Gitea Actions** — through the platform's shared CI workflows — tests, secret-scans, bumps the version, builds, scans and **signs** the image, and pushes it to the private in-cluster registry. The cluster refuses to run an unsigned one ([ADR 020](../../architecture/decisions/020-signed-images-runtime-enforcement/)).
 3. The pipeline then **clones the GitOps repo and patches the image tag** in the deployment manifest.
 4. **ArgoCD** reconciles and rolls it out.
 
 The CI runner is executing *inside the cluster it deploys to*, cloning over in-cluster service DNS. Separately, editing `stores.yaml` in the app repo automatically regenerates the corresponding Kubernetes ConfigMap in the GitOps repo — config-as-code across two repositories.
 
-**Version 0.1.9 with 9 CI-driven releases.** Renovate keeps base images current.
+### Nothing public reaches the lab
+
+Until September 2026 the public site was served from that pod, through a Cloudflare Tunnel into the cluster. It isn't any more. big-ads has no users to authenticate and nothing to write, so its public copy can be plain files — and plain files don't need to come from my house.
+
+Each refresh now builds a **static site** and uploads it to a **Cloudflare R2 bucket**: page images first, then the JSON, then `index.html` last, so a reader never sees a page that points at images that aren't there yet. Pages live under per-publish version paths cached as immutable, and superseded versions are deleted after a day's grace. `big-ads.gawarecki.us` is the bucket's custom domain, with one rewrite rule because R2 has no directory index.
+
+The pod still does all the work — scraping, building, publishing — but it's reachable only on a private hostname, and the tunnel route, public gateway, and VirtualService are gone. The Terraform says it plainly:
+
+> Nothing public reaches the home lab once the hostname moves; the cluster only ever connects OUT, to R2's S3 API.
+
+The publisher's token can read and write objects in that one bucket and nothing else in the account, and rotates every 90 days. Egress to R2 is pinned to my account's endpoint rather than the `*.r2.cloudflarestorage.com` wildcard, because any Cloudflare customer can stand up a bucket behind that name. Uptime Kuma watches both the private status endpoint and the public copy.
+
+**Version 0.1.108, with more than 100 CI-driven releases.** It refreshes at 02:00 and 13:00 local time. Renovate keeps base images current, and every build upgrades the Debian base so a fix that's out doesn't wait for a new image tag.
 
 ---
 
 ## Engineering summary
 
 <ul class="pills">
-  <li>Python 3.11+</li><li>FastAPI</li><li>Playwright</li><li>PyMuPDF</li><li>Pillow</li>
-  <li>Pydantic v2</li><li>Vanilla JS</li><li>Kubernetes</li><li>ArgoCD</li><li>Gitea Actions</li>
+  <li>Python 3.15</li><li>FastAPI</li><li>Playwright</li><li>PyMuPDF</li><li>Pillow</li>
+  <li>Pydantic v2</li><li>boto3</li><li>Vanilla JS</li><li>Kubernetes</li><li>ArgoCD</li><li>Gitea Actions</li><li>Cloudflare R2</li>
 </ul>
 
-- ~936 LOC of application and capture code, 347 LOC frontend, 320 LOC tests
-- **12 tests** across API, acquisition, config, scheduler, and storage — covering adapter selection, PDF merge, scheduler time math and crash recovery, and storage round-trips
-- 6 HTTP endpoints, including `/health` and `/ready` probes
+- ~3,300 LOC of application and capture code, ~1,800 LOC frontend, ~1,800 LOC tests
+- **84 tests** across 15 files — adapter selection, PDF merge, scheduler time math and crash recovery, storage round-trips, static-site build and publish order, retry backoff, and offline tests of each store's parsing logic
+- The FastAPI app no longer serves the public. It runs the scheduler, builds and publishes the site, serves a private preview, and exposes `/health`, `/ready`, a `/api/status` that returns 503 when any store goes stale, and a token-gated manual refresh that's off unless a token is configured
 - **No LLM anywhere in it.** It's a deterministic imaging pipeline, and it should stay one.
 
 ### Honest caveats
 
-The scrapers themselves are **not covered by tests** — they hit live sites, and a test that breaks when a retailer redesigns is a test that trains you to ignore failures. The real safety net is the fallback chain plus capture validation.
+The scrapers are **not tested against the live sites** — a test that breaks when a retailer redesigns is a test that trains you to ignore failures. Each store's parsing logic now has offline unit tests, but the real safety net is still the per-store isolation, capture validation, and the staleness alert.
 
 There's also a genuine structural wart: the acquisition layer imports directly from `scripts/`, so what began as CLI experiments are now production runtime code, and the Dockerfile copies them in to make that work. It functions, but the package boundary is blurred and it's the first thing I'd clean up.
 
@@ -129,6 +150,6 @@ There's also a genuine structural wart: the acquisition layer imports directly f
 
 ## Why it's on this site
 
-Cortexa is the project with the most interesting architecture. Context Engine is the most technically current. big-ads is the one that gets used every week by someone who couldn't do this before.
+Cortexa is the project with the most interesting architecture, and Worth Keeping the most carefully specified. big-ads is the one that gets used every week by someone who couldn't do this before, and the one the other two accessibility tools were built from.
 
-It's also the clearest example of accessibility working as an engineering forcing function. No build step, no database, no framework, hotkeys printed on buttons, graceful degradation at every tier — all of it falls directly out of taking one user's constraints seriously. That's not a simpler kind of engineering. It's just engineering with the requirements pointed at a person.
+It's also the clearest example of accessibility working as an engineering forcing function. No build step, no database, no framework, hotkeys printed on buttons, graceful degradation at every tier — all of it falls directly out of taking one user's constraints seriously. Even the move to R2 fell out of them: an app with no accounts and no writes is, publicly, just files. That's not a simpler kind of engineering. It's just engineering with the requirements pointed at a person.

@@ -1,12 +1,15 @@
 ---
 title: "ADR 006: Kubernetes Nodes as Proxmox VMs, Not Bare Metal"
 eyebrow: Architecture Decision Record
-summary: The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work.
+description: The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work.
 permalink: /architecture/decisions/006-proxmox-vms/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Nov 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Kubernetes nodes as Proxmox VMs"
+card_blurb: "The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work."
+layout: adr
+status: Accepted
+date_label: Nov 2025
+subsystem: Compute · Virtualization
+tldr: Every Kubernetes node runs as a Terraform-defined VM on a 3-node Proxmox cluster, making nodes disposable and GPU passthrough workable — at the cost of a virtualization tax and another platform to operate.
 ---
 
 ## Context
@@ -15,9 +18,9 @@ The early cluster ran k0s directly on bare metal, with the server treated as a p
 
 Options for the next iteration:
 
-- **Stay bare metal** — maximum performance, no virtualization layer to learn. But every node remains a pet, and rebuilding means reinstalling an OS on hardware.
-- **Proxmox VE with Kubernetes nodes as VMs** — a hypervisor layer on each of the three hosts, nodes become disk images.
-- **Other hypervisors** — ESXi's free tier was effectively dead; XCP-ng was viable but with a smaller homelab ecosystem and no ZFS-native story.
+- <span class="opt">Rejected</span> **Stay bare metal** — maximum performance, no virtualization layer to learn. But every node remains a pet, and rebuilding means reinstalling an OS on hardware.
+- <span class="opt opt-chosen">Chosen</span> **Proxmox VE with Kubernetes nodes as VMs** — a hypervisor layer on each of the three hosts, nodes become disk images.
+- <span class="opt">Rejected</span> **Other hypervisors** — ESXi's free tier was effectively dead; XCP-ng was viable but with a smaller homelab ecosystem and no ZFS-native story.
 
 ## Decision
 
@@ -41,9 +44,4 @@ Run a **3-node Proxmox cluster** (ZFS on each host) and provision **every Kubern
 
 Nodes are rebuilt routinely without drama. The full stack — Proxmox → Talos VM → NVIDIA device plugin → Ollama — has survived host reboots and upgrades. This decision is the foundation [ADR 007 (Talos)](../007-talos-linux/) stands on: immutable node OS only pays off when creating and destroying nodes is trivial.
 
-
-<div class="adr-nav">
-  <a href="../005-synology-iscsi-storage/">&larr; ADR 005 &middot; Synology iSCSI storage</a>
-  <a class="adr-nav-all" href="../../">ADR 6 of 17</a>
-  <a href="../007-talos-linux/">ADR 007 &middot; Talos Linux &rarr;</a>
-</div>
+> **Update (Nov 2026):** A fourth host, **pve-4** (a Dell OptiPlex 5060), joined the cluster. It has 32GB against the others' 64GB and no second SSD, so it carries one deliberately *smaller* worker, `kube-worker-2`, and no control plane. The asymmetry runs the safe way: the scheduler places by memory requests, so the smallest node takes the least and hurts least to lose. Control-plane placement, one per HP host, is unchanged.

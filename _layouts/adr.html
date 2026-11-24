@@ -1,0 +1,151 @@
+---
+layout: default
+---
+{%- comment -%}
+  Architecture Decision Record layout.
+
+  Every ADR uses the same five H2s (Context, Decision, Reasoning, Tradeoffs,
+  Outcome). Rather than asking each markdown file to carry wrapper markup --
+  which would clutter how the same file reads on GitHub -- this layout splits
+  the rendered content at each <h2 id="..."> and wraps the pieces in labelled
+  <section>s. The numbering, the "What it cost" panel, and the outcome tiles
+  all hang off those sections.
+
+  Optional front matter:
+    status        Accepted | Superseded      (default: Accepted)
+    status_note   short qualifier, markdown allowed ("runtime extended by [ADR 014](...)")
+    date_label    "Sep 2026"
+    subsystem     "Identity · Ingress"
+    tldr          one-sentence answer, shown under the title
+    builds_on     ["004"]                    ADR numbers this record extends
+    supersedes / superseded_by  ["006"]
+    outcome_stats - num: "16"
+                    label: Apps behind Authentik
+{%- endcomment -%}
+{%- assign adr_num = page.path | split: '/' | last | slice: 0, 3 -%}
+{%- assign adrs = site.pages | where_exp: "p", "p.path contains 'architecture/decisions/0'" | sort: "path" -%}
+{%- assign status = page.status | default: "Accepted" -%}
+{%- assign labels = "context:Problem space|decision:The decision|reasoning:Why this|tradeoffs:What it cost|outcome:How it held up" | split: "|" -%}
+
+{%- for p in adrs -%}
+  {%- if p.path == page.path -%}
+    {%- assign idx = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign prev_idx = idx | minus: 1 -%}
+{%- assign next_idx = idx | plus: 1 -%}
+
+<div class="wrap adr">
+  <header class="page-head adr-head">
+    <span class="adr-watermark" aria-hidden="true">{{ adr_num }}</span>
+    <p class="eyebrow">{{ page.eyebrow | default: "Architecture Decision Record" }}</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
+
+    <p class="adr-meta-row">
+      <span class="status {% if status == 'Superseded' %}status-wip{% else %}status-live{% endif %}">{{ status }}</span>
+      {% if page.status_note %}<span class="adr-status-note">{{ page.status_note | markdownify | remove: '<p>' | remove: '</p>' | strip }}</span>{% endif %}
+      {% if page.date_label %}<span><span class="adr-meta-key">Date</span> {{ page.date_label }}</span>{% endif %}
+      {% if page.subsystem %}<span><span class="adr-meta-key">Subsystem</span> {{ page.subsystem }}</span>{% endif %}
+      <a href="{{ '/architecture/decisions/' | relative_url }}">&larr; All ADRs</a>
+    </p>
+
+    {% if page.tldr %}
+    <div class="adr-tldr">
+      <span class="adr-tldr-label">TL;DR</span>
+      <p>{{ page.tldr }}</p>
+    </div>
+    {% endif %}
+  </header>
+
+  <div class="adr-grid">
+    <article class="prose adr-body" id="adr-body">
+      {%- assign parts = content | split: '<h2 id="' -%}
+      {{ parts[0] }}
+      {%- for part in parts offset: 1 -%}
+        {%- assign sid = part | split: '"' | first -%}
+        {%- assign label = "" -%}
+        {%- for l in labels -%}
+          {%- assign kv = l | split: ":" -%}
+          {%- if kv[0] == sid -%}{%- assign label = kv[1] -%}{%- endif -%}
+        {%- endfor -%}
+        <section class="adr-sec adr-sec-{{ sid }}" data-label="{{ label }}" aria-labelledby="{{ sid }}">
+        {%- if sid == "outcome" and page.outcome_stats -%}
+          {%- assign halves = part | split: '</h2>' -%}
+          <h2 id="{{ halves[0] }}</h2>
+          <div class="adr-stats">
+            {%- for s in page.outcome_stats -%}
+            <div class="adr-stat"><span class="num">{{ s.num }}</span><span class="lbl">{{ s.label }}</span></div>
+            {%- endfor -%}
+          </div>
+          {%- for h in halves offset: 1 -%}{{ h }}{%- unless forloop.last -%}</h2>{%- endunless -%}{%- endfor -%}
+        {%- else -%}
+          <h2 id="{{ part }}
+        {%- endif -%}
+        </section>
+      {%- endfor -%}
+    </article>
+
+    <aside class="adr-side">
+      <nav class="adr-toc" aria-label="On this page">
+        <p class="adr-side-title">On this page</p>
+        <ol>
+          <li><a href="#context">Context</a></li>
+          <li><a href="#decision">Decision</a></li>
+          <li><a href="#reasoning">Reasoning</a></li>
+          <li><a href="#tradeoffs">Tradeoffs</a></li>
+          <li><a href="#outcome">Outcome</a></li>
+        </ol>
+      </nav>
+
+      <div class="adr-facts">
+        <p class="adr-side-title">Record</p>
+        <dl>
+          <dt>Number</dt><dd>ADR {{ adr_num }}</dd>
+          <dt>Status</dt><dd>{{ status }}</dd>
+          {% if page.date_label %}<dt>Date</dt><dd>{{ page.date_label }}</dd>{% endif %}
+          {% if page.subsystem %}<dt>Subsystem</dt><dd>{{ page.subsystem }}</dd>{% endif %}
+          {%- assign ref_keys = "builds_on,supersedes,superseded_by" | split: "," -%}
+          {%- for key in ref_keys -%}
+            {%- assign refs = page[key] -%}
+            {%- if refs -%}
+            <dt>{% case key %}{% when "builds_on" %}Builds on{% when "supersedes" %}Supersedes{% else %}Superseded by{% endcase %}</dt>
+            <dd>
+              {%- for n in refs -%}
+                {%- assign target = adrs | where_exp: "p", "p.path contains n" | first -%}
+                {%- if target -%}<a href="{{ target.url | relative_url }}">ADR {{ n }}</a>{%- else -%}ADR {{ n }}{%- endif -%}
+                {%- unless forloop.last %}, {% endunless -%}
+              {%- endfor -%}
+            </dd>
+            {%- endif -%}
+          {%- endfor -%}
+        </dl>
+      </div>
+    </aside>
+  </div>
+
+  <nav class="adr-pager" aria-label="Decision records">
+    {%- if idx > 0 -%}
+      {%- assign p = adrs[prev_idx] -%}
+      <a class="adr-pager-card" href="{{ p.url | relative_url }}">
+        <span class="adr-pager-dir">&larr; Previous</span>
+        <span class="adr-pager-title">{{ p.title | slice: 0, 7 }} &middot; {{ p.title | slice: 9, 200 }}</span>
+      </a>
+    {%- else -%}
+      <span></span>
+    {%- endif -%}
+    <a class="adr-pager-card adr-pager-all" href="{{ '/architecture/decisions/' | relative_url }}">
+      <span class="adr-pager-dir">Index</span>
+      <span class="adr-pager-title">All {{ adrs.size }} decision records</span>
+    </a>
+    {%- if next_idx < adrs.size -%}
+      {%- assign p = adrs[next_idx] -%}
+      <a class="adr-pager-card adr-pager-next" href="{{ p.url | relative_url }}">
+        <span class="adr-pager-dir">Next &rarr;</span>
+        <span class="adr-pager-title">{{ p.title | slice: 0, 7 }} &middot; {{ p.title | slice: 9, 200 }}</span>
+      </a>
+    {%- else -%}
+      <span></span>
+    {%- endif -%}
+  </nav>
+</div>

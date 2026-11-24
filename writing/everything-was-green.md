@@ -1,7 +1,7 @@
 ---
 title: Everything Was Green
 eyebrow: Writing
-summary: A weekend that started with an expired certificate on a UPS and ended 164 commits later with seven applications that had never had a login. Almost nothing in between was broken. That was the problem.
+description: A weekend that started with an expired certificate on a UPS and ended 164 commits later with seven applications that had never had a login. Almost nothing in between was broken. That was the problem.
 permalink: /writing/everything-was-green/
 ---
 

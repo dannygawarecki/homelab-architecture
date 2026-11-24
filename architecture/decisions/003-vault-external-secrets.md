@@ -1,12 +1,20 @@
 ---
 title: "ADR 003: Vault + External Secrets Operator as the Only Secrets Path"
 eyebrow: Architecture Decision Record
-summary: One source of truth for every secret, synced into Kubernetes at runtime — chosen after living with the alternative.
+description: One source of truth for every secret, synced into Kubernetes at runtime — chosen after living with the alternative.
 permalink: /architecture/decisions/003-vault-external-secrets/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Aug 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Vault + ESO as the only secrets path"
+card_blurb: "One source of truth, synced at runtime, with manual Shamir unsealing accepted as the cost of owning the root of trust."
+layout: adr
+status: Accepted
+date_label: Aug 2025
+subsystem: Secrets
+tldr: Vault is the single source of truth for every secret, synced into Kubernetes by External Secrets Operator with no static Vault credential in the cluster — at the cost of manual Shamir unsealing after every Vault restart.
+outcome_stats:
+  - num: "47"
+    label: ExternalSecret Resources
+  - num: "~25"
+    label: Namespaces Synced
 ---
 
 ## Context
@@ -15,10 +23,10 @@ Early on, secrets lived wherever was convenient: manually created Kubernetes Sec
 
 I'll be straight about the process: I didn't run a bake-off. I use Vault at work, wanted to understand it more deeply, and knew it would do the job — so I went with it. That's a legitimate way to pick a tool, and pretending otherwise would be dishonest. For the record, the alternatives I'd have been choosing against:
 
-- **SOPS-encrypted secrets in Git** — simple, GitOps-native, but every rotation is a commit, and the encryption key becomes the crown jewel with no audit trail around it.
-- **Sealed Secrets** — similar shape; cluster-coupled encryption, awkward key rotation and disaster recovery.
-- **Cloud secret managers** — outsources the hard part, but puts the homelab's keys outside the homelab.
-- **HashiCorp Vault + External Secrets Operator** — a real secrets engine with auth backends, policies, and audit, synced into the cluster at runtime.
+- <span class="opt">Rejected</span> **SOPS-encrypted secrets in Git** — simple, GitOps-native, but every rotation is a commit, and the encryption key becomes the crown jewel with no audit trail around it.
+- <span class="opt">Rejected</span> **Sealed Secrets** — similar shape; cluster-coupled encryption, awkward key rotation and disaster recovery.
+- <span class="opt">Rejected</span> **Cloud secret managers** — outsources the hard part, but puts the homelab's keys outside the homelab.
+- <span class="opt opt-chosen">Chosen</span> **HashiCorp Vault + External Secrets Operator** — a real secrets engine with auth backends, policies, and audit, synced into the cluster at runtime.
 
 Vault won on merits I already trusted rather than on a comparison I ran — and the deep-end learning was part of the point.
 
@@ -45,9 +53,4 @@ Access paths are per-consumer: humans authenticate to Vault via **OIDC through A
 
 Every secret a workload consumes arrives through the same pipeline: Vault → ESO → Kubernetes Secret, declared in Git as an ExternalSecret that contains no secret material. Rotations have been exercised for real — including a full cluster CA rotation, which is exactly the drill that proves the recovery paths work.
 
-
-<div class="adr-nav">
-  <a href="../002-self-hosted-gitea-ci/">&larr; ADR 002 &middot; Self-hosted Gitea + CI</a>
-  <a class="adr-nav-all" href="../../">ADR 3 of 17</a>
-  <a href="../004-authentik-sso/">ADR 004 &middot; Authentik SSO &rarr;</a>
-</div>
+> **Update (Sep 2026):** "Rotation is an edit, not a redeploy" was true, and nothing ever made the edit. Credentials now rotate on Terraform clocks, with a nightly runner for what a scoped key can mint and a human apply for what needs root: [ADR 021](../021-credential-rotation/).

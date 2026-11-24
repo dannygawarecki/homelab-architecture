@@ -1,22 +1,25 @@
 ---
 title: "ADR 010: CloudNative PG for Managed Postgres"
 eyebrow: Architecture Decision Record
-summary: An operator-managed Postgres with WAL archiving to MinIO, instead of one database container per application.
+description: An operator-managed Postgres with WAL archiving to MinIO, instead of one database container per application.
 permalink: /architecture/decisions/010-cloudnative-pg/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Dec 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "CloudNative PG for managed Postgres"
+card_blurb: "Operator-managed Postgres with WAL archiving to MinIO, replacing one database container per application."
+layout: adr
+status: Accepted
+date_label: Dec 2025
+subsystem: Data · Postgres
+tldr: Every Postgres workload runs in a single shared CloudNative PG cluster with per-app databases and WAL archiving to MinIO, buying one consistent backup story at the cost of a shared blast radius.
 ---
 
 ## Context
 
 Several applications in the cluster require Postgres: Authentik, Gitea, Paperless-NGX, Outline, and others. Options for providing it:
 
-- **Bundled per-app Postgres** — each Helm chart deploys its own `StatefulSet`. Simple, but no consistency in backup strategy, upgrade path, or configuration. One misconfiguration per app, repeated across every app.
-- **Single self-managed StatefulSet** — one shared Postgres instance. Backup and restore is a manual concern. No operator, no WAL archiving, no automatic failover.
-- **Zalando Postgres Operator** — mature, widely used, but more complex configuration model.
-- **CloudNative PG (CNPG)** — CNCF-graduated operator. First-class Kubernetes resource model, built-in WAL archiving, backup/restore via object storage, declarative cluster definitions.
+- <span class="opt">Rejected</span> **Bundled per-app Postgres** — each Helm chart deploys its own `StatefulSet`. Simple, but no consistency in backup strategy, upgrade path, or configuration. One misconfiguration per app, repeated across every app.
+- <span class="opt">Rejected</span> **Single self-managed StatefulSet** — one shared Postgres instance. Backup and restore is a manual concern. No operator, no WAL archiving, no automatic failover.
+- <span class="opt">Rejected</span> **Zalando Postgres Operator** — mature, widely used, but more complex configuration model.
+- <span class="opt opt-chosen">Chosen</span> **CloudNative PG (CNPG)** — CNCF-graduated operator. First-class Kubernetes resource model, built-in WAL archiving, backup/restore via object storage, declarative cluster definitions.
 
 The core requirement was consistency: every database should be backed up the same way, recoverable to a known point in time, and managed with the same tooling.
 
@@ -53,10 +56,3 @@ Rather than provisioning a dedicated `Cluster` resource per application, run a *
 ## Outcome
 
 All stateful applications in the cluster use CNPG-managed Postgres clusters. WAL is continuously archived to MinIO. Scheduled base backups run nightly. Each database is independently restorable to any point in time without affecting others.
-
-
-<div class="adr-nav">
-  <a href="../009-istio-ambient-mode/">&larr; ADR 009 &middot; Istio ambient mode</a>
-  <a class="adr-nav-all" href="../../">ADR 10 of 17</a>
-  <a href="../011-local-llm-inference/">ADR 011 &middot; Local LLM inference &rarr;</a>
-</div>

@@ -4,3 +4,6 @@ _site/
 .sass-cache/
 vendor/
 Gemfile.lock
+
+# Claude Code per-user settings
+.claude/settings.local.json

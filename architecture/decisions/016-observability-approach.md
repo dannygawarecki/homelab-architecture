@@ -1,12 +1,17 @@
 ---
 title: "ADR 016: Targeted Observability Tools, Not a Single Pane of Glass"
 eyebrow: Architecture Decision Record
-summary: I ran a full APM stack, retired it, and replaced it with narrow tools that each answer one question — accepting that nothing correlates across layers.
+description: I ran a full APM stack, retired it, and replaced it with narrow tools that each answer one question — accepting that nothing correlates across layers.
 permalink: /architecture/decisions/016-observability-approach/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Aug 2026 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Targeted observability, no single pane"
+card_blurb: "I ran a full APM stack, retired it, and replaced it with narrow tools per layer — accepting that nothing correlates, and saying why that's the right call here."
+layout: adr
+status: Superseded
+status_note: "by [ADR 019](../019-metrics-and-slos/), Oct 2026"
+superseded_by: ["019"]
+date_label: Aug 2026
+subsystem: Observability
+tldr: I retired SigNoz and run narrow tools each scoped to one layer, with no Prometheus or Grafana — accepting no distributed tracing, no historical metrics, and nothing that correlates across layers.
 ---
 
 ## Context
@@ -58,9 +63,4 @@ The platform's day-to-day operational questions get answered faster than they di
 
 The honest summary: **this is the right architecture for a single operator running a homelab, and the wrong one for a team running a product.** The moment more than one person is on call, or anything here becomes latency-sensitive for someone other than me, the correlation problem stops being a minor inconvenience and Prometheus goes back in.
 
-
-<div class="adr-nav">
-  <a href="../015-tailscale-remote-access/">&larr; ADR 015 &middot; Tailscale remote access</a>
-  <a class="adr-nav-all" href="../../">ADR 16 of 17</a>
-  <a href="../017-outpost-reverse-proxy-auth/">ADR 017 &middot; A reverse-proxy outpost &rarr;</a>
-</div>
+> **Update (Oct 2026):** It went back in — for SLOs rather than correlation. The project after this one needed error budgets, and error budgets need history. The reasoning, and what it cost, are in [ADR 019](../019-metrics-and-slos/). Uptime Kuma, Hubble, Kiali, Dozzle, and the push-to-phone alerting described here all stayed. Netdata was retired in November 2026, after a parity week alongside Alertmanager ([ADR 019](../019-metrics-and-slos/)).

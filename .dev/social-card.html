@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: radial-gradient(ellipse 900px 520px at 22% 0%, #161d27 0%, #0d1117 70%);
+    color: #e6edf3; font-family: "Segoe UI", sans-serif; position: relative;
+  }
+  .wrap { position: absolute; left: 84px; right: 84px; top: 0; bottom: 0; }
+  .brand { position: absolute; top: 101px; display: flex; align-items: center; gap: 18px;
+           font-weight: 700; font-size: 33px; letter-spacing: -0.2px; }
+  .brand svg { width: 31px; height: 34px; }
+  .eyebrow { position: absolute; top: 186px; font-family: "Cascadia Mono", Consolas, monospace;
+             font-size: 19px; letter-spacing: 12.5px; color: #4fa3ff; }
+  h1 { position: absolute; top: 238px; margin: 0; font-size: 66px; line-height: 1.12;
+       font-weight: 700; letter-spacing: -0.6px; width: 1000px; }
+  .pills { position: absolute; top: 436px; display: flex; gap: 14px; }
+  .pill { font-family: "Cascadia Mono", Consolas, monospace; font-size: 20px; color: #c9d4de;
+          padding: 11px 21px; border: 1.5px solid #2b3542; border-radius: 999px; background: #151b23; }
+  .rule { position: absolute; top: 540px; left: 0; right: 0; height: 2px; background: #222b36; }
+  .url { position: absolute; top: 556px; font-family: "Cascadia Mono", Consolas, monospace;
+         font-size: 20px; color: #6e7d8d; }
+</style></head>
+<body><div class="wrap">
+  <div class="brand">
+    <svg viewBox="0 0 31 34"><polygon points="15.5,0 31,8.5 31,25.5 15.5,34 0,25.5 0,8.5" fill="#4fa3ff"/></svg>
+    Danny Gawarecki
+  </div>
+  <div class="eyebrow">PLATFORM ENGINEERING · HOME LAB</div>
+  <h1>A production-grade Kubernetes platform, built at home.</h1>
+  <div class="pills">
+    <span class="pill">7-node Talos</span>
+    <span class="pill">Full GitOps</span>
+    <span class="pill">Zero-trust mesh</span>
+    <span class="pill">Local GPU inference</span>
+  </div>
+  <div class="rule"></div>
+  <div class="url">lab.gawarecki.us</div>
+</div></body></html>

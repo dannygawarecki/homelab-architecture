@@ -1,21 +1,29 @@
 ---
 title: "ADR 002: Self-Hosted Gitea with In-Cluster CI"
 eyebrow: Architecture Decision Record
-summary: The Git server, CI runners, and container registry all live inside the cluster they deploy — sovereignty traded against a bootstrap circularity I chose to own.
+description: The Git server, CI runners, and container registry all live inside the cluster they deploy — sovereignty traded against a bootstrap circularity I chose to own.
 permalink: /architecture/decisions/002-self-hosted-gitea-ci/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** July 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Self-hosted Gitea with in-cluster CI"
+card_blurb: "Git, CI runners, and the container registry all live inside the cluster they deploy — the self-hosted substrate the GitOps loop runs on."
+layout: adr
+status: Accepted
+date_label: Jul 2025
+subsystem: Delivery · CI
+tldr: Gitea, its built-in registry, and Gitea Actions runners all run inside the cluster they deploy, keeping the whole delivery loop in-platform — at the price of an accepted bootstrap circularity and privileged Docker-in-Docker CI.
+outcome_stats:
+  - num: "9"
+    label: CI-driven big-ads releases
+  - num: "2"
+    label: Parallel CI jobs
 ---
 
 ## Context
 
 GitOps needs a Git host, CI needs runners, and images need a registry. The real shortlist was two — GitHub, or self-host with Gitea — with a glance at the heavier open-source options:
 
-- **GitHub (SaaS)** — zero operations, excellent tooling. But the platform's control plane would live outside the platform, and self-hosting *was* the point of this lab.
-- **Self-hosted GitLab** — batteries included, and famously heavy; it would have been the largest single workload on the cluster.
-- **Gitea** — lightweight, includes an OCI-compliant container registry, and its Actions are GitHub-Actions-compatible, so workflow knowledge transfers in both directions. It was easily the winner.
+- <span class="opt">Rejected</span> **GitHub (SaaS)** — zero operations, excellent tooling. But the platform's control plane would live outside the platform, and self-hosting *was* the point of this lab.
+- <span class="opt">Rejected</span> **Self-hosted GitLab** — batteries included, and famously heavy; it would have been the largest single workload on the cluster.
+- <span class="opt opt-chosen">Chosen</span> **Gitea** — lightweight, includes an OCI-compliant container registry, and its Actions are GitHub-Actions-compatible, so workflow knowledge transfers in both directions. It was easily the winner.
 
 ## Decision
 
@@ -37,10 +45,3 @@ GitOps needs a Git host, CI needs runners, and images need a registry. The real 
 ## Outcome
 
 Nine CI-driven releases of big-ads shipped through this pipeline with no manual steps. Custom MCP server images build and publish here. The circular-dependency question — "what if the cluster hosting your Git dies?" — has a rehearsed answer, which is more than most setups with the same architecture can say.
-
-
-<div class="adr-nav">
-  <a href="../001-gitops-argocd/">&larr; ADR 001 &middot; GitOps with ArgoCD</a>
-  <a class="adr-nav-all" href="../../">ADR 2 of 17</a>
-  <a href="../003-vault-external-secrets/">ADR 003 &middot; Vault + External Secrets &rarr;</a>
-</div>

@@ -1,12 +1,24 @@
 ---
 title: "ADR 014: vLLM for Served Generation, Alongside Ollama"
 eyebrow: Architecture Decision Record
-summary: A second inference runtime for throughput — vLLM serving a quantized 30B tensor-parallel across both GPUs, with Ollama kept for embeddings and flexible experimentation.
+description: A second inference runtime for throughput — vLLM serving a quantized 30B tensor-parallel across both GPUs, with Ollama kept for embeddings and flexible experimentation.
 permalink: /architecture/decisions/014-vllm-inference/
----
-
-**Status:** Accepted — rollout in progress &nbsp;·&nbsp; **Date:** Aug 2026 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "vLLM for served generation"
+card_blurb: "A throughput-first runtime, tensor-parallel across both GPUs, alongside Ollama, which moved to embeddings. Documented mid-migration in August; finished, on a new 128k-context model, in October."
+layout: adr
+status: Accepted
+status_note: "cutover finished Oct 2026"
+date_label: Aug 2026
+subsystem: AI · Inference
+builds_on: ["011"]
+tldr: vLLM now serves a quantized 30B model tensor-parallel across both GPUs for throughput, while Ollama stays for embeddings and experimentation — and because both claim both cards, only one GPU generation workload runs at a time.
+outcome_stats:
+  - num: "30B"
+    label: AWQ-quantized MoE model
+  - num: "2"
+    label: GPUs, tensor-parallel
+  - num: "24 GB"
+    label: VRAM it fits in
 ---
 
 ## Context
@@ -49,9 +61,6 @@ vLLM is live and serving `qwen3-coder-30b` across both cards. But this is honest
 
 I'm documenting it mid-flight on purpose. The tidy version — "migrated to vLLM" — would be a cleaner sentence and a less honest one. This is what the change actually looks like a few days in.
 
-
-<div class="adr-nav">
-  <a href="../013-mcp-ai-operations/">&larr; ADR 013 &middot; MCP for AI operations</a>
-  <a class="adr-nav-all" href="../../">ADR 14 of 17</a>
-  <a href="../015-tailscale-remote-access/">ADR 015 &middot; Tailscale remote access &rarr;</a>
-</div>
+> **Update (Oct 2026):** The cutover finished, and the model changed. vLLM (now `v0.31.0`) serves **Qwen3.6-35B-A3B**, int4 (W4A16), still tensor-parallel across both cards, at a **128k context window** — up from 32k. It won a bake-off against `qwen3-coder-30b` on Cortexa's evaluation checks (75/75 vs 74/75) and holds roughly twice the KV cache, because only 10 of its 40 layers keep one; the cost is about half a second more to first token. A Gemma 4 candidate was also tried and reverted: its quantization group size doesn't divide the weight shards at tensor-parallel 2, so it can't run on two 12 GB cards at all.
+>
+> The consumers moved. Open WebUI now talks to [Cortexa](../../../projects/cortexa/), which runs in-cluster and calls vLLM; paperless-ai was removed in favour of Paperless's own AI features, pointed at vLLM. Karakeep is the one consumer still without a generation backend. Ollama is down to embeddings on CPU. vLLM also has an SLO now — 99% of requests get a first token within 2.5 s ([ADR 019](../019-metrics-and-slos/)). The missing egress lane is still missing.

@@ -2,7 +2,7 @@
 
 ### 📖 **[Read this as a site → lab.gawarecki.us](https://lab.gawarecki.us/)**
 
-*A 6-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust networking, and local GPU inference — plus the applications running on top of it.*
+*A 7-node Talos Kubernetes cluster on Proxmox with full GitOps delivery, zero-trust networking, and local GPU inference — plus the applications running on top of it.*
 
 <sub>Working on the site itself? See [DEVELOPMENT.md](./DEVELOPMENT.md) — preview and link-check it with Docker, no Ruby required.</sub>
 
@@ -12,7 +12,7 @@ This started in 2024 with a desire to play with Home Assistant and ESP32s and le
 
 I didn't set out to build a platform. I set out to learn, and the learning has kept pulling me deeper. I've rebuilt my Kubernetes cluster from scratch three times. I've lost data once. I've won some hard fights with GPU passthrough, zero-trust networking and full GitOps. I lost a few small ones and one that I really wanted, GPU passthrough into k0s containers. I self-host not because there aren't better alternatives, but because you don't really understand a system until you've built it, broken it, and fixed it yourself.
 
-This lab is by no means perfect or complete. I get about 80% of the way through each mini-project before something new and interesting pulls me sideways. There is still so much I want to do: more local LLM & AI agent work (including resurrecting the archived agent-runtime experiments), an offsite backup layer, more automation with n8n. The goalposts move every time I find something new. That's the point.
+This lab is by no means perfect or complete. I get about 80% of the way through each mini-project before something new and interesting pulls me sideways. There is still so much I want to do: more local LLM & AI agent work (including resurrecting the archived agent-runtime experiments) and more automation with n8n. The goalposts move every time I find something new. That's the point.
 
 This repo is the **narrative and architecture layer**. Actual configs live in the repos below.
 
@@ -21,6 +21,7 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 | home-lab-talos | Talos Linux machine configs and cluster bootstrap |
 | home-lab-terraform | Proxmox VMs, Vault, Authentik, Gitea, MinIO, UptimeKuma |
 | home-lab-argocd | All Kubernetes workloads via GitOps |
+| home-lab-credentials | Nightly, scoped rotation of database passwords and service tokens |
 
 *The infrastructure repos are hosted on my self-managed Gitea instance — the same one the cluster's CI runs on. Happy to walk through any of them.*
 
@@ -29,13 +30,13 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 ## The Stack
 
 ### Compute
-- **3-node Proxmox cluster** (pve-1, pve-2, pve-3) with ZFS storage
-- **6-node Talos Kubernetes cluster** with 3 control plane nodes, 3 workers (1 dedicated to AI)
+- **4-node Proxmox cluster** (pve-1 through pve-4) with ZFS storage
+- **7-node Talos Kubernetes cluster** with 3 control plane nodes, 4 workers (1 dedicated to AI)
 - **GPU passthrough** on the AI worker (NVIDIA) for local LLM inference
 
 ### Networking
 
-![Network Layout](./images/network-layout-v3.png)
+![Network Layout](./images/network-layout-v4.png)
 
 - **VLAN segmentation** across management, workload, and IoT traffic
 - **Cilium** as the Kubernetes CNI featuring eBPF-based networking, network policies, and egress control
@@ -43,15 +44,25 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 - **MetalLB** for bare-metal load balancing
 
 ### Platform Capabilities
-This diagram covers the high-level capabilities of my homelab platform. See [`/infrastructure`](./infrastructure/) for deeper technical detail.
+The high-level capabilities of the platform. The [site](https://lab.gawarecki.us/architecture/diagrams/#platform-capability-map) links each one to the decision record behind it; see [`/infrastructure`](./infrastructure/) for deeper technical detail.
 
-![Platform View](./images/platform-view-v3.png)
+| Area | Components |
+|---|---|
+| **GitOps & delivery** | Argo CD, Gitea, Gitea Runner, Renovate |
+| **Networking & segmentation** | Cilium, Istio Ambient, MetalLB, Cloudflare Tunnel |
+| **Data persistence** | CloudNativePG, Synology CSI, MinIO, Velero |
+| **Observability** | Prometheus, Alertmanager, Pyrra, Grafana, six exporters, Uptime Kuma, Hubble, Kiali, Dozzle, Ntfy, metrics-server, Goldilocks |
+| **Security & compliance** | Authentik (and its outpost), Vault, External Secrets, Kyverno, Tetragon, cert-manager, Falco, Trivy, Gitleaks, Checkov, kube-bench, Polaris |
+| **Local AI platform** | vLLM, Ollama, NVIDIA device plugin, 11 MCP servers, Open WebUI |
+| **User apps** | Cortexa, Worth Keeping, big-ads, big-recipes, big-weather, Paperless, Karakeep, Outline, Homepage, Wallos |
+
+Beside the cluster, for recovery and on purpose: Tailscale, Proxmox Backup Server, transit-vault, and an offsite copy on Backblaze B2. And the foundations it grew from: UniFi, the Synology NAS, and Home Assistant.
 
 ---
 
 ## The Journey
 
-The foundation was already there: Unifi networking and a Synology NAS gave me a solid base to build on. From there:
+The foundation was already there: UniFi networking and a Synology NAS gave me a solid base to build on. From there:
 
 - **Started with Docker containers on the NAS** — The simplest solution to running containers from my starting point
 - **Moved containers to bare-metal k0s** — server treated as a pet, workloads managed as GitOps
@@ -60,6 +71,7 @@ The foundation was already there: Unifi networking and a Synology NAS gave me a 
 - **Graduated to Proxmox VMs** treated as disposable — the only real loss that can happen now is data, and even that is backed up
 - **Migrated from k0s to Talos Linux** — declarative, immutable, no SSH, purpose-built for Kubernetes
 - **Further iteration on the platform layer** — Added observability, alerting and many security capabilities
+- **Day two: operating it, not just building it** — an offsite copy, credentials that rotate on a clock, signed images and kernel-level exec allow-lists, SLOs, and a fourth host
 
 Along the way: a good amount of service selection (and reselection), many learning opportunities with basic IT services such as networking and storage, and a lot of learned intuition about when to trust AI tools and when to trust your gut.
 
@@ -79,17 +91,20 @@ This isn't a homelab running a few Docker containers. It's a platform, and the e
 
 ## Projects Running on the Platform
 
-The platform exists to run things. Two are shipped accessibility tools; the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://lab.gawarecki.us/projects/).
+The platform exists to run things. Three are accessibility tools for the same person, one is a reliability operator just getting started, and the rest are chapters of a single arc of AI work converging on one question — *what does it take to build an AI collaborator you can actually trust?* Full write-ups are on the [site](https://lab.gawarecki.us/projects/).
 
 | Project | What it is | Status |
 |---|---|---|
-| **[big-ads](https://lab.gawarecki.us/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule; a 347-line dependency-free UI. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
-| **[big-recipes](https://lab.gawarecki.us/projects/big-recipes/)** | The sibling to big-ads: accessible recipe search, reading, listening, and printing for the same user. Three-tier extraction, so every result on screen is a real recipe. | Deployed, two-day build |
-| **[Context Engine](https://lab.gawarecki.us/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen, folding into Cortexa |
-| **[Policyclaw](https://lab.gawarecki.us/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | First-gen, design input to Cortexa |
-| **[Cortexa](https://lab.gawarecki.us/projects/cortexa/)** | The synthesis: an AI collaboration engine that puts collaborative behavior in code rather than a system prompt — with a blind-judged evaluation harness built to falsify that claim. | MVP, in development |
+| **[big-ads](https://lab.gawarecki.us/projects/big-ads/)** | A grocery flyer viewer built for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule in the cluster and published as a static site to Cloudflare R2, so nothing public reaches the lab. Every design decision forced by an accessibility constraint. | Shipped, in weekly use |
+| **[big-recipes](https://lab.gawarecki.us/projects/big-recipes/)** | The sibling to big-ads: a Chrome/Edge extension that turns a recipe already found into large type, read-aloud, cook mode, and print. It started as a search engine; the search was the part that had to go. | Deployed |
+| **[big-weather](https://lab.gawarecki.us/projects/big-weather/)** | The third tool for the same reader: eight weather sources compared and stated plainly, built like big-ads as static files on R2. Public, with no login, and never more precise than a general area. | Deployed, new |
+| **[kubeslo-operator](https://lab.gawarecki.us/projects/kubeslo-operator/)** | A Kubernetes operator, written by hand in Go, that records every rollout as a `ChangeRecord` and judges it against the workload's SLO. The metrics, SLOs, and a purpose-built test service are running; the controller is next. | Early, groundwork done |
+| **[Context Engine](https://lab.gawarecki.us/projects/context-engine/)** | The *knowledge* piece: local-first RAG over files, sites, and git repos. Embeddings on the GPU worker, vectors in Postgres + pgvector. | First-gen; retrieval core now in Cortexa |
+| **[Policyclaw](https://lab.gawarecki.us/projects/policyclaw/)** | The *governance* piece: a Go + OPA gateway putting every mutating AI action behind a human confirmation gate. | Archived; its policy rules ported into Cortexa |
+| **[Cortexa](https://lab.gawarecki.us/projects/cortexa/)** | The synthesis: an AI collaborator running in the cluster behind Open WebUI, where code decides what the model sees and the model writes the answer. Measured against the same model alone — and corrected, retraction included, when the instrument was wrong. | Deployed, single user |
+| **[Worth Keeping](https://lab.gawarecki.us/projects/worth-keeping/)** | The second path to the same question: a deterministic model of what a person is responsible for, with AI allowed only to *hear*, on the local GPU. | Deployed, unfinished |
 
-big-ads is delivered to the cluster through the GitOps pipeline described below; the AI projects consume the platform's Postgres, Ollama, and MCP layer. Cortexa is the successor the other two are converging into — see the [through-line](https://lab.gawarecki.us/projects/).
+big-ads is delivered to the cluster through the platform's GitOps pipeline; Cortexa runs in the cluster on the platform's vLLM, Postgres, and MCP layer, and is the successor the other two folded into — see the [through-line](https://lab.gawarecki.us/projects/).
 
 ---
 
@@ -113,6 +128,6 @@ See [`/writing`](./writing/) for longer pieces that are an argument rather than 
 
 ---
 
-## Copilot & AI-Assisted Engineering
+## AI-Assisted Engineering
 
-See [`/copilot-experiments`](./copilot-experiments/) for notes on using GitHub Copilot to accelerate infrastructure work — including where it helped, where it hallucinated, and how I learned to drive it effectively.
+See [`/copilot-experiments`](./copilot-experiments/) for how AI tooling changed the way this platform gets built in 2026: how I work with agents now, what still holds from the early lessons, what expired, and the one project where AI teaches instead of writes. The original early-2026 notes on GitHub Copilot are kept there, as written.

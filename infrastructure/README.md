@@ -1,11 +1,11 @@
 ---
 title: Infrastructure
 eyebrow: Platform
-summary: Three repositories, three scopes — machine configs, cloud-style provisioning, and every workload delivered by GitOps.
+description: Four repositories, four scopes — machine configs, cloud-style provisioning, every workload delivered by GitOps, and a small one that rotates credentials while nobody watches.
 permalink: /infrastructure/
 ---
 
-The infrastructure is split across three repos, each with a distinct scope. They're hosted on my self-managed Gitea instance — the same one the cluster's CI runs on — rather than GitHub; I'm happy to walk through any of them.
+The infrastructure is split across four repos, each with a distinct scope. They're hosted on my self-managed Gitea instance — the same one the cluster's CI runs on — rather than GitHub; I'm happy to walk through any of them.
 
 ---
 
@@ -13,15 +13,17 @@ The infrastructure is split across three repos, each with a distinct scope. They
 
 Talos Linux machine configurations for all cluster nodes.
 
-- Control plane and worker node configs generated with `talosconfig`
+- Control plane and worker node configs generated with [topf](https://postfinance.github.io/topf/) (migrated from talhelper, which was archived upstream)
 - Node-specific patches (VIP, kubelet CA, per-node settings)
 - Common patches (Cilium CNI config, installer extensions)
 - Custom Talos image spec (NVIDIA extensions, bare-metal extras)
+- Talos workload isolation on every node: containerd, the kubelet and pods run apart from the Talos system services
+- Renovate queues Talos and Kubernetes updates for a human, and an in-cluster alarm pages when the nodes drift from this repo
 - Secrets managed separately and never committed
 
 **Cluster layout:**
 
-![Physical Architecture](../images/physical-architecture.png)
+![Physical Architecture](../images/physical-architecture-v2.png)
 
 | Node | Role | Host | Hardware |
 |---|---|---|---|
@@ -29,10 +31,13 @@ Talos Linux machine configurations for all cluster nodes.
 | kube-ctl-2 | Control Plane | pve-2 | HP Z440 (RTX 3060 x2) |
 | kube-ctl-3 | Control Plane | pve-3 | HP EliteDesk 800 |
 | kube-worker-1 | Worker | pve-1 | HP ProDesk 600 |
+| kube-worker-2 | Worker | pve-4 | Dell OptiPlex 5060 |
 | kube-worker-ai | Worker (GPU) | pve-2 | HP Z440 (RTX 3060 x2) |
 | kube-worker-3 | Worker | pve-3 | HP EliteDesk 800 |
 
-Storage is provided by a **Synology DS1817+** over iSCSI. The EliteDesk 800 also runs a **Proxmox Backup Server (PBS)** VM and **Home Assistant**.
+Storage is provided by a **Synology DS1817+** over iSCSI. The ProDesk 600 also runs the **Proxmox Backup Server (PBS)** VM, and the EliteDesk 800 runs **Home Assistant**.
+
+The fourth host, **pve-4**, joined in November 2026: a Dell OptiPlex 5060 with half the memory of the others (32GB) and no second SSD, so it carries one deliberately smaller worker and no control plane.
 
 ---
 
@@ -43,9 +48,24 @@ Terraform managing the Proxmox layer and supporting services.
 - **Proxmox:** VM definitions for all cluster nodes, PBS backup VM, Proxmox ACME certificates (Let's Encrypt via Cloudflare), host entries, APT repositories, OpenID realm (Authentik SSO)
 - **Vault:** Policies, auth backends (Kubernetes, AppRole, OIDC), KV mounts
 - **Authentik:** Users, groups, OAuth2 providers and applications for all SSO-integrated services
-- **Gitea:** Org, users, repositories, teams
-- **MinIO:** Buckets (velero-backups, postgres-backups, security-scans), IAM users, policies, service accounts
-- **UptimeKuma:** HTTP monitors for all 37 endpoints, managed via `for_each` from a single locals map
+- **Gitea:** Orgs (including a public `ci` org for the shared pipeline), users, repositories, teams
+- **MinIO:** Six buckets (backups for Velero, Postgres and Vault, Terraform state, security scans, and an archive), IAM users, policies, service accounts
+- **Cloudflare:** the tunnel, DNS, the R2 buckets that serve big-ads and big-weather, and their narrowly scoped tokens
+- **Backblaze B2:** the offsite bucket and its two prefix-scoped keys ([ADR 018](../architecture/decisions/018-offsite-backup/))
+- **Proxmox Backup Server:** API tokens, including a read-only one for its metrics exporter
+- **UptimeKuma:** 56 monitors (HTTP, TCP and keyword), managed via `for_each` from locals maps, alerting through the in-cluster notification gateway
+- **Rotation clocks:** 19 `time_rotating` clocks (60–180 days) for provider tokens, OIDC client secrets, signing keys and service accounts. These rotate on the next hand-run apply after each clock passes, because minting them needs credentials that must never reach an unattended job ([ADR 021](../architecture/decisions/021-credential-rotation/))
+
+---
+
+## home-lab-credentials
+
+The smallest repo, and deliberately separate: a nightly, **unattended** Terraform run that rotates what a scoped credential can mint, and nothing else.
+
+- 8 Postgres passwords, the Paperless Redis password, and 11 Gitea service tokens, each on a 90-day clock
+- A Vault AppRole scoped to exactly the KV paths it rewrites, and a MinIO key scoped to its own state prefix. Its policy lives in home-lab-terraform, so it can't widen its own permissions
+- Runs at 03:17, an hour clear of the certificate rotations, and notifies loudly on every rotation and urgently on any failure
+- The reasoning, and why the rest of the rotation stays on a human apply, is in [ADR 021](../architecture/decisions/021-credential-rotation/)
 
 ---
 
@@ -55,9 +75,9 @@ All Kubernetes workloads, delivered via GitOps.
 
 - App of Apps pattern — one root Application bootstraps everything
 - Platform: Cilium for eBPF networking and policy enforcement, Istio in ambient mode for zero-trust mTLS, cert-manager for TLS automation, MetalLB for bare-metal load balancing, External Secrets Operator + Vault to keep secrets out of Git, CloudNative PG with WAL archiving to MinIO, and Velero for cluster backup and restore
-- Security and compliance: Falco for runtime detection, Gitleaks and Checkov for GitOps scanning, kube-bench and Polaris for Kubernetes posture checks
-- Observability: Dozzle for container logs, Netdata for node and cluster metrics, UptimeKuma for external endpoint monitoring, and Ntfy for notifications and alerts
-- AI platform: Ollama serving local models from the dedicated GPU worker, Open WebUI for interactive chat, and 12 MCP servers exposing platform APIs to AI tooling ([ADR 013](../architecture/decisions/013-mcp-ai-operations/)). Earlier agent-runtime and policy-gateway experiments — Openclaw, Hermes, and Policyclaw (a custom OPA-based MCP gateway) — aren't currently running: they're shelved deliberately, their capabilities headed for a permanent home inside [Cortexa](../projects/cortexa/) rather than as standalone cluster services. The writeup is in the ADR.
+- Security and compliance: Kyverno refusing unsigned in-house images at admission, Tetragon enforcing per-workload exec allow-lists in the kernel ([ADR 020](../architecture/decisions/020-signed-images-runtime-enforcement/)), Falco for runtime detection, Gitleaks and Checkov for GitOps scanning, kube-bench and Polaris for Kubernetes posture checks
+- Observability: kube-prometheus-stack and Pyrra for metrics, SLOs and burn-rate alerts ([ADR 019](../architecture/decisions/019-metrics-and-slos/)), Hubble and Kiali for network and mesh, Dozzle for container logs, UptimeKuma for external endpoint monitoring, and a notification gateway in front of Ntfy for every alert source
+- AI platform: vLLM serving generation tensor-parallel across both GPUs on the dedicated worker, Ollama for embeddings, Open WebUI for interactive chat (through Cortexa), and 11 MCP servers exposing platform APIs to AI tooling ([ADR 013](../architecture/decisions/013-mcp-ai-operations/)). Earlier agent-runtime and policy-gateway experiments — Openclaw, Hermes, and Policyclaw (a custom OPA-based MCP gateway) — aren't currently running: they're shelved deliberately, their capabilities headed for a permanent home inside [Cortexa](../projects/cortexa/) rather than as standalone cluster services. The writeup is in the ADR.
 - Core applications: Authentik, Gitea, Vault, MinIO, n8n and others
 - User applications: Paperless, Grocy, Wallos, KaraKeep, Outline, Homepage and others
-- MCP servers (11): Kubernetes, ArgoCD, Gitea, Vault, MinIO, CloudNativePG, Talos, Authentik, Synology, Unifi, and Paperless — each with scoped credentials delivered from Vault, in a namespace with no internet egress
+- MCP servers (11): Kubernetes, ArgoCD, Gitea, Vault, CloudNativePG, Talos, Authentik, Synology, UniFi, Paperless, and Karakeep — nine behind an Authentik login (ArgoCD and Paperless check their own tokens), each with scoped credentials delivered from Vault, in a namespace with no internet egress

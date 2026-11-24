@@ -1,0 +1,111 @@
+# The platform capability map, rendered by _includes/platform-map.html on the
+# homepage and the diagrams page. Edit here; both update.
+#
+# Each item takes one of:
+#   adr: <number>   links to that decision record and marks the chip as decided
+#   url: <path>     links to a page on this site (projects, mostly)
+#   note: <text>    hover text for a plain chip
+# Order within an area is the order shown.
+
+areas:
+  - name: GitOps & delivery
+    blurb: Git is the only way in.
+    items:
+      - { name: Argo CD, adr: 1 }
+      - { name: Gitea, adr: 2 }
+      - { name: Gitea Runner, adr: 2 }
+      - { name: Renovate }
+
+  - name: Networking & segmentation
+    blurb: Nothing talks unless policy says so.
+    items:
+      - { name: Cilium, adr: 8 }
+      - { name: Istio Ambient, adr: 9 }
+      - { name: MetalLB }
+      - { name: Cloudflare Tunnel, note: "The only public ingress; cloudflared runs in the DMZ" }
+
+  - name: Data persistence
+    blurb: State lives on the array, and gets copied off it.
+    items:
+      - { name: CloudNativePG, adr: 10 }
+      - { name: Synology CSI, adr: 5 }
+      - { name: MinIO }
+      - { name: Velero, adr: 12 }
+
+  - name: Observability
+    blurb: Objectives, not just dashboards.
+    items:
+      - { name: Prometheus, adr: 19 }
+      - { name: Alertmanager, adr: 19 }
+      - { name: Pyrra, adr: 19 }
+      - { name: Grafana }
+      - { name: Exporters ×6, note: "Proxmox, PBS, Synology SNMP, UniFi, GPU, and blackbox probes" }
+      - { name: Uptime Kuma, adr: 16 }
+      - { name: Hubble, adr: 16 }
+      - { name: Kiali, adr: 16 }
+      - { name: Dozzle, adr: 16 }
+      - { name: Ntfy }
+      - { name: metrics-server }
+      - { name: Goldilocks }
+
+  - name: Security & compliance
+    blurb: Controls that refuse, not just report.
+    items:
+      - { name: Authentik, adr: 4 }
+      - { name: Authentik outpost, adr: 17 }
+      - { name: Vault, adr: 3 }
+      - { name: External Secrets, adr: 3 }
+      - { name: Kyverno, adr: 20 }
+      - { name: Tetragon, adr: 20 }
+      - { name: cert-manager }
+      - { name: Falco }
+      - { name: Trivy }
+      - { name: Gitleaks }
+      - { name: Checkov }
+      - { name: kube-bench }
+      - { name: Polaris }
+
+  - name: Local AI platform
+    blurb: No prompt leaves the network.
+    items:
+      - { name: vLLM, adr: 14 }
+      - { name: Ollama, adr: 11 }
+      - { name: NVIDIA device plugin, adr: 11 }
+      - { name: MCP servers ×11, adr: 13 }
+      - { name: Open WebUI }
+
+  - name: User apps
+    blurb: What all of the above is for.
+    items:
+      - { name: Cortexa, url: /projects/cortexa/ }
+      - { name: Worth Keeping, url: /projects/worth-keeping/ }
+      - { name: big-ads, url: /projects/big-ads/ }
+      - { name: big-recipes, url: /projects/big-recipes/ }
+      - { name: big-weather, url: /projects/big-weather/ }
+      - { name: Paperless }
+      - { name: Karakeep }
+      - { name: Outline }
+      - { name: Homepage }
+      - { name: Wallos }
+
+# The dashed frame's footer: what the cluster itself stands on.
+runs_on:
+  - { name: Talos Linux, adr: 7 }
+  - { name: Proxmox VMs, adr: 6 }
+
+# Outside the frame: tiles that sit beside the cluster rather than in it.
+beside:
+  - name: Recovery, on purpose
+    blurb: What you need when the cluster is the thing that's broken.
+    items:
+      - { name: Tailscale, adr: 15, note: "LXC on pve-3" }
+      - { name: Proxmox Backup Server, adr: 12 }
+      - { name: transit-vault, note: "LXC on pve-1 that auto-unseals the cluster's Vault" }
+      - { name: Backblaze B2, adr: 18 }
+
+  - name: Foundations
+    blurb: Where the lab started, and what it still stands on.
+    items:
+      - { name: UniFi, note: "The networking foundation for the lab" }
+      - { name: Synology NAS, note: "The storage foundation for the lab" }
+      - { name: Home Assistant, note: "The original home lab that helped start much of the platform journey" }

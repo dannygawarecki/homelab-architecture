@@ -1,0 +1,22 @@
+# Groups on the ADR index. `from`/`to` are ADR numbers (inclusive).
+# The last era is open-ended: any ADR past its `from` lands there until a new era is added.
+- name: Foundations
+  blurb: Git, secrets, identity and storage — the decisions everything else assumes.
+  from: 1
+  to: 5
+- name: The pivot
+  blurb: Disposable VMs, an immutable OS, and a network that says no by default.
+  from: 6
+  to: 10
+- name: AI and backup
+  blurb: Local inference becomes first-class, and the backup story gets layers.
+  from: 11
+  to: 14
+- name: Day two
+  blurb: Less new capability, more reaching, seeing and protecting what's already there.
+  from: 15
+  to: 18
+- name: Measured and enforced
+  blurb: Objectives instead of dashboards, and controls that refuse instead of report.
+  from: 19
+  to: 999

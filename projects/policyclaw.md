@@ -1,7 +1,7 @@
 ---
 title: Policyclaw
 eyebrow: Side Project · AI Governance
-summary: A policy gateway that put every mutating AI action behind a human confirmation gate — a working first-generation answer to "how do you let an agent touch production safely?" whose lesson now lives in Cortexa.
+description: A policy gateway that put every mutating AI action behind a human confirmation gate — a working first-generation answer to "how do you let an agent touch production safely?" whose lesson now lives in Cortexa.
 permalink: /projects/policyclaw/
 ---
 
@@ -39,11 +39,12 @@ The design principle: **the model proposes; code disposes.** An agent could *ask
 
 Policyclaw worked. But standing it up taught me it was the wrong *shape*. A confirmation gateway you have to remember to route through is opt-in governance: it protects you exactly as long as every client is pointed at it and nobody talks to an MCP server directly. Governance that lives beside the thing it governs is governance you can bypass.
 
-The right shape puts that judgment *inside* the collaborator, as an invariant it can't route around. Which is precisely what [Cortexa](../cortexa/) does with its code-owned memory handshake: the model can propose that something be remembered, but only deterministic code writes it, and only after explicit human approval whose wording code renders. I arrived at that design in Cortexa independently — and then recognized it as Policyclaw's confirmation gate, one layer up and built-in rather than bolted-on.
+The right shape puts that judgment *inside* the collaborator, as an invariant it can't route around. Which is what [Cortexa](../cortexa/) did with its first design, a code-owned memory handshake: the model could propose that something be remembered, but only deterministic code wrote it, and only after explicit human approval. I arrived at that independently — and then recognized it as Policyclaw's confirmation gate, one layer up and built-in rather than bolted-on. The handshake has since been simplified (asking to remember *is* the approval), but the rule underneath it held: code, not the model, decides what happens.
 
 So Policyclaw isn't being maintained. Its lesson graduated:
 
-- The **confirmation-gate concept** is now Cortexa's approval handshake — an architectural invariant, not an optional proxy.
-- The **risk-tier idea** — that actions carry blast radius and the dangerous ones deserve a different path — is the seed of how a governed Cortexa will drive the still-live MCP layer.
+- The **policy itself** was ported into Cortexa in August 2026: its rules for the same twelve MCP servers — qualified tool names, a hard-denied set beating everything, read detection, a reason code on every decision — kept verbatim so a Cortexa decision can be read against a Policyclaw log line, with a stricter allow-list layered on top.
+- The **confirmation-gate concept** became how Cortexa acts at all: its largest consequence is a pull request that a person has to merge, and saving a memory requires the person to ask.
+- The **risk-tier idea** — that actions carry blast radius and the dangerous ones deserve a different path — is why Cortexa reads the MCP layer but doesn't change the cluster through it.
 
 That's the honest arc: a working prototype whose real product was the design it pointed at. It's archived in the GitOps repo, and it earned its place there.

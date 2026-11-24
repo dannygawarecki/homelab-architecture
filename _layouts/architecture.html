@@ -1,0 +1,50 @@
+---
+layout: default
+---
+{%- comment -%}
+  Architecture hub: two feature cards (Diagrams, ADRs) drawn from live data,
+  then the page's own markdown (the ADR table). Counts and "latest" update
+  themselves as ADRs are added.
+{%- endcomment -%}
+{%- assign adrs = site.pages | where_exp: "p", "p.path contains 'architecture/decisions/0'" | sort: "path" -%}
+{%- assign first = adrs | first -%}
+{%- assign latest = adrs | last -%}
+{%- assign accepted = 0 -%}
+{%- for a in adrs -%}{%- assign s = a.status | default: "Accepted" -%}{%- if s == "Accepted" -%}{%- assign accepted = accepted | plus: 1 -%}{%- endif -%}{%- endfor -%}
+<article class="wrap prose">
+  <header class="page-head">
+    {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
+  </header>
+
+  <div class="hub-cards">
+    <a class="card hub-card" href="{{ '/architecture/diagrams/' | relative_url }}">
+      <span class="card-tag">Diagrams · {{ page.diagram_count }} plates</span>
+      <h3>Architecture diagrams</h3>
+      <p>Physical layout, network trust zones, the platform capability map, and how change and inference actually flow through the system.</p>
+      <span class="hub-thumb"><img src="{{ page.diagram_thumb | relative_url }}" alt="" loading="lazy"></span>
+      <span class="hub-more">View all diagrams &rarr;</span>
+    </a>
+
+    <div class="card hub-card">
+      <span class="card-tag">Decision records · {{ first.date_label }} – {{ latest.date_label }}</span>
+      <h3><a href="{{ '/architecture/decisions/' | relative_url }}">Architecture decision records</a></h3>
+      <p>Context, decision, reasoning, tradeoffs, and outcome for every significant platform choice — including the alternatives I rejected and what each choice cost.</p>
+      <div class="hub-stats">
+        <span><b>{{ adrs.size }}</b> records</span>
+        <span><b>{{ accepted }}</b> accepted</span>
+        {%- assign superseded = adrs.size | minus: accepted -%}
+        {% if superseded > 0 %}<span><b>{{ superseded }}</b> superseded</span>{% endif %}
+      </div>
+      <a class="hub-latest" href="{{ latest.url | relative_url }}">
+        <span class="hub-latest-tag">Latest · {{ latest.title | slice: 0, 7 }} · {{ latest.date_label }}</span>
+        <span class="hub-latest-title">{{ latest.title | slice: 9, 200 }}</span>
+        <span class="hub-latest-sum">{{ latest.tldr | default: latest.description | truncatewords: 26 }}</span>
+      </a>
+      <a class="hub-more" href="{{ '/architecture/decisions/' | relative_url }}">Browse all decision records &rarr;</a>
+    </div>
+  </div>
+
+  {{ content }}
+</article>

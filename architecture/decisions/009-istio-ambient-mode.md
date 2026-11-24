@@ -1,12 +1,15 @@
 ---
 title: "ADR 009: Use Istio in Ambient Mode (not Sidecar Mode)"
 eyebrow: Architecture Decision Record
-summary: Cluster-wide mTLS without per-pod sidecars — lower overhead, simpler rollout, a younger ecosystem.
+description: Cluster-wide mTLS without per-pod sidecars — lower overhead, simpler rollout, a younger ecosystem.
 permalink: /architecture/decisions/009-istio-ambient-mode/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Nov 2025 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "Istio in ambient mode, not sidecars"
+card_blurb: "Cluster-wide mTLS without per-pod proxies. Lower overhead and a one-label rollout, against a younger ecosystem."
+layout: adr
+status: Accepted
+date_label: Nov 2025
+subsystem: Networking · Mesh
+tldr: Istio runs in ambient mode, with ztunnel providing cluster-wide mTLS and no per-pod sidecars — trading sidecar overhead for a younger ecosystem, an extra Istio CNI component, and careful coexistence with Cilium.
 ---
 
 ## Context
@@ -49,13 +52,8 @@ Run **Istio in ambient mode** using ztunnel for cluster-wide mTLS and waypoint p
 
 ## Outcome
 
+> **Update (Oct 2026):** The first waypoint now exists, in the `mcp` namespace, where it checks an Authentik-issued token per service before a request reaches an MCP server ([ADR 013](../013-mcp-ai-operations/)). Doing that check at the shared ingress gateway would have broken other clients' API keys. It is still the only one: everywhere else, L7 policy is enforced at the gateway or not at all.
+
 Ambient mode is running across ~28 namespaces with mesh-wide `STRICT` mTLS enforced by a default PeerAuthentication. Outbound traffic policy is `REGISTRY_ONLY`, so external destinations require an explicit ServiceEntry. In practice I've ended up doing L7 authorization with per-namespace AuthorizationPolicies rather than waypoint proxies — no waypoints are currently deployed, which itself says something about how far L4 + AuthorizationPolicy gets you. The operational experience is genuinely lighter than sidecar mode.
 
 *The Cilium coexistence work this required is in [Lessons Learned](../../../lessons-learned/); the CNI's own decision record is [ADR 008](../008-cilium-cni/).*
-
-
-<div class="adr-nav">
-  <a href="../008-cilium-cni/">&larr; ADR 008 &middot; Cilium CNI</a>
-  <a class="adr-nav-all" href="../../">ADR 9 of 17</a>
-  <a href="../010-cloudnative-pg/">ADR 010 &middot; CloudNativePG &rarr;</a>
-</div>

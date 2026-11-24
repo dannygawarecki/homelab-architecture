@@ -1,12 +1,12 @@
 ---
 title: Context Engine
 eyebrow: Side Project · Retrieval
-summary: A local-first RAG platform — ingest files, sites, and git repos, embed them on my own GPU, and answer questions without a single token leaving the network.
+description: A local-first RAG platform — ingest files, sites, and git repos, embed them on my own GPU, and answer questions without a single token leaving the network.
 permalink: /projects/context-engine/
 ---
 
 <p class="pills-row">
-  <span class="status status-wip">First-generation · folding into Cortexa as its knowledge layer</span>
+  <span class="status">First-generation · retrieval core now in Cortexa</span>
   <span class="pill">Source available on request</span>
 </p>
 
@@ -47,6 +47,8 @@ This lands directly on a problem named in my [AI-assisted engineering notes](../
 
 ---
 
-## Where it's going
+## Where it went
 
-Cortexa's design calls for a knowledge layer, and Context Engine is that capability in waiting. To be exact about what exists: they are **not integrated today** — Cortexa has no retrieval hooked up yet, and this is stated intent, not a shipped feature. What Context Engine already proved is the hard part — that local-first retrieval over your own corpus, embeddings and all, works end to end without a token leaving the network. The remaining work is composition, not invention: lifting that capability into Cortexa rather than running it as a separate service. See [Cortexa's lineage section](../cortexa/#what-its-the-successor-to) for how the pieces fit.
+In October 2026 Context Engine was folded into [Cortexa](../cortexa/), in a narrower form than this page first imagined. Cortexa harvested Context Engine's **retrieval core** — the pgvector schema, heading-aware chunking, ingestion, hybrid vector and full-text search with rank fusion, and the scanning and change detection from the `ctx` CLI — adapted into its own code rather than called as a service. What it deliberately **left behind** was the hand-tuned layer on top: sufficiency, answerability and arbitration rules with invented weights, none of them ever measured. That's the same pattern Cortexa's own evaluation caught in its first design. Context Engine is no longer deployed; its corpus now serves every chat in the lab, through Cortexa.
+
+What Context Engine proved is the hard part — that local-first retrieval over your own corpus, embeddings and all, works end to end without a token leaving the network. See [Cortexa's lineage section](../cortexa/#what-its-the-successor-to) for how the pieces fit.

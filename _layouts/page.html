@@ -1,14 +1,23 @@
 ---
 layout: default
 ---
-<article class="wrap prose">
+<article class="wrap prose{% if page.class %} {{ page.class }}{% endif %}">
   {% if page.title %}
   <header class="page-head">
     {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
     <h1>{{ page.title }}</h1>
-    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   </header>
   {% endif %}
 
-  {{ content }}
+  {%- comment -%}
+    A markdown page drops in the capability map with an HTML comment marker,
+    which GitHub's renderer hides — so the same file still reads cleanly there.
+  {%- endcomment -%}
+  {%- if content contains '<!-- platform-map -->' -%}
+    {%- capture platform_map -%}{% include platform-map.html %}{%- endcapture -%}
+    {{ content | replace: '<!-- platform-map -->', platform_map }}
+  {%- else -%}
+    {{ content }}
+  {%- endif %}
 </article>

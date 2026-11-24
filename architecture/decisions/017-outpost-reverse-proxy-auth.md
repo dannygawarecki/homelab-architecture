@@ -1,12 +1,23 @@
 ---
 title: "ADR 017: A Reverse-Proxy Outpost for the Apps That Can't Do OIDC"
 eyebrow: Architecture Decision Record
-summary: Seven web surfaces had no usable login. Rather than wait for each vendor to ship OIDC, they moved behind Authentik's embedded outpost — which makes an L4 AuthorizationPolicy the actual security boundary.
+description: Seven web surfaces had no usable login. Rather than wait for each vendor to ship OIDC, they moved behind Authentik's embedded outpost — which makes an L4 AuthorizationPolicy the actual security boundary.
 permalink: /architecture/decisions/017-outpost-reverse-proxy-auth/
----
-
-**Status:** Accepted &nbsp;·&nbsp; **Date:** Sep 2026 &nbsp;·&nbsp; [← All ADRs](../../)
-
+card_title: "A reverse-proxy outpost for apps that can't do OIDC"
+card_blurb: "Seven web surfaces had no usable login. Putting them behind Authentik's embedded outpost makes an L4 network policy the real security boundary — not a nicety."
+layout: adr
+status: Accepted
+date_label: Sep 2026
+subsystem: Identity · Ingress
+builds_on: ["004"]
+tldr: Every web surface that can't authenticate for itself now sits behind Authentik's embedded outpost — no application changes and no new secrets, at the price of making an Istio AuthorizationPolicy, not the login page, the real security boundary.
+outcome_stats:
+  - num: "16"
+    label: Apps behind Authentik
+  - num: "7"
+    label: Moved behind the outpost
+  - num: "0"
+    label: New credentials to rotate
 ---
 
 ## Context
@@ -23,10 +34,10 @@ Every one of these sits behind the same gateway and the same certificate as the 
 
 Options:
 
-- **Wait for upstream OIDC.** Not available on any useful timeline. Two of these projects have no OIDC in core, one sells it, and the rest have no user model to attach an identity to.
-- **A community plugin, per app.** For grocy this meant `bboehmke/grocy-oauth`. Rejected on reading it: no `state`, no `nonce`, no PKCE, no `id_token` signature validation, and `redirect_uri` derived from the current request URI. It also targets the pre-4.x `Grocy\Middleware` namespace. This is a plugin that would have *looked* like SSO.
-- **Accept network position as the control.** The status quo, and the audit above is what it was actually worth.
-- **Authentik's embedded outpost as a forward-auth proxy.**
+- <span class="opt">Rejected</span> **Wait for upstream OIDC.** Not available on any useful timeline. Two of these projects have no OIDC in core, one sells it, and the rest have no user model to attach an identity to.
+- <span class="opt">Rejected</span> **A community plugin, per app.** For grocy this meant `bboehmke/grocy-oauth`. Rejected on reading it: no `state`, no `nonce`, no PKCE, no `id_token` signature validation, and `redirect_uri` derived from the current request URI. It also targets the pre-4.x `Grocy\Middleware` namespace. This is a plugin that would have *looked* like SSO.
+- <span class="opt">Rejected</span> **Accept network position as the control.** The status quo, and the audit above is what it was actually worth.
+- <span class="opt opt-chosen">Chosen</span> **Authentik's embedded outpost as a forward-auth proxy.**
 
 ## Decision
 
@@ -63,9 +74,4 @@ Sixteen applications now sit behind Authentik: nine OIDC clients and seven behin
 
 The more durable result is the audit itself. Six of these seven had no authentication at all, on a platform whose documentation, dashboards, and monitors all reported that identity was solved. Nothing was broken; everything was green. **That story is written up separately: [Everything Was Green](../../../writing/everything-was-green/).**
 
-
-<div class="adr-nav">
-  <a href="../016-observability-approach/">&larr; ADR 016 &middot; Targeted observability</a>
-  <a class="adr-nav-all" href="../../">ADR 17 of 17</a>
-  <span></span>
-</div>
+> **Update (Nov 2026):** Netdata, one of the seven gated here, was retired on 19 November when Prometheus took over its alerting ([ADR 019](../019-metrics-and-slos/)). It no longer sits behind this gate, which now covers six.
