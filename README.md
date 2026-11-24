@@ -35,7 +35,7 @@ This repo is the **narrative and architecture layer**. Actual configs live in th
 
 ### Networking
 
-![Network Layout](./images/network-layout-v3.png)
+![Network Layout](./images/network-layout-v4.png)
 
 - **VLAN segmentation** across management, workload, and IoT traffic
 - **Cilium** as the Kubernetes CNI featuring eBPF-based networking, network policies, and egress control

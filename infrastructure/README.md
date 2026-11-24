@@ -23,7 +23,7 @@ Talos Linux machine configurations for all cluster nodes.
 
 **Cluster layout:**
 
-![Physical Architecture](../images/physical-architecture.png)
+![Physical Architecture](../images/physical-architecture-v2.png)
 
 | Node | Role | Host | Hardware |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Talos Linux machine configurations for all cluster nodes.
 
 Storage is provided by a **Synology DS1817+** over iSCSI. The ProDesk 600 also runs the **Proxmox Backup Server (PBS)** VM, and the EliteDesk 800 runs **Home Assistant**.
 
-The fourth host, **pve-4**, joined in November 2026: a Dell OptiPlex 5060 with half the memory of the others (32GB) and no second SSD, so it carries one deliberately smaller worker and no control plane. *The diagram above predates it.*
+The fourth host, **pve-4**, joined in November 2026: a Dell OptiPlex 5060 with half the memory of the others (32GB) and no second SSD, so it carries one deliberately smaller worker and no control plane.
 
 ---
 

@@ -117,7 +117,7 @@ The pod still does all the work — scraping, building, publishing — but it's 
 
 The publisher's token can read and write objects in that one bucket and nothing else in the account, and rotates every 90 days. Egress to R2 is pinned to my account's endpoint rather than the `*.r2.cloudflarestorage.com` wildcard, because any Cloudflare customer can stand up a bucket behind that name. Uptime Kuma watches both the private status endpoint and the public copy.
 
-**Version 0.1.62, with 61 CI-driven releases.** Renovate keeps base images current.
+**Version 0.1.107, with more than 100 CI-driven releases.** Renovate keeps base images current.
 
 ---
 

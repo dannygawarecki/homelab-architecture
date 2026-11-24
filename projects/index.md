@@ -24,7 +24,7 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
       <h3>big-ads</h3>
       <p>A grocery flyer viewer for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule in the cluster, published as a static site to Cloudflare R2 — so nothing public reaches the lab.</p>
       <div class="proj-facts">
-        <span><b>4</b>retailer sites</span><span><b>61</b>CI-driven releases</span><span><b>60px</b>min button height</span>
+        <span><b>4</b>retailer sites</span><span><b>100+</b>CI-driven releases</span><span><b>60px</b>min button height</span>
       </div>
       <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>The scrapers aren't tested against the live sites — the safety net is per-store isolation, capture validation, and a staleness alert.</div>
     </a>
