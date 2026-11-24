@@ -26,7 +26,7 @@ defaults:
       path: ""
     values:
       layout: page
-      image: /assets/img/social-card.png
+      image: /assets/img/social-card-v2.png
 
 exclude:
   - README.md

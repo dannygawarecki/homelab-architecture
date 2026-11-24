@@ -51,6 +51,16 @@ files). So the convention is content-versioned filenames: `network-layout-v3.png
 becomes `-v4`, and so on — update the handful of references and every cache, everywhere,
 misses cleanly. Delete the superseded file once nothing references it. Same-name overwrites are what cause "my new diagram isn't showing."
 
+**The social card is generated, not drawn.** `.dev/social-card.html` is the source for the
+1200×630 image LinkedIn and others show beside a link. Edit it, then render it with headless
+Edge (or Chrome), save it under the next version number, and point `image:` in `_config.yml` at it:
+
+```powershell
+& "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless=new --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 --screenshot="$PWD\assets\img\social-card-v3.png" "file:///$($PWD -replace '\\','/')/.dev/social-card.html"
+```
+
+The card states facts (node count, the domain), so it goes stale with them — check it whenever the homepage stats change.
+
 **Link checking is deliberately internal-only.** External URLs fail for reasons that have
 nothing to do with this repo — rate limits, hosts that block CI, sites that are briefly
 down. A check that goes red for reasons you can't fix is a check you learn to ignore.
@@ -63,7 +73,7 @@ down. A check that goes red for reasons you can't fix is a check you learn to ig
    ---
    title: Page Title
    eyebrow: Section Label      # small uppercase label above the title
-   summary: One-sentence lede shown under the title.
+   description: One-sentence lede shown under the title, and the page's description for search and link previews.
    permalink: /some/path/      # explicit — do not rely on filename-based URLs
    ---
    ```
@@ -79,7 +89,7 @@ down. A check that goes red for reasons you can't fix is a check you learn to ig
 ## Layout notes
 
 - `_layouts/default.html` — header, nav, footer. Edit the nav here.
-- `_layouts/page.html` — the prose wrapper. Renders `title` / `eyebrow` / `summary`.
+- `_layouts/page.html` — the prose wrapper. Renders `title` / `eyebrow` / `description`.
 - `assets/css/site.css` — all styling. Colors are CSS custom properties at the top and
   the whole sheet supports light and dark via `prefers-color-scheme`.
 - The root `README.md` is excluded from the site (see `exclude:` in `_config.yml`). It's
