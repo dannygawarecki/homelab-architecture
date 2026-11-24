@@ -1,13 +1,13 @@
 ---
 title: Projects
 eyebrow: Side Projects
-summary: One shipped accessibility tool in weekly use — and a multi-month arc of AI work converging on a single question, what does it take to build an AI collaborator you can actually trust?
+description: Three accessibility tools for one reader, an operator written by hand, and a multi-month arc of AI work converging on a single question — what does it take to build an AI collaborator you can actually trust?
 permalink: /projects/
 ---
 
 The homelab is the substrate. What runs on it falls into three groups.
 
-**[big-ads](big-ads/)**, **[big-recipes](big-recipes/)** and **[big-weather](big-weather/)** are a family: three accessibility tools for the same person, sharing one house style and one set of keys, with no AI in any of them. That was the right call all three times.
+**[big-ads](big-ads/)**, **[big-recipes](big-recipes/)** and **[big-weather](big-weather/)** are a family: three accessibility tools for the same person, sharing one style and one set of keys, with no AI in any of them. That was the right call all three times.
 
 **[kubeslo-operator](kubeslo-operator/)** is the newest, and the earliest: a Kubernetes operator, written by hand in Go, that judges every change against its SLO. The groundwork is running; the operator is next.
 
@@ -22,7 +22,7 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
     <a class="card proj-card" href="big-ads/">
       <div class="proj-top"><span class="card-tag">Accessibility</span><span class="status status-live">Shipped · in daily use</span></div>
       <h3>big-ads</h3>
-      <p>A grocery flyer viewer for a user with severe visual impairment. Four hostile retailer sites scraped on a schedule in the cluster, published as a static site to Cloudflare R2 — so nothing public reaches the lab.</p>
+      <p>A grocery flyer viewer for a user with severe visual impairment. Four retailer sites scraped on a schedule in the cluster, published as a static site to Cloudflare R2 — so nothing public reaches the lab.</p>
       <div class="proj-facts">
         <span><b>4</b>retailer sites</span><span><b>100+</b>CI-driven releases</span><span><b>60px</b>min button height</span>
       </div>
@@ -31,16 +31,16 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
     <a class="card proj-card" href="big-recipes/">
       <div class="proj-top"><span class="card-tag">Accessibility</span><span class="status status-live">Deployed</span></div>
       <h3>big-recipes</h3>
-      <p>The sibling: a Chrome/Edge extension that turns the recipe he already found into large type, read-aloud, cook mode, and print. It started as a search engine — and the search engine was the part that had to go.</p>
+      <p>The sibling: a Chrome/Edge extension that turns a recipe into large type, read-aloud, cook mode, and print. It started as a search engine — and the search engine was the part that had to go.</p>
       <div class="proj-facts">
-        <span><b>0</b>databases</span><span><b>0</b>internet egress</span><span><b>1,075 / 1,083</b>pages identical after stripping</span>
+        <span><b>0</b>databases</span><span><b>1</b> simple chrome extension</span><span><b>no</b> search dependency</span>
       </div>
       <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>Public requests still come through the tunnel into the lab, and it hasn't earned "in weekly use" yet.</div>
     </a>
     <a class="card proj-card" href="big-weather/">
       <div class="proj-top"><span class="card-tag">Accessibility</span><span class="status status-live">Deployed · new</span></div>
       <h3>big-weather</h3>
-      <p>Eight weather sources compared for him and said plainly: "Rain likely", "Sources differ", a named disagreement when it matters. Built like big-ads, as static files on R2, and public without ever publishing where home is.</p>
+      <p>Eight weather sources compared and stated plainly: "Rain likely", "Sources differ", a named disagreement when it matters. Built like big-ads and served publicly as static files on R2.</p>
       <div class="proj-facts">
         <span><b>8</b>sources compared</span><span><b>0</b>servers listening</span><span><b>~4 mi</b>most precise it publishes</span>
       </div>
@@ -99,7 +99,7 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
     <div class="proj-hero-main">
       <div class="proj-top"><span class="card-tag">AI Systems · The synthesis</span><span class="status status-wip">Deployed · single user, in development</span></div>
       <h3>Cortexa</h3>
-      <p>An AI collaborator running in the cluster behind Open WebUI. It began as a state machine that owned collaboration in code; honest measurement — including retracting a published win — turned it into "code decides, the model writes." Five runs: 97.8 vs 56.6 against the same model alone.</p>
+      <p>An AI collaborator running in the cluster behind Open WebUI. It began as a state machine that owned collaboration in code; honest measurement — including retracting a published win — turned it into "code decides, the model writes." Scored against the same model on its own: 97.8 vs 56.6 of 111, won on documents, the live cluster and the web.</p>
       <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>Single user and built around this lab's hosts, and on long conversations it doesn't beat the bare model yet.</div>
     </div>
     <dl class="proj-spec">

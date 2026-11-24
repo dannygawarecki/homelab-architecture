@@ -1,7 +1,7 @@
 ---
 title: "ADR 008: Cilium as the CNI, with kube-proxy Replaced"
 eyebrow: Architecture Decision Record
-summary: eBPF networking with kube-proxy fully replaced, and an egress "lanes" model that makes internet access an explicit, reviewable choice.
+description: eBPF networking with kube-proxy fully replaced, and an egress "lanes" model that makes internet access an explicit, reviewable choice.
 permalink: /architecture/decisions/008-cilium-cni/
 card_title: "Cilium as the CNI"
 card_blurb: "eBPF networking, no kube-proxy at all, and an egress-lanes model where internet access is an explicit Git change."

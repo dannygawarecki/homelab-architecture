@@ -1,7 +1,7 @@
 ---
 title: "ADR 016: Targeted Observability Tools, Not a Single Pane of Glass"
 eyebrow: Architecture Decision Record
-summary: I ran a full APM stack, retired it, and replaced it with narrow tools that each answer one question — accepting that nothing correlates across layers.
+description: I ran a full APM stack, retired it, and replaced it with narrow tools that each answer one question — accepting that nothing correlates across layers.
 permalink: /architecture/decisions/016-observability-approach/
 card_title: "Targeted observability, no single pane"
 card_blurb: "I ran a full APM stack, retired it, and replaced it with narrow tools per layer — accepting that nothing correlates, and saying why that's the right call here."

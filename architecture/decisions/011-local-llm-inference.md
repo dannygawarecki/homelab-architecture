@@ -1,7 +1,7 @@
 ---
 title: "ADR 011: Local LLM Inference with Ollama on a Dedicated GPU Worker"
 eyebrow: Architecture Decision Record
-summary: GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network.
+description: GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network.
 permalink: /architecture/decisions/011-local-llm-inference/
 card_title: "Local LLM inference on a dedicated GPU worker"
 card_blurb: "GPU passthrough from Proxmox through Talos into Kubernetes, so no prompt ever leaves the network."

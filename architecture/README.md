@@ -1,7 +1,7 @@
 ---
 title: Architecture
 eyebrow: Platform
-summary: The diagrams that describe the platform, and the decision records that explain why it looks the way it does.
+description: The diagrams that describe the platform, and the decision records that explain why it looks the way it does.
 permalink: /architecture/
 layout: architecture
 diagram_count: 4
@@ -38,3 +38,4 @@ The records are ordered as the platform came together — foundational choices f
 | [018](./decisions/018-offsite-backup/) | An offsite copy on Backblaze B2 | Sep 2026 |
 | [019](./decisions/019-metrics-and-slos/) | Prometheus goes back in, for SLOs | Oct 2026 |
 | [020](./decisions/020-signed-images-runtime-enforcement/) | Signed images at admission, exec allow-lists in the kernel | Oct 2026 |
+| [021](./decisions/021-credential-rotation/) | Credentials rotate on a clock | Sep 2026 |

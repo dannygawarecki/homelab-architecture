@@ -1,7 +1,7 @@
 ---
 title: "ADR 020: Signed Images at Admission, Exec Allow-Lists in the Kernel"
 eyebrow: Architecture Decision Record
-summary: A purple-team exercise showed where detection stopped helping. The answer was two controls that say no instead of reporting afterwards — one at admission, one in the kernel.
+description: A purple-team exercise showed where detection stopped helping. The answer was two controls that say no instead of reporting afterwards — one at admission, one in the kernel.
 permalink: /architecture/decisions/020-signed-images-runtime-enforcement/
 card_title: "Signed images, and exec allow-lists in the kernel"
 card_blurb: "A purple-team exercise showed where detection stopped helping. Kyverno now rejects unsigned in-house images, and Tetragon kills unexpected processes in nine workloads — rolled out log-only first."

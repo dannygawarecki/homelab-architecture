@@ -40,7 +40,7 @@ layout: default
     <span class="adr-watermark" aria-hidden="true">{{ adr_num }}</span>
     <p class="eyebrow">{{ page.eyebrow | default: "Architecture Decision Record" }}</p>
     <h1>{{ page.title }}</h1>
-    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
 
     <p class="adr-meta-row">
       <span class="status {% if status == 'Superseded' %}status-wip{% else %}status-live{% endif %}">{{ status }}</span>

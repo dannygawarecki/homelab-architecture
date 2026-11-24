@@ -1,7 +1,7 @@
 ---
 title: "ADR 009: Use Istio in Ambient Mode (not Sidecar Mode)"
 eyebrow: Architecture Decision Record
-summary: Cluster-wide mTLS without per-pod sidecars — lower overhead, simpler rollout, a younger ecosystem.
+description: Cluster-wide mTLS without per-pod sidecars — lower overhead, simpler rollout, a younger ecosystem.
 permalink: /architecture/decisions/009-istio-ambient-mode/
 card_title: "Istio in ambient mode, not sidecars"
 card_blurb: "Cluster-wide mTLS without per-pod proxies. Lower overhead and a one-label rollout, against a younger ecosystem."

@@ -1,7 +1,7 @@
 ---
 title: "ADR 015: A Tailscale Subnet Router for Private Remote Access"
 eyebrow: Architecture Decision Record
-summary: A deliberate exception to "Git is the only way in" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't.
+description: A deliberate exception to "Git is the only way in" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't.
 permalink: /architecture/decisions/015-tailscale-remote-access/
 card_title: "A Tailscale subnet router"
 card_blurb: "A deliberate exception to \"Git is the only way in\" — remote access lives outside Kubernetes, because it has to work when the cluster doesn't."

@@ -1,7 +1,7 @@
 ---
 title: Policyclaw
 eyebrow: Side Project · AI Governance
-summary: A policy gateway that put every mutating AI action behind a human confirmation gate — a working first-generation answer to "how do you let an agent touch production safely?" whose lesson now lives in Cortexa.
+description: A policy gateway that put every mutating AI action behind a human confirmation gate — a working first-generation answer to "how do you let an agent touch production safely?" whose lesson now lives in Cortexa.
 permalink: /projects/policyclaw/
 ---
 

@@ -1,7 +1,7 @@
 ---
 title: big-weather
 eyebrow: Side Project · Accessibility
-summary: The third tool for the same reader. He likes weather and likes comparing sources. The sites that compare forecast models are some of the most crowded pages on the web, so big-weather does the comparing and shows the answer in very large type.
+description: The third tool for the same reader, someone who likes weather and likes comparing sources. The sites that compare forecast models are some of the most crowded pages on the web, so big-weather does the comparing and shows the answer in very large type.
 permalink: /projects/big-weather/
 ---
 
@@ -11,9 +11,9 @@ permalink: /projects/big-weather/
   <span class="pill">Source available on request</span>
 </p>
 
-[big-ads](../big-ads/) magnifies images and [big-recipes](../big-recipes/) restyles text. big-weather is the first of the three where the hard part is **deciding what to say**. He doesn't want one forecast; he wants to know whether the forecasts agree. Mainstream apps show one source. The sites that compare models show all of them, in a dense grid of numbers that's unusable under heavy magnification.
+[big-ads](../big-ads/) magnifies images and [big-recipes](../big-recipes/) restyles text. big-weather is the first of the three where the hard part is **deciding what to say**. The goal isn't one forecast; it's knowing whether the forecasts agree. Mainstream apps show one source. The sites that compare models show all of them, in a dense grid of numbers that's unusable under heavy magnification.
 
-So big-weather reads eight sources and does the comparison for him: the Weather Service, six forecast models (American, European, German, Canadian, the NWS blend, and the short-range HRRR), and a local TV station's own forecast. Then it says the result plainly.
+So big-weather reads eight sources and does the comparison itself: the Weather Service, six forecast models (American, European, German, Canadian, the NWS blend, and the short-range HRRR), and a local TV station's own forecast. Then it says the result plainly.
 
 ---
 
@@ -31,7 +31,7 @@ The first version showed the comparison everywhere: every row carried its spread
 
 > The comparison was taking over every row. The main views now give one answer and keep who-said-what on the day's details page.
 
-Now temperatures are the middle of the sources, never a range. Rain and snow say how sure in **words**, from the share of sources that expect it: *expected*, *likely*, *possible*, *slight chance*, or *dry*. A "sources differ" mark appears only when it matters, when rain is a genuine toss-up or the highs are more than 8° apart. The disagreement, when he wants it, is named: "Low: 26° Canadian to 32° German", "Rain: only Blend says yes".
+Now temperatures are the middle of the sources, never a range. Rain and snow say how sure in **words**, from the share of sources that expect it: *expected*, *likely*, *possible*, *slight chance*, or *dry*. A "sources differ" mark appears only when it matters, when rain is a genuine toss-up or the highs are more than 8° apart. The disagreement, when it's wanted, is named: "Low: 26° Canadian to 32° German", "Rain: only Blend says yes".
 
 Two details I'd point to, because they're the kind of thing that only shows up when you look at real output:
 
@@ -40,9 +40,13 @@ Two details I'd point to, because they're the kind of thing that only shows up w
 
 ---
 
-## Public, without a login, and without a location
+## Public, without a login, and not anonymous
 
-He should never have to sign in, so the site is public. Instead of protecting the site, the rule is that **the site never contains anything more precise than "this general area"**, and the repository never contains anything that identifies the family at all.
+Signing in should never be required, so the site is public. That's a real tradeoff, and I'd rather be plain about what the design protects and what it doesn't.
+
+**It doesn't provide anonymity.** The site shows home's general area and labels the towns family live in. My name is uncommon, and anyone who connected the site to me could fill in the rest from public records without much effort. Nothing here pretends otherwise.
+
+**What it protects is precision.** The site never adds anything more exact than "this general area", and the repository never contains anything that identifies the family at all:
 
 - **Locations live only in Vault.** The repository holds a format example with made-up places; the real file arrives as a Kubernetes Secret via External Secrets. A missing file fails the run with an error that names the file but echoes nothing from inside it, and there's no fallback to built-in locations, because that's how real places end up in code.
 - **Radar centres on home rounded to about 3–4 miles**, drawn as a "home area" circle, never a pin. Town labels show only larger towns.
@@ -50,13 +54,13 @@ He should never have to sign in, so the site is public. Instead of protecting th
 - **Gitleaks has a custom rule** that flags precise coordinates in any committed file, in pre-commit and in CI.
 - **Errors are published as "failed", never as text.** The HTTP client's errors include the request URL, and the request URL includes coordinates.
 
-What's left exposed is about what a weather app's saved-locations list reveals. If that's ever too much, a login can go in front with no code changes.
+The site isn't linked from this page or from any public repository. That isn't security, just not advertising it. If the tradeoff ever stops being acceptable, a login can go in front with no code changes.
 
 ---
 
 ## Accessibility, and one house style
 
-big-weather was laid out like the Windows weather app he already knows (now, an hourly strip, a daily list), only much bigger. Each screen fits on one display without scrolling. Single keys move between screens (**H**ourly, **D**ays, **R**adar, **P**ast weather), number keys pick a day or a radar frame, **A** reads the screen aloud, and **Esc** goes home. Radar is still frames he can step through and enlarge, with forecast frames given a dashed border that says they aren't real radar.
+big-weather was laid out like the Windows weather app its reader already knows (now, an hourly strip, a daily list), only much bigger. Each screen fits on one display without scrolling. Single keys move between screens (**H**ourly, **D**ays, **R**adar, **P**ast weather), number keys pick a day or a radar frame, **A** reads the screen aloud, and **Esc** goes home. Radar is still frames to step through and enlarge, with forecast frames given a dashed border that says they aren't real radar.
 
 All three tools are used by the same person, so they now **look and work the same**: one `house.css`, the same file in all three repositories, carries the font (Atkinson Hyperlegible Next, self-hosted), the light and dark screens, the button style, the yellow key badges and the focus ring. **T** switches light and dark in every app; **Esc** always backs out. Each app keeps only its own sizes and its own colours.
 
@@ -87,4 +91,4 @@ All three tools are used by the same person, so they now **look and work the sam
 
 ## Why it's here
 
-The three tools share a reader, a house style, and no AI in any of them. What big-weather adds is the problem of **saying less**. Eight sources, a dozen fields and a radar are easy to show; the work was deciding what a single glance should tell him, and keeping everything else one key away.
+The three tools share a reader, a house style, and no AI in any of them. What big-weather adds is the problem of **saying less**. Eight sources, a dozen fields and a radar are easy to show; the work was deciding what a single glance should tell, and keeping everything else one key away.

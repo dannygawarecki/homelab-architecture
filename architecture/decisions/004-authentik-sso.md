@@ -1,7 +1,7 @@
 ---
 title: "ADR 004: Authentik as the Identity Provider"
 eyebrow: Architecture Decision Record
-summary: One login for everything — including the infrastructure itself — with every provider and application declared in Terraform.
+description: One login for everything — including the infrastructure itself — with every provider and application declared in Terraform.
 permalink: /architecture/decisions/004-authentik-sso/
 card_title: "Authentik as the identity provider"
 card_blurb: "One login for everything — including Vault, ArgoCD, and Proxmox — declared entirely in Terraform."

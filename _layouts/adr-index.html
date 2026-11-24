@@ -16,7 +16,7 @@ layout: default
   <header class="page-head">
     {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
     <h1>{{ page.title }}</h1>
-    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   </header>
 
   <p class="chip-row">
@@ -48,7 +48,7 @@ layout: default
         <a class="card adr-card{% if st == 'Superseded' %} adr-card-superseded{% endif %}" href="{{ a.url | relative_url }}">
           <span class="card-tag">{{ a.title | slice: 0, 7 }} · {{ a.date_label }}</span>
           <h3>{{ a.card_title | default: a.title }}</h3>
-          <p>{{ a.card_blurb | default: a.summary }}</p>
+          <p>{{ a.card_blurb | default: a.description }}</p>
           <span class="adr-card-foot">
             <span>{{ a.subsystem }}</span>
             <span class="status {% if st == 'Superseded' %}status-wip{% else %}status-live{% endif %}">{{ st }}</span>

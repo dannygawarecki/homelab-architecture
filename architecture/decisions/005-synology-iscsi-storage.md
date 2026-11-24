@@ -1,7 +1,7 @@
 ---
 title: "ADR 005: Synology iSCSI via CSI as Primary Storage"
 eyebrow: Architecture Decision Record
-summary: Centralized NAS storage over a dedicated network, chosen over distributed storage I would have operated badly — with the single point of failure named and accepted.
+description: Centralized NAS storage over a dedicated network, chosen over distributed storage I would have operated badly — with the single point of failure named and accepted.
 permalink: /architecture/decisions/005-synology-iscsi-storage/
 card_title: "Synology iSCSI as primary storage"
 card_blurb: "Centralized NAS block storage over distributed storage I'd operate badly — the single point of failure named and accepted."

@@ -1,7 +1,7 @@
 ---
 title: "ADR 014: vLLM for Served Generation, Alongside Ollama"
 eyebrow: Architecture Decision Record
-summary: A second inference runtime for throughput — vLLM serving a quantized 30B tensor-parallel across both GPUs, with Ollama kept for embeddings and flexible experimentation.
+description: A second inference runtime for throughput — vLLM serving a quantized 30B tensor-parallel across both GPUs, with Ollama kept for embeddings and flexible experimentation.
 permalink: /architecture/decisions/014-vllm-inference/
 card_title: "vLLM for served generation"
 card_blurb: "A throughput-first runtime, tensor-parallel across both GPUs, alongside Ollama, which moved to embeddings. Documented mid-migration in August; finished, on a new 128k-context model, in October."

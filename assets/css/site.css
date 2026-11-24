@@ -313,8 +313,13 @@ hr { border: 0; border-top: 1px solid var(--line-soft); margin: 3rem 0; }
 .prose th { color: var(--text-dim); font-weight: 600; font-size: .82rem; text-transform: uppercase; letter-spacing: .05em; }
 .prose tbody tr:hover { background: var(--bg-soft); }
 
-/* tables and wide blocks scroll inside themselves, never the page */
+/* tables and wide blocks scroll inside themselves, never the page —
+   at any depth, since ADR sections wrap their tables in <section> */
 .prose > table { display: block; overflow-x: auto; }
+@media (max-width: 760px) { .prose table { display: block; overflow-x: auto; max-width: 100%; } }
+.prose pre { max-width: 100%; }
+/* long inline identifiers (service-account paths, URLs) wrap instead of widening the page */
+.prose :not(pre) > code { overflow-wrap: anywhere; }
 
 /* ---------- code ---------- */
 code {
@@ -786,9 +791,12 @@ pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 .pmap a.pchip:hover, .pmap a.pchip:focus-visible { border-color: var(--accent); color: var(--accent); text-decoration: none; }
 .pmap span.pchip[title] { cursor: help; }
 
-.pmap-base, .pmap-beside { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem .85rem; }
+.pmap-base { display: flex; flex-wrap: wrap; align-items: center; gap: .55rem .85rem; }
 .pmap-base { margin-top: .1rem; padding: .8rem .15rem 0; border-top: 1px dashed var(--line); }
-.pmap-beside { margin-top: .8rem; padding: 0 1rem; }
+.pmap-beside { margin-top: 1rem; padding: 0 .85rem; }
+.pmap-beside > .pmap-base-label { display: block; margin-bottom: .55rem; }
+.pmap-beside-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: .75rem; }
+.pmap-beside-grid .pmap-area { margin: 0; background: transparent; border-style: dashed; }
 .pmap-base-label {
   font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
   text-transform: uppercase; color: var(--text-mute);
@@ -801,5 +809,16 @@ pre code { background: none; border: 0; padding: 0; font-size: inherit; }
 .pchip-demo { pointer-events: none; font-size: .72rem; padding: .15rem .5rem; }
 @media (max-width: 640px) {
   .pmap-frame { padding: .6rem; }
-  .pmap-beside { padding: 0 .25rem; }
+  .pmap-beside { padding: 0; }
 }
+
+/* ---------- archived sections (<details markdown="1">) ---------- */
+.prose details {
+  margin: 1.5rem 0; padding: .9rem 1.1rem;
+  border: 1px dashed var(--line); border-radius: var(--radius); background: var(--bg-soft);
+}
+.prose details > summary {
+  cursor: pointer; color: var(--text-dim); font-size: .92rem;
+}
+.prose details > summary:hover { color: var(--accent); }
+.prose details[open] > summary { margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--line-soft); }

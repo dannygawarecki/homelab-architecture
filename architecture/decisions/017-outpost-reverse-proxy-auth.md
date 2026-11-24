@@ -1,7 +1,7 @@
 ---
 title: "ADR 017: A Reverse-Proxy Outpost for the Apps That Can't Do OIDC"
 eyebrow: Architecture Decision Record
-summary: Seven web surfaces had no usable login. Rather than wait for each vendor to ship OIDC, they moved behind Authentik's embedded outpost — which makes an L4 AuthorizationPolicy the actual security boundary.
+description: Seven web surfaces had no usable login. Rather than wait for each vendor to ship OIDC, they moved behind Authentik's embedded outpost — which makes an L4 AuthorizationPolicy the actual security boundary.
 permalink: /architecture/decisions/017-outpost-reverse-proxy-auth/
 card_title: "A reverse-proxy outpost for apps that can't do OIDC"
 card_blurb: "Seven web surfaces had no usable login. Putting them behind Authentik's embedded outpost makes an L4 network policy the real security boundary — not a nicety."
@@ -73,3 +73,5 @@ These are real, and the first one is the one I'd raise in a design review:
 Sixteen applications now sit behind Authentik: nine OIDC clients and seven behind the outpost. The claim ADR 004 made in its Outcome — that every web surface sits behind the same login — is true as of this record, and was not when it was written.
 
 The more durable result is the audit itself. Six of these seven had no authentication at all, on a platform whose documentation, dashboards, and monitors all reported that identity was solved. Nothing was broken; everything was green. **That story is written up separately: [Everything Was Green](../../../writing/everything-was-green/).**
+
+> **Update (Nov 2026):** Netdata, one of the seven gated here, was retired on 19 November when Prometheus took over its alerting ([ADR 019](../019-metrics-and-slos/)). It no longer sits behind this gate, which now covers six.

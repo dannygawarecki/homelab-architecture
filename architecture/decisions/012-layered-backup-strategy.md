@@ -1,7 +1,7 @@
 ---
 title: "ADR 012: A Layered Backup Strategy"
 eyebrow: Architecture Decision Record
-summary: Five recovery layers with different failure domains — the decision record for "what changed after losing data," and for what August 2026 proved about how independent they actually were.
+description: Five recovery layers with different failure domains — the decision record for "what changed after losing data," and for what August 2026 proved about how independent they actually were.
 permalink: /architecture/decisions/012-layered-backup-strategy/
 card_title: "A layered backup strategy"
 card_blurb: "Five recovery layers with different failure domains — what changed after losing data once, and what August 2026 proved about how independent they really were."

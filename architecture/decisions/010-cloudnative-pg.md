@@ -1,7 +1,7 @@
 ---
 title: "ADR 010: CloudNative PG for Managed Postgres"
 eyebrow: Architecture Decision Record
-summary: An operator-managed Postgres with WAL archiving to MinIO, instead of one database container per application.
+description: An operator-managed Postgres with WAL archiving to MinIO, instead of one database container per application.
 permalink: /architecture/decisions/010-cloudnative-pg/
 card_title: "CloudNative PG for managed Postgres"
 card_blurb: "Operator-managed Postgres with WAL archiving to MinIO, replacing one database container per application."

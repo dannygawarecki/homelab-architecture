@@ -1,7 +1,7 @@
 ---
 title: Worth Keeping
 eyebrow: Side Project · AI Systems
-summary: A system for keeping the things that matter in mind, from the dentist to a marriage, so nothing important quietly rots. Cortexa's sibling, reaching the same question from the opposite end. Unfinished.
+description: A system for keeping the things that matter in mind, from the dentist to a marriage, so nothing important quietly rots. Cortexa's sibling, reaching the same question from the opposite end. Unfinished.
 permalink: /projects/worth-keeping/
 ---
 

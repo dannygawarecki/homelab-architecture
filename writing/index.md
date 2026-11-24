@@ -1,7 +1,7 @@
 ---
 title: Writing
 eyebrow: Essays
-summary: Longer pieces about operating this platform — the ones that are an argument rather than a decision record or a postmortem.
+description: Longer pieces about operating this platform — the ones that are an argument rather than a decision record or a postmortem.
 permalink: /writing/
 ---
 

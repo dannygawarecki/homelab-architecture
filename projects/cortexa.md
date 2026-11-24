@@ -1,13 +1,13 @@
 ---
 title: Cortexa
 eyebrow: Side Project · AI Systems
-summary: An AI collaborator for one person and one lab, running in the cluster behind Open WebUI. It started as a state machine that owned collaboration in code; measuring it honestly is what replaced that design, and what retracted the result this page used to report.
+description: An AI collaborator for one person and one lab, running in the cluster behind Open WebUI. It started as a state machine that owned collaboration in code; measuring it honestly is what replaced that design, and what retracted the result this page used to report.
 permalink: /projects/cortexa/
 ---
 
 <p class="pills-row">
   <span class="status status-wip">Deployed in the lab · single user, in active development</span>
-  <span class="pill">v0.1.20</span>
+  <span class="pill">v0.1.31</span>
   <span class="pill">Source available on request</span>
 </p>
 

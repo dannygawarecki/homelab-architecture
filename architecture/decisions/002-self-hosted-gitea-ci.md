@@ -1,7 +1,7 @@
 ---
 title: "ADR 002: Self-Hosted Gitea with In-Cluster CI"
 eyebrow: Architecture Decision Record
-summary: The Git server, CI runners, and container registry all live inside the cluster they deploy — sovereignty traded against a bootstrap circularity I chose to own.
+description: The Git server, CI runners, and container registry all live inside the cluster they deploy — sovereignty traded against a bootstrap circularity I chose to own.
 permalink: /architecture/decisions/002-self-hosted-gitea-ci/
 card_title: "Self-hosted Gitea with in-cluster CI"
 card_blurb: "Git, CI runners, and the container registry all live inside the cluster they deploy — the self-hosted substrate the GitOps loop runs on."

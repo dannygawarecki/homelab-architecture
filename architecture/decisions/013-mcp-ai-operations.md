@@ -1,7 +1,7 @@
 ---
 title: "ADR 013: MCP Servers as the AI-Operations Interface"
 eyebrow: Architecture Decision Record
-summary: Twelve in-cluster MCP servers give AI tooling structured, scoped access to platform APIs — instead of pasted terminal output or raw credentials.
+description: Twelve in-cluster MCP servers give AI tooling structured, scoped access to platform APIs — instead of pasted terminal output or raw credentials.
 permalink: /architecture/decisions/013-mcp-ai-operations/
 card_title: "MCP servers as the AI-ops interface"
 card_blurb: "Twelve scoped, in-cluster MCP servers give AI tooling live platform access without credentials ever leaving the cluster."

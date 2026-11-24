@@ -1,7 +1,7 @@
 ---
 title: "ADR 019: Prometheus Goes Back In, for SLOs"
 eyebrow: Architecture Decision Record
-summary: Two months after deciding against a metrics stack, I installed one — not for dashboards, but because error budgets need history, and the next project needs error budgets.
+description: Two months after deciding against a metrics stack, I installed one — not for dashboards, but because error budgets need history, and the next project needs error budgets.
 permalink: /architecture/decisions/019-metrics-and-slos/
 card_title: "Prometheus goes back in, for SLOs"
 card_blurb: "Two months after deciding against a metrics stack, I installed one — scoped to SLOs and burn-rate alerts, with request metrics taken from the mesh instead of from the apps."

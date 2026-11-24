@@ -15,7 +15,6 @@ areas:
       - { name: Gitea, adr: 2 }
       - { name: Gitea Runner, adr: 2 }
       - { name: Renovate }
-      - { name: Velero, adr: 12 }
 
   - name: Networking & segmentation
     blurb: Nothing talks unless policy says so.
@@ -31,6 +30,7 @@ areas:
       - { name: CloudNativePG, adr: 10 }
       - { name: Synology CSI, adr: 5 }
       - { name: MinIO }
+      - { name: Velero, adr: 12 }
 
   - name: Observability
     blurb: Objectives, not just dashboards.
@@ -93,9 +93,19 @@ runs_on:
   - { name: Talos Linux, adr: 7 }
   - { name: Proxmox VMs, adr: 6 }
 
-# Outside the frame, on purpose: things that must keep working when the cluster doesn't.
+# Outside the frame: tiles that sit beside the cluster rather than in it.
 beside:
-  - { name: Tailscale, adr: 15, note: "LXC on pve-3" }
-  - { name: Proxmox Backup Server, adr: 12 }
-  - { name: transit-vault, note: "LXC on pve-1 that auto-unseals the cluster's Vault" }
-  - { name: Backblaze B2, adr: 18 }
+  - name: Recovery, on purpose
+    blurb: What you need when the cluster is the thing that's broken.
+    items:
+      - { name: Tailscale, adr: 15, note: "LXC on pve-3" }
+      - { name: Proxmox Backup Server, adr: 12 }
+      - { name: transit-vault, note: "LXC on pve-1 that auto-unseals the cluster's Vault" }
+      - { name: Backblaze B2, adr: 18 }
+
+  - name: Foundations
+    blurb: Where the lab started, and what it still stands on.
+    items:
+      - { name: UniFi, note: "The networking foundation for the lab" }
+      - { name: Synology NAS, note: "The storage foundation for the lab" }
+      - { name: Home Assistant, note: "The original home lab that helped start much of the platform journey" }

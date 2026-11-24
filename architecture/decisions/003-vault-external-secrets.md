@@ -1,7 +1,7 @@
 ---
 title: "ADR 003: Vault + External Secrets Operator as the Only Secrets Path"
 eyebrow: Architecture Decision Record
-summary: One source of truth for every secret, synced into Kubernetes at runtime — chosen after living with the alternative.
+description: One source of truth for every secret, synced into Kubernetes at runtime — chosen after living with the alternative.
 permalink: /architecture/decisions/003-vault-external-secrets/
 card_title: "Vault + ESO as the only secrets path"
 card_blurb: "One source of truth, synced at runtime, with manual Shamir unsealing accepted as the cost of owning the root of trust."
@@ -52,3 +52,5 @@ Access paths are per-consumer: humans authenticate to Vault via **OIDC through A
 ## Outcome
 
 Every secret a workload consumes arrives through the same pipeline: Vault → ESO → Kubernetes Secret, declared in Git as an ExternalSecret that contains no secret material. Rotations have been exercised for real — including a full cluster CA rotation, which is exactly the drill that proves the recovery paths work.
+
+> **Update (Sep 2026):** "Rotation is an edit, not a redeploy" was true, and nothing ever made the edit. Credentials now rotate on Terraform clocks, with a nightly runner for what a scoped key can mint and a human apply for what needs root: [ADR 021](../021-credential-rotation/).

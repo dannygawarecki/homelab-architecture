@@ -1,7 +1,7 @@
 ---
 title: "ADR 001: GitOps with ArgoCD (App of Apps Pattern)"
 eyebrow: Architecture Decision Record
-summary: One root Application bootstraps the entire cluster. Git is the only way in.
+description: One root Application bootstraps the entire cluster. Git is the only way in.
 permalink: /architecture/decisions/001-gitops-argocd/
 card_title: "GitOps with ArgoCD — App of Apps"
 card_blurb: "One root Application bootstraps the entire cluster. Git is the only supported way to change anything — the paradigm everything else lives under."

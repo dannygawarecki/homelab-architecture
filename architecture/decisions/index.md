@@ -1,7 +1,7 @@
 ---
 title: Architecture Decision Records
 eyebrow: Architecture
-summary: The major platform choices, the alternatives actually considered, and the tradeoffs accepted rather than solved.
+description: The major platform choices, the alternatives actually considered, and the tradeoffs accepted rather than solved.
 permalink: /architecture/decisions/
 layout: adr-index
 ---

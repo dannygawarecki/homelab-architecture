@@ -1,7 +1,7 @@
 ---
 title: Lessons Learned
 eyebrow: Operations
-summary: Three rebuilds from scratch. One data loss. Honest notes on what broke, what I underestimated, and what I'd do differently.
+description: Three rebuilds from scratch. One data loss. Honest notes on what broke, what I underestimated, and what I'd do differently.
 permalink: /lessons-learned/
 ---
 
@@ -57,7 +57,7 @@ Early on, some secrets were managed ad-hoc — in Kubernetes Secrets created man
 
 ## Networking Deeper Than Expected
 
-I expected to configure VLANs and move on. Instead, VLANs pulled me into MTU sizing, VLAN trunk configurations on Unifi switches, corosync heartbeat traffic isolation, and eventually Cilium egress policies. Each change that "should have been simple" had a dependency I hadn't accounted for.
+I expected to configure VLANs and move on. Instead, VLANs pulled me into MTU sizing, VLAN trunk configurations on UniFi switches, corosync heartbeat traffic isolation, and eventually Cilium egress policies. Each change that "should have been simple" had a dependency I hadn't accounted for.
 
 The MTU issues were the worst. A misconfigured MTU silently degrades performance and causes intermittent failures that don't point at themselves. Traffic flows, but large packets get fragmented or dropped, and the symptoms look like application bugs, not network bugs.
 

@@ -26,10 +26,18 @@
 </div>
 </div>
 <div class="pmap-beside">
-<span class="pmap-base-label">Beside the cluster, on purpose</span>
+<span class="pmap-base-label">Beside the cluster</span>
+<div class="pmap-beside-grid">
+{%- for area in site.data.platform.beside %}
+<section class="pmap-area">
+<h3 class="pmap-name">{{ area.name }}<span class="pmap-count">{{ area.items.size }}</span></h3>
+<p class="pmap-blurb">{{ area.blurb }}</p>
 <ul class="pmap-chips">
-{%- for item in site.data.platform.beside -%}{%- include platform-chip.html item=item adrs=pm_adrs -%}{%- endfor -%}
+{%- for item in area.items -%}{%- include platform-chip.html item=item adrs=pm_adrs -%}{%- endfor -%}
 </ul>
+</section>
+{%- endfor %}
+</div>
 </div>
 <figcaption class="pmap-legend">
 <span class="pchip pchip-adr pchip-demo">Component<span class="pchip-ref">ADR</span></span> a decision record explains the choice

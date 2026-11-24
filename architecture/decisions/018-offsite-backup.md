@@ -1,7 +1,7 @@
 ---
 title: "ADR 018: An Offsite Copy on Backblaze B2"
 eyebrow: Architecture Decision Record
-summary: The layer that doesn't live in the building — deliberately small, deliberately incomplete, and chosen by what can't be rebuilt rather than by what's valuable.
+description: The layer that doesn't live in the building — deliberately small, deliberately incomplete, and chosen by what can't be rebuilt rather than by what's valuable.
 permalink: /architecture/decisions/018-offsite-backup/
 card_title: "An offsite copy on Backblaze B2"
 card_blurb: "Every layer but one ended on the same disk array, and a stalling LUN proved it. The copy that leaves the building is deliberately small — and chosen by what can't be rebuilt, not by what's valuable."

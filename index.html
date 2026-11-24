@@ -28,7 +28,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <div class="stat"><span class="num">4</span><span class="lbl">Proxmox hosts</span></div>
     <div class="stat"><span class="num">99</span><span class="lbl">ArgoCD applications</span></div>
     <div class="stat"><span class="num">56</span><span class="lbl">Monitored endpoints</span></div>
-    <div class="stat"><span class="num">8</span><span class="lbl">Network trust zones</span></div>
+    <div class="stat"><span class="num">6</span><span class="lbl">Network trust zones</span></div>
     <div class="stat"><span class="num">100%</span><span class="lbl">GitOps delivered</span></div>
   </div>
 </div>
@@ -44,11 +44,11 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <p class="eyebrow" style="margin-top: 2rem;">Built and running</p>
     <div class="cards">
       <a class="card" href="{{ '/architecture/' | relative_url }}">
-        <span class="card-tag">Platform · 20 ADRs · 99 apps</span>
+        <span class="card-tag">Platform · 21 ADRs · 99 apps</span>
         <h3>The homelab platform</h3>
         <p>A production-grade Kubernetes platform on Talos and Proxmox — full GitOps,
         zero-trust networking, local GPU inference. It grew from a single Home Assistant box
-        into 99 ArgoCD applications, documented across twenty decision records that show the
+        into 99 ArgoCD applications, documented across twenty-one decision records that show the
         tradeoffs I accepted rather than solved.</p>
       </a>
       <a class="card" href="{{ '/projects/big-ads/' | relative_url }}">
@@ -68,8 +68,9 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
         <p>Three efforts — a knowledge engine, a governance gateway, and a collaboration
         runtime — turned out to be one question: what does it take to build an AI collaborator
         you can actually trust? Cortexa is the synthesis the others folded into, now running
-        in the cluster. Measuring it honestly cost me a published result and the architecture
-        I'd built it around — and the product got faster and better for it.</p>
+        in the cluster, with Worth Keeping coming at it from the other end. Measuring Cortexa
+        honestly made me retract a result I'd published and delete most of the design behind it. The 
+        product got faster and better for it.</p>
       </a>
     </div>
   </div>
@@ -99,7 +100,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
         <span class="card-tag">Networking</span>
         <h3>Zero-trust by default</h3>
         <p>Cilium eBPF networking with per-namespace egress policy. Istio ambient mode for
-        mTLS without sidecars. VLAN segmentation across eight trust zones.</p>
+        mTLS without sidecars. Six trust zones across five VLANs.</p>
       </div>
       <div class="card">
         <span class="card-tag">Delivery</span>
@@ -122,7 +123,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
     <h2>How it grew</h2>
     <p class="section-sub">
       Eighteen months of tinkering, then a year of building. It didn't arrive as a platform —
-      it accreted, one problem at a time, through a couple of rebuilds and one fight I lost
+      it grew, one problem at a time, through three rebuilds and one fight I lost
       outright.
     </p>
     <div class="timeline">
@@ -130,7 +131,7 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
         <div class="tl-date">2024 – mid 2025 · the prelude</div>
         <div class="tl-title">Home Assistant, ESP32s, Docker on the NAS</div>
         <p>It started small and stayed small for a while: Home Assistant and a handful of
-        ESP32s on an existing Unifi and Synology foundation, then containers running straight
+        ESP32s on an existing UniFi and Synology foundation, then containers running straight
         on the NAS. The goal was to learn a little Linux. Eighteen months of tinkering that
         looks unremarkable on a timeline — and taught me enough to want something better.</p>
       </div>
@@ -184,10 +185,19 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
       <div class="tl-item">
         <div class="tl-date">Sep – Oct 2026</div>
         <div class="tl-title">Proving it</div>
-        <p>A copy of what can't be rebuilt went offsite. A purple-team exercise found alerts
+        <p>A copy of what can't be rebuilt went offsite. Passwords and tokens that had never
+        changed since install started rotating on a clock. A purple-team exercise found alerts
         that never arrived, so signed images and kernel-level exec allow-lists started saying
         no instead of reporting. And the metrics stack I'd decided against went in after all —
         for SLOs, because the next project judges every change against one.</p>
+      </div>
+      <div class="tl-item">
+        <div class="tl-date">Nov 2026</div>
+        <div class="tl-title">Watching all of it</div>
+        <p>A fourth host joined the cluster. The metrics stack grew from SLOs to the whole lab:
+        Vault, the databases, backups, the NAS, the network, the GPUs. Netdata was retired, but
+        only after a week side by side proved Prometheus missed out-of-memory kills it had no
+        rule for. And a third accessibility tool shipped, for weather.</p>
       </div>
     </div>
     <p class="section-sub" style="margin-top: 2rem;">
@@ -216,9 +226,8 @@ description: A production-grade Kubernetes platform built at home — Talos, ful
       <a class="card" href="{{ '/copilot-experiments/' | relative_url }}">
         <span class="card-tag">Practice</span>
         <h3>AI-assisted engineering</h3>
-        <p>Where AI tools genuinely accelerated this work, where they cost me days, and the
-        most dangerous failure mode: being confidently assured a destructive action was
-        safe.</p>
+        <p>How the work changed when the tools became agents: what still holds from the early
+        lessons, what expired, and the one project where AI teaches instead of writes.</p>
       </a>
     </div>
   </div>

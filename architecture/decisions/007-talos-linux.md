@@ -1,7 +1,7 @@
 ---
 title: "ADR 007: Use Talos Linux as the Kubernetes OS"
 eyebrow: Architecture Decision Record
-summary: An immutable, API-driven, SSH-less OS — chosen to make nodes disposable and eliminate configuration drift.
+description: An immutable, API-driven, SSH-less OS — chosen to make nodes disposable and eliminate configuration drift.
 permalink: /architecture/decisions/007-talos-linux/
 card_title: "Talos Linux as the Kubernetes OS"
 card_blurb: "An immutable, API-driven OS with no SSH and no package manager — so nodes become genuinely disposable."

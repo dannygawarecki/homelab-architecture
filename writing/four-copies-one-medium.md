@@ -1,7 +1,7 @@
 ---
 title: Four Copies, One Medium
 eyebrow: Writing
-summary: My backup design had four layers and a decision record that called them independent. A stalling disk array proved three of them were the same copy — and the alert that should have told me couldn't start, because it was on the array too.
+description: My backup design had four layers and a decision record that called them independent. A stalling disk array proved three of them were the same copy — and the alert that should have told me couldn't start, because it was on the array too.
 permalink: /writing/four-copies-one-medium/
 ---
 

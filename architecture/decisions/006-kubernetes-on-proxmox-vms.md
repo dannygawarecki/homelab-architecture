@@ -1,7 +1,7 @@
 ---
 title: "ADR 006: Kubernetes Nodes as Proxmox VMs, Not Bare Metal"
 eyebrow: Architecture Decision Record
-summary: The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work.
+description: The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work.
 permalink: /architecture/decisions/006-proxmox-vms/
 card_title: "Kubernetes nodes as Proxmox VMs"
 card_blurb: "The virtualization pivot that made nodes disposable, backups whole, and GPU passthrough finally work."

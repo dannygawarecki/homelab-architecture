@@ -1,7 +1,7 @@
 ---
 title: kubeslo-operator
 eyebrow: Side Project · Reliability
-summary: A Kubernetes operator, written by hand in Go, that records every change to a workload and judges it against that workload's SLO. The groundwork is done and proven; the operator itself is just getting started.
+description: A Kubernetes operator, written by hand in Go, that records every change to a workload and judges it against that workload's SLO. The groundwork is done and proven; the operator itself is just getting started.
 permalink: /projects/kubeslo-operator/
 ---
 
@@ -21,7 +21,7 @@ This page is a status report, not a write-up. The write-up comes when it works.
 
 ## The rule for this one
 
-This project has one rule the others don't: **I write the Go by hand.** AI reviews it, explains it, and quizzes me on it, but it doesn't author it. The point is to understand the reconcile loop well enough to write one from a blank file, not to own one. It's the one project on this site where AI is the teacher rather than the author, and the [AI-assisted engineering](../../copilot-experiments/#the-exception-where-ai-teaches-and-i-write) page says what that cost and what it bought.
+This project has one rule the others don't: **I write the Go by hand.** AI reviews it, explains it, and quizzes me on it, but it doesn't author it. The point is to understand the reconcile loop well enough to write one from a blank file, not to own one. It's the one project on this site where AI is the teacher rather than the author, and the [AI-assisted engineering](../../copilot-experiments/#flipping-the-script-where-ai-teaches-and-i-write) page says what that cost and what it bought.
 
 ---
 

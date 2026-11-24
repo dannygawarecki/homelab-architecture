@@ -15,7 +15,7 @@ layout: default
   <header class="page-head">
     {% if page.eyebrow %}<p class="eyebrow">{{ page.eyebrow }}</p>{% endif %}
     <h1>{{ page.title }}</h1>
-    {% if page.summary %}<p class="lede">{{ page.summary }}</p>{% endif %}
+    {% if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
   </header>
 
   <div class="hub-cards">
@@ -40,7 +40,7 @@ layout: default
       <a class="hub-latest" href="{{ latest.url | relative_url }}">
         <span class="hub-latest-tag">Latest · {{ latest.title | slice: 0, 7 }} · {{ latest.date_label }}</span>
         <span class="hub-latest-title">{{ latest.title | slice: 9, 200 }}</span>
-        <span class="hub-latest-sum">{{ latest.tldr | default: latest.summary | truncatewords: 26 }}</span>
+        <span class="hub-latest-sum">{{ latest.tldr | default: latest.description | truncatewords: 26 }}</span>
       </a>
       <a class="hub-more" href="{{ '/architecture/decisions/' | relative_url }}">Browse all decision records &rarr;</a>
     </div>

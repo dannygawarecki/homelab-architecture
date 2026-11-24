@@ -1,11 +1,11 @@
 ---
 title: Infrastructure
 eyebrow: Platform
-summary: Three repositories, three scopes — machine configs, cloud-style provisioning, and every workload delivered by GitOps.
+description: Four repositories, four scopes — machine configs, cloud-style provisioning, every workload delivered by GitOps, and a small one that rotates credentials while nobody watches.
 permalink: /infrastructure/
 ---
 
-The infrastructure is split across three repos, each with a distinct scope. They're hosted on my self-managed Gitea instance — the same one the cluster's CI runs on — rather than GitHub; I'm happy to walk through any of them.
+The infrastructure is split across four repos, each with a distinct scope. They're hosted on my self-managed Gitea instance — the same one the cluster's CI runs on — rather than GitHub; I'm happy to walk through any of them.
 
 ---
 
@@ -49,8 +49,23 @@ Terraform managing the Proxmox layer and supporting services.
 - **Vault:** Policies, auth backends (Kubernetes, AppRole, OIDC), KV mounts
 - **Authentik:** Users, groups, OAuth2 providers and applications for all SSO-integrated services
 - **Gitea:** Orgs (including a public `ci` org for the shared pipeline), users, repositories, teams
-- **MinIO:** Buckets (velero-backups, postgres-backups, security-scans), IAM users, policies, service accounts
+- **MinIO:** Six buckets (backups for Velero, Postgres and Vault, Terraform state, security scans, and an archive), IAM users, policies, service accounts
+- **Cloudflare:** the tunnel, DNS, the R2 buckets that serve big-ads and big-weather, and their narrowly scoped tokens
+- **Backblaze B2:** the offsite bucket and its two prefix-scoped keys ([ADR 018](../architecture/decisions/018-offsite-backup/))
+- **Proxmox Backup Server:** API tokens, including a read-only one for its metrics exporter
 - **UptimeKuma:** 56 monitors (HTTP, TCP and keyword), managed via `for_each` from locals maps, alerting through the in-cluster notification gateway
+- **Rotation clocks:** 19 `time_rotating` clocks (60–180 days) for provider tokens, OIDC client secrets, signing keys and service accounts. These rotate on the next hand-run apply after each clock passes, because minting them needs credentials that must never reach an unattended job ([ADR 021](../architecture/decisions/021-credential-rotation/))
+
+---
+
+## home-lab-credentials
+
+The smallest repo, and deliberately separate: a nightly, **unattended** Terraform run that rotates what a scoped credential can mint, and nothing else.
+
+- 8 Postgres passwords, the Paperless Redis password, and 11 Gitea service tokens, each on a 90-day clock
+- A Vault AppRole scoped to exactly the KV paths it rewrites, and a MinIO key scoped to its own state prefix. Its policy lives in home-lab-terraform, so it can't widen its own permissions
+- Runs at 03:17, an hour clear of the certificate rotations, and notifies loudly on every rotation and urgently on any failure
+- The reasoning, and why the rest of the rotation stays on a human apply, is in [ADR 021](../architecture/decisions/021-credential-rotation/)
 
 ---
 
@@ -65,4 +80,4 @@ All Kubernetes workloads, delivered via GitOps.
 - AI platform: vLLM serving generation tensor-parallel across both GPUs on the dedicated worker, Ollama for embeddings, Open WebUI for interactive chat (through Cortexa), and 11 MCP servers exposing platform APIs to AI tooling ([ADR 013](../architecture/decisions/013-mcp-ai-operations/)). Earlier agent-runtime and policy-gateway experiments — Openclaw, Hermes, and Policyclaw (a custom OPA-based MCP gateway) — aren't currently running: they're shelved deliberately, their capabilities headed for a permanent home inside [Cortexa](../projects/cortexa/) rather than as standalone cluster services. The writeup is in the ADR.
 - Core applications: Authentik, Gitea, Vault, MinIO, n8n and others
 - User applications: Paperless, Grocy, Wallos, KaraKeep, Outline, Homepage and others
-- MCP servers (11): Kubernetes, ArgoCD, Gitea, Vault, CloudNativePG, Talos, Authentik, Synology, Unifi, Paperless, and Karakeep — nine behind an Authentik login (ArgoCD and Paperless check their own tokens), each with scoped credentials delivered from Vault, in a namespace with no internet egress
+- MCP servers (11): Kubernetes, ArgoCD, Gitea, Vault, CloudNativePG, Talos, Authentik, Synology, UniFi, Paperless, and Karakeep — nine behind an Authentik login (ArgoCD and Paperless check their own tokens), each with scoped credentials delivered from Vault, in a namespace with no internet egress
