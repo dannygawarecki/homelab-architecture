@@ -1,9 +1,23 @@
+{%- comment -%}
+  One chip on the capability map. An `adr:` number is matched against the
+  ADR's filename (architecture/decisions/NNN-...), not its position in the
+  list, so a gap or a renumbering can't silently point a chip at the wrong
+  record. If no ADR has that number, the chip links to a path that doesn't
+  exist, which makes `docker compose run --rm check` fail and name it.
+{%- endcomment -%}
 {%- assign c = include.item -%}
 {%- if c.adr -%}
-{%- assign c_idx = c.adr | minus: 1 -%}
-{%- assign c_page = include.adrs[c_idx] -%}
 {%- assign c_num = c.adr | prepend: "00" | slice: -3, 3 -%}
+{%- assign c_needle = "architecture/decisions/" | append: c_num | append: "-" -%}
+{%- assign c_page = nil -%}
+{%- for p in include.adrs -%}
+{%- if p.path contains c_needle -%}{%- assign c_page = p -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- if c_page -%}
 <li><a class="pchip pchip-adr" href="{{ c_page.url | relative_url }}" title="{{ c_page.title | escape }}{% if c.note %} · {{ c.note | escape }}{% endif %}">{{ c.name }}<span class="pchip-ref">{{ c_num }}</span></a></li>
+{%- else -%}
+<li><a class="pchip pchip-adr" href="{{ '/architecture/decisions/missing-adr-' | append: c_num | append: '/' | relative_url }}" title="No ADR {{ c_num }} exists">{{ c.name }}<span class="pchip-ref">{{ c_num }}?</span></a></li>
+{%- endif -%}
 {%- elsif c.url -%}
 <li><a class="pchip pchip-link" href="{{ c.url | relative_url }}"{% if c.note %} title="{{ c.note | escape }}"{% endif %}>{{ c.name }}<span class="pchip-arrow" aria-hidden="true">&rarr;</span></a></li>
 {%- else -%}
