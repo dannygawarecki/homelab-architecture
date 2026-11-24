@@ -78,6 +78,7 @@ areas:
     blurb: What all of the above is for.
     items:
       - { name: Cortexa, url: /projects/cortexa/ }
+      - { name: Worth Keeping, url: /projects/worth-keeping/ }
       - { name: big-ads, url: /projects/big-ads/ }
       - { name: big-recipes, url: /projects/big-recipes/ }
       - { name: big-weather, url: /projects/big-weather/ }

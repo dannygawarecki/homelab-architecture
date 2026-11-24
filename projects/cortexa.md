@@ -145,6 +145,8 @@ Cortexa is where the AI work on this platform converged. Three earlier efforts e
 
 What *isn't* there: Cortexa can't act on the cluster directly. The original loop had a confirmed-action lane for two narrow Kubernetes tools; it was removed with the loop, and bringing it back is its own decision.
 
+It also has a sibling rather than a predecessor. **[Worth Keeping](../worth-keeping/)** goes after the same question from the opposite end: a deterministic model of a person's responsibilities, with no AI in its core and the local model allowed only to hear what they tell it. Cortexa had to delete its way to "code decides, the model writes"; Worth Keeping started there.
+
 ---
 
 ## Why this project matters to me

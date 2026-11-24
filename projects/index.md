@@ -11,7 +11,7 @@ The homelab is the substrate. What runs on it falls into three groups.
 
 **[kubeslo-operator](kubeslo-operator/)** is the newest, and the earliest: a Kubernetes operator, written by hand in Go, that judges every change against its SLO. The groundwork is running; the operator is next.
 
-The rest are chapters of one story. I kept building AI tools to scratch specific itches — a way to give an assistant *current* knowledge, a way to give it *safe* access to my systems, a way to make it a genuine *collaborator* — before I understood they were three faces of a single problem: **what does it take to build an AI collaborator you can actually trust?** Cortexa is where that question finally has a name, and it's the successor the earlier attempts folded into.
+The rest are chapters of one story. I kept building AI tools to scratch specific itches — a way to give an assistant *current* knowledge, a way to give it *safe* access to my systems, a way to make it a genuine *collaborator* — before I understood they were three faces of a single problem: **what does it take to build an AI collaborator you can actually trust?** Cortexa is where that question finally has a name, and it's the successor the earlier attempts folded into. **[Worth Keeping](worth-keeping/)** is a second route to the same answer, from the opposite end, and like Cortexa it's unfinished.
 
 <div class="proj-group" markdown="0">
   <div class="proj-group-head">
@@ -70,7 +70,7 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
 <div class="proj-group" markdown="0">
   <div class="proj-group-head">
     <p class="eyebrow">The AI arc</p>
-    <span class="proj-group-meta">2 first-generation builds · 1 synthesis</span>
+    <span class="proj-group-meta">2 first-generation builds · 1 synthesis · 1 second path</span>
   </div>
   <div class="cards proj-gen1">
     <a class="card proj-card" href="context-engine/">
@@ -110,6 +110,20 @@ The rest are chapters of one story. I kept building AI tools to scratch specific
       <dt>Runs on</dt><dd>vLLM · pgvector · MCP</dd>
     </dl>
   </a>
+
+  <div class="proj-converge" aria-hidden="true"><span>A second path to the same question · from the opposite end</span></div>
+
+  <div class="cards">
+    <a class="card proj-card" href="worth-keeping/">
+      <div class="proj-top"><span class="card-tag">AI Systems · The other path</span><span class="status status-wip">Deployed · unfinished</span></div>
+      <h3>Worth Keeping</h3>
+      <p>Keeps the things that matter in a life in mind, so nothing important quietly rots. Where Cortexa started from the conversation, this starts from a deterministic model of a person's responsibilities, with AI allowed only to <em>hear</em>: on the local GPU, and kept away from outside models by the type system.</p>
+      <div class="proj-facts">
+        <span><b>0</b>AI in the core model</span><span><b>34</b>design decisions</span><span><b>500+</b>tests, incl. adversarial</span>
+      </div>
+      <div class="proj-flaw"><span class="proj-flaw-label">Honest caveat</span>It was built to say only true things, and its first user, me, stopped adding to it because it asked too much. The fix ranks ease first, and isn't proven yet.</div>
+    </a>
+  </div>
 </div>
 
 ---
@@ -126,6 +140,8 @@ Four efforts, one question. Each solved a piece of "a collaborator you can trust
 - **The mind — [Cortexa](cortexa/).** The frame that holds all three: something that knows, can act, and is governed — and whose value is *measured* rather than asserted.
 
 </div>
+
+**And a second path — [Worth Keeping](worth-keeping/).** Cortexa started from the conversation and measured its way down to "code decides, the model writes". Worth Keeping started from the other end: a deterministic model of what a person is responsible for, with no AI in its core, and AI added only at the edges to hear what they tell it. They're separate projects on purpose. If the same rule holds in a conversation *and* in a model of someone's life, I trust it more than if it only held in one.
 
 Two honesty notes, because the point of this site is that I don't skip them. **The convergence is code now, but not services**: Cortexa adapted Context Engine's retrieval core and ported Policyclaw's policy rules rather than calling either one, and it reads the cluster through the MCP layer only, read-only. And "successor" doesn't mean the predecessors were wasted: each was a working first-generation build whose real output was the lesson. Building them separately is *how I learned* they belonged together.
 

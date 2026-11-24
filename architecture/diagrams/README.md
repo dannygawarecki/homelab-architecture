@@ -66,7 +66,7 @@ What runs on the platform, in seven areas. This one isn't a drawing because it i
 | **Observability** | Prometheus, Alertmanager, Pyrra, Grafana, six exporters, Uptime Kuma, Hubble, Kiali, Dozzle, Ntfy, metrics-server, Goldilocks |
 | **Security & compliance** | Authentik (and its outpost), Vault, External Secrets, Kyverno, Tetragon, cert-manager, Falco, Trivy, Gitleaks, Checkov, kube-bench, Polaris |
 | **Local AI platform** | vLLM, Ollama, NVIDIA device plugin, 11 MCP servers, Open WebUI |
-| **User apps** | Cortexa, big-ads, big-recipes, big-weather, Paperless, Karakeep, Outline, Homepage, Wallos |
+| **User apps** | Cortexa, Worth Keeping, big-ads, big-recipes, big-weather, Paperless, Karakeep, Outline, Homepage, Wallos |
 
 </div>
 
